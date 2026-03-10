@@ -1,0 +1,17 @@
+# Python (Arquivos temporários e compilados)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes Virtuais (Essencial ignorar!)
+venv/
+env/
+.env
+
+# Configurações de Editores
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
