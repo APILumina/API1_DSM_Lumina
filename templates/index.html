@@ -7,6 +7,7 @@
     <title>Index</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
+
         document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('btn-deputados');
             const menu = document.getElementById('menu-deputados');
@@ -35,151 +36,146 @@
 
 <body class="min-h-screen flex flex-col">
     <main class="flex-grow">
-    <div class="h-30 p-5 bg-[#3D6CC3] flex items-center justify-between text-white">
-        <img src="/img/logo.png" alt="" class="h-20">
-        <ul class="flex gap-8 text-sm mr-20 font-sans font-semibold">
-            <li>
-                <a href="#"
-                    class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME</a>
-            </li>
-            <li class="relative flex items-center">
-                <button id="btn-deputados" type="button"
-                    class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-sm">
-                    DEPUTADOS
-                    <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-                        stroke="currentColor" class="size-4 ml-1 transition-transform duration-300">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        <div class="h-30 p-5 bg-[#3D6CC3] flex items-center justify-between text-white">
+            <img src="/img/logo.png" alt="" class="h-20">
+            <ul class="flex gap-8 text-xs md:text-sm mr-20 font-sans font-semibold">
+                <li>
+                    <a href="#" class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME</a>
+                </li>
+                <li class="relative flex items-center">
+                    <button id="btn-deputados" type="button"class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
+                        DEPUTADOS
+                        <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="3" stroke="currentColor"
+                            class="size-4 ml-1 transition-transform duration-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <ul id="menu-deputados" class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito Federal</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito Santo</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso do Sul</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas Gerais</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de Janeiro</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Norte</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Sul</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa Catarina</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a></li>
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a></li>
+                        <li><a href="#"class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"
+                        class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
+                </li>
+            </ul>
+        </div>
+        <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
+            style="background-image: url(/img/banner.png);">
+            <div class="absolute inset-0 bg-black/20"></div>
+            <div class="relative z-10 text-white">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-15 mb-5">
+                    ACOMPANHE SEUS DEPUTADOS FEDERAIS!
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl mx-15 ">
+                    Saiba como votar com consciencia
+                </p>
+            </div>
+        </section>
+
+        <div class="bg-gray-200 p-6">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3">
+
+                <input type="text" placeholder="Buscar por deputado" class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm">
+
+                <div class="relative flex-1">
+                    <select class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+                        <option>Estado</option>
+                        <option>SP</option>
+                        <option>RJ</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="relative flex-1">
+                    <select
+                        class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+                        <option>Partido</option>
+                        <option>PT</option>
+                        <option>PL</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <button class="bg-white px-8 py-4 rounded-none md:rounded-r-full hover:bg-gray-100 transition-colors shadow-sm flex items-center justify-center cursor-pointer">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
 
-                <ul id="menu-deputados"
-                    class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito Federal</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito Santo</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso do Sul</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas Gerais</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de Janeiro</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Norte</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Sul</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa Catarina</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"
-                    class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
-            </li>
-        </ul>
-    </div>
-    <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
-        style="background-image: url(/img/banner.png);">
-        <div class="absolute inset-0 bg-black/20"></div>
-        <div class="relative z-10 text-white">
-            <h1 class="text-5xl font-bold tracking-tight max-w-2xl mx-15 mb-5">
-                ACOMPANHE SEUS DEPUTADOS FEDERAIS!
-            </h1>
-            <p class="text-xl font-normal max-w-2xl mx-auto">
-                Saiba como votar com consciencia
-            </p>
+            </div>
         </div>
-    </section>
+        <h1 class="text-black  pt-10 pl-10 pb-10 md:pt-15 pl-15 pb-15 text-2xl md:text-3xl font-bold font-poppins">Saiba Mais Sobre...</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 mb-15">
 
-    <div class="bg-gray-200 p-6">
-        <div class="max-w-6xl mx-auto flex flex-row gap-3">
-
-            <input type="text" placeholder="Buscar por deputado"
-                class="flex-1 px-6 py-4 rounded-l-full md:rounded-l-full md:rounded-none bg-white text-gray-500 outline-none border-none shadow-sm">
-
-            <div class="relative flex-1">
-                <select
-                    class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-                    <option>Estado</option>
-                    <option>SP</option>
-                    <option>RJ</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                </div>
-            </div>
-
-            <div class="relative flex-1">
-                <select
-                    class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-                    <option>Partido</option>
-                    <option>PT</option>
-                    <option>PL</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                </div>
-            </div>
-
-            <button
-                class="bg-white px-8 py-4 rounded-r-full hover:bg-gray-100 transition-colors shadow-sm flex items-center justify-center cursor-pointer">
-                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+            <button class="text-left w-full">
+                <a href="#">
+                    <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
+                        <img src="/img/Gastos.png" class="w-full object-cover">
+                        <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
+                        <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se os gastos do seu deputado são úteis.</h1>
+                    </div>
+                </a>
             </button>
 
+            <button class="text-left">
+                <a href="#">
+                    <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
+                        <img src="/img/Projetos.png" class="w-full object-cover">
+                        <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
+                        <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra sobre os projetos seu deputado. </h1>
+                    </div>
+                </a>
+            </button>
+
+            <button class="text-left">
+                <a href="#">
+                    <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
+                        <img src="/img/Presença.png" class="w-full object-cover">
+                        <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
+                        <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se o seu deputado está faltando muito.</h1>
+                    </div>
+                </a>
+            </button>
         </div>
-    </div>
-    <h1 class="text-black pt-15 pl-15 pb-15 text-3xl font-bold font-poppins">Saiba Mais Sobre...</h1>
-    <div class="flex justify-between ml-20 mb-15 mr-20">
-
-        <button class="text-left">
-            <a href="#">
-                <div class="bg-[#E5E5E5] shadow-lg h-90 w-1xs hover:scale-105 duration-300">
-                    <img src="/img/Gastos.png">
-                    <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
-                    <h1 class="text-black pl-5 pt-1 font-semibold text-base">Descubra se os gastos do seu deputado são úteis.</h1>
-                </div>
-            </a>
-        </button>
-
-        <button class="text-left">
-            <a href="#">
-                <div class="bg-[#E5E5E5] shadow-lg h-90 w-1xs hover:scale-105 duration-300">
-                    <img src="/img/Projetos.png">
-                    <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
-                    <h1 class="text-black pl-5 pt-1 font-semibold text-base">Descubra sobre os projetos seu deputado.</h1>
-                </div>
-            </a>
-        </button>
-
-        <button class="text-left">
-            <a href="#">
-                <div class="bg-[#E5E5E5] shadow-lg h-90 w-1xs hover:scale-105 duration-300">
-                    <img src="/img/Presença.png">
-                    <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
-                    <h1 class="text-black pl-5 pt-1 font-semibold text-base">Descubra se o seu deputado está faltando muito.</h1>
-                </div>
-            </a>
-        </button>
-    </div>
     </main>
     <footer class="bg-[#e5e5e5] py-8 text-center">
         <h1 class="text-sm font-medium text-black">Todos os direitos preservados a Lumina</h1>
