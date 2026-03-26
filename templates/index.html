@@ -7,7 +7,6 @@
     <title>Index</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-        // Usar DOMContentLoaded garante que o JS só rode após o HTML estar pronto
         document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('btn-deputados');
             const menu = document.getElementById('menu-deputados');
@@ -16,12 +15,11 @@
             if (btn && menu) {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    console.log("Botão clicado!"); // Teste: Veja se aparece no F12
+                    console.log("Botão clicado!"); 
                     menu.classList.toggle('hidden');
                     seta.classList.toggle('rotate-180');
                 });
 
-                // Fechar ao clicar fora
                 document.addEventListener('click', (e) => {
                     if (!menu.contains(e.target) && !btn.contains(e.target)) {
                         menu.classList.add('hidden');
