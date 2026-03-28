@@ -1,65 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="style.css">
+    <style type="text/tailwindcss">
+        @theme {
+        --color-radar: #3D6CC3; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #3A4D74; /* Cor dos texto */
+    }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-deputados');
+            const menu = document.getElementById('menu-deputados');
+            const seta = document.getElementById('seta');
+
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log("Botão clicado!");
+                    menu.classList.toggle('hidden');
+                    seta.classList.toggle('rotate-180');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.add('hidden');
+                        seta.classList.remove('rotate-180');
+                    }
+                });
+            } else {
+                console.error("Erro: Elementos não encontrados. Verifique os IDs.");
+            }
+        });
+    </script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!--Navbar ⬇️ -->
     <header>
-        <div class="h-30 p-5 bg-[#3D6CC3] flex items-center justify-between text-white">
-            <img src="/img/logo.png" alt="" class="h-20">
-            <div class="flex flex-col gap-5 w-1/6 mr-40">
-                <!-- Barra pesquisa ⬇️ -->
-                <div class="flex w-auto relative">
-                    <!-- Lupinha ⬇️ -->
-                    <label for="pesquisa" class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
-                        <div class="bg-[#3D6CC3]/30 size-9 rounded-full"></div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
-                            stroke="currentColor"
-                            class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#3D6CC3]">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                    </label>
-                    <!-- Parte  ⬇️ -->
-                    <input id="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
-                        placeholder="Pesquisar">
-                </div>
-                <!-- Dropdowns ⬇️ -->
-                <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
-                    <li>
-                        <a href="index.html"
-                            class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME
-                        </a>
-                    </li>
-                    <div class="relative inline-block group">
-                        <li class="flex items-center">
-                            <a href="#"
-                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">DEPUTADOS
-                            </a>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-                                stroke="currentColor" class="size-4 ml-1">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        <div class="h-30 py-5 bg-radar text-white">
+            <div class="w-full flex mx-auto max-w-[100rem]">
+                <a href=""><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
+                <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
+                    <!-- Barra pesquisa ⬇️ -->
+                    <div class="flex relative">
+                        <!-- Lupinha ⬇️ -->
+                        <label for="pesquisa"
+                            class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
+                            <div class="bg-radar/30 size-9 rounded-full"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
+                                stroke="currentColor"
+                                class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
-                        </li>
-
+                        </label>
+                        <!-- Parte  ⬇️ -->
+                        <input id="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
+                            placeholder="Pesquisar">
                     </div>
-                    <li>
-                        <a href="#"
-                            class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
-                    </li>
-                </ul>
+                    <!-- Dropdowns ⬇️ -->
+                    <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
+                        <li>
+                            <a href="index.html"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME
+                            </a>
+                        </li>
+                        <div class="relative inline-block group">
+                            <li class="relative flex items-center">
+                                <button id="btn-deputados" type="button"
+                                    class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
+                                    DEPUTADOS
+                                    <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="3" stroke="currentColor"
+                                        class="size-4 ml-1 transition-transform duration-300">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+
+                                <ul id="menu-deputados"
+                                    class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito
+                                            Federal</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito
+                                            Santo</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
+                                            Grosso</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso
+                                            do Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas
+                                            Gerais</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de
+                                            Janeiro</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Norte</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa
+                                            Catarina</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </div>
+                        <li>
+                            <a href="#"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
+    <!-- Conteúdo da página ⬇️ -->
     <main>
-        <div class="container mx-auto mt-20">
+        <!-- Container ⬇️ -->
+        <div class="w-full mx-auto max-w-[100rem] mt-20">
+            <!-- Breadcrumb (Deputados > Nome do deputado) ⬇️ -->
             <nav class="flex mb-5" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse text-[#536586]">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse text-dark-blue">
                     <li class="inline-flex items-center">
                         <a href="index.html"
                             class="inline-flex items-center text-lg font-medium text-body text-current/75 hover:text-fg-brand">
@@ -79,34 +182,45 @@
                     </li>
                 </ol>
             </nav>
-            <div class="flex gap-8 w-full">
-                <div class="bg-white w-2/7 p-5 shadow-md rounded-lg text-[#3a4d74] relative overflow-hidden">
+            <!-- Informações e foto do deputado ⬇️ -->
+            <section class="flex gap-8 w-full">
+                <!-- Área da foto ⬇️ -->
+                <div class="bg-white w-2/7 p-5 shadow-md rounded-lg text-dark-blue relative overflow-hidden">
+                    <!-- Foto ⬇️ -->
                     <div
                         class="aspect-square w-full rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7">
-                        <img src="/img/joao-silva.jpeg" class="max-h-full" alt="">
+                        <img src="../static/img/joao-silva.jpeg" class="max-h-full" alt="">
                     </div>
+                    <!-- Nome eleitoral do deputado ⬇️ -->
                     <h2 class="text-4xl mt-4 mb-7"><span class="font-bold">João</span> Silva</h2>
+                    <!-- Partido, Estado e Email ⬇️ -->
                     <div class="text-xl mb-30">
                         <p>Partido: <span class="font-bold">MST</span></p>
                         <p>Estado: <span class="font-bold">Acre</span></p>
-                        <p>Email: joao.silva@camara.sp.gov.br</p>
+                        <p>Email: <a href="#" class="hover:underline">joao.silva@camara.sp.gov.br</a></p>
                     </div>
-                    <div class="absolute bg-blue-100 bottom-0 right-0 w-full p-5 flex justify-center">
-                        <a href="https://www.camara.leg.br" class="bg-green-600 hover:bg-green-700 text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
+                    <!-- Botão de acessar site da câmara ⬇️ -->
+                    <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
+                        <a href="https://www.camara.leg.br"
+                            class="bg-green-600 hover:bg-green-700 text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
                             site da câmara</a>
                     </div>
                 </div>
-                <div class="bg-white w-5/7 py-10 px-7 shadow-md rounded-lg text-[#3a4d74] flex flex-col gap-5">
+                <!-- Área das informações ⬇️ -->
+                <div class="bg-white w-5/7 py-5 px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
+                    <!-- Nome eleitoral e partido ⬇️ -->
                     <div class="flex flex-col gap-2">
                         <h2 class="text-4xl"><span class="font-bold">João</span> Silva</h2>
                         <p class="text-xl mb-5">Partido: MST</p>
                         <div class="h-px w-full bg-gray-300"></div>
                     </div>
+                    <!-- Principais informações sobre o deputado ⬇️ -->
                     <div class="flex w-full h-full">
+                        <!-- Mandatos, Situação, Total de Proposições e Despesas totais ⬇️ -->
                         <div class="w-1/2 h-full flex flex-col justify-between text-2xl pr-5">
                             <div class="flex flex-col">
                                 <span class="font-bold">Mandatos</span>
-                                1° Mandato (2022 - 2026)
+                                1° Mandato (2023 - 2026)
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
@@ -120,10 +234,10 @@
                                 <span class="font-bold">Total de Proposições</span>
                                 <p class="mb-7"><span class="font-bold">10</span> proposições</p>
                                 <div class="relative bg-gray-200 rounded-full">
-                                    <div class="bg-[#3D6CC3] h-3 rounded-full" style="width: 70%"></div>
+                                    <div class="bg-radar h-3 rounded-full" style="width: 72%"></div>
                                 </div>
-                                <p class="mt-1 text-xl"><span class="font-bold">92%</span> presença <span
-                                        class="font-bold">(72)</span></p>
+                                <p class="mt-1 text-xl"><span class="font-bold">92</span> presença <span
+                                        class="font-bold">(72%)</span></p>
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
@@ -132,13 +246,14 @@
                             </div>
                         </div>
                         <div class="w-px h-full bg-gray-300"></div>
+                        <!-- Últimas proposições ⬇️ -->
                         <div class="w-1/2 h-full flex flex-col text-2xl pl-5">
                             <h3 class="uppercase font-bold mb-5">Últimas proposições</h3>
-                            <div class="flex flex-col flex-1 justify-between gap-5">
+                            <div class="flex flex-col flex-1 gap-7">
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-[#3D6CC3]/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                             class="size-6">
                                             <path fill-rule="evenodd"
@@ -147,7 +262,7 @@
                                         </svg>
                                     </div>
                                     <!-- Textos ⬇️ -->
-                                    <div class=" text-[#3a4d74]">
+                                    <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
                                         <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
                                         <!-- Descrição ⬇️ -->
@@ -158,7 +273,7 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-[#3D6CC3]/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                             class="size-6">
                                             <path fill-rule="evenodd"
@@ -167,7 +282,7 @@
                                         </svg>
                                     </div>
                                     <!-- Textos ⬇️ -->
-                                    <div class=" text-[#3a4d74]">
+                                    <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
                                         <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
                                         <!-- Descrição ⬇️ -->
@@ -178,7 +293,7 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-[#3D6CC3]/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                             class="size-6">
                                             <path fill-rule="evenodd"
@@ -187,7 +302,7 @@
                                         </svg>
                                     </div>
                                     <!-- Textos ⬇️ -->
-                                    <div class=" text-[#3a4d74]">
+                                    <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
                                         <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
                                         <!-- Descrição ⬇️ -->
@@ -198,7 +313,7 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-[#3D6CC3]/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                             class="size-6">
                                             <path fill-rule="evenodd"
@@ -207,7 +322,7 @@
                                         </svg>
                                     </div>
                                     <!-- Textos ⬇️ -->
-                                    <div class=" text-[#3a4d74]">
+                                    <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
                                         <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
                                         <!-- Descrição ⬇️ -->
@@ -218,7 +333,7 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-[#3D6CC3]/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                             class="size-6">
                                             <path fill-rule="evenodd"
@@ -227,7 +342,7 @@
                                         </svg>
                                     </div>
                                     <!-- Textos ⬇️ -->
-                                    <div class=" text-[#3a4d74]">
+                                    <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
                                         <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
                                         <!-- Descrição ⬇️ -->
@@ -238,8 +353,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </section>
+        </div>
     </main>
 </body>
 

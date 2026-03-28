@@ -32,12 +32,19 @@
             }
         });
     </script>
+
+    <style type="text/tailwindcss">
+        @theme {
+        --color-radar: #3D6CC3; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #3A4D74; /* Cor dos texto */
+        }
+    </style>
 </head>
 
 <body class="min-h-screen flex flex-col">
     <main class="flex-grow">
-        <div class="h-30 p-5 bg-[#3D6CC3] flex items-center justify-between text-white">
-            <img src="/img/logo.png" alt="" class="h-20">
+        <div class="h-30 p-5 bg-radar flex items-center justify-between text-white">
+            <img src="../static/img/logo.png" alt="" class="h-20">
             <ul class="flex gap-8 text-xs md:text-sm mr-20 font-sans font-semibold">
                 <li>
                     <a href="#" class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME</a>
@@ -52,7 +59,7 @@
                         </svg>
                     </button>
 
-                    <ul id="menu-deputados" class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
+                    <ul id="menu-deputados" class="absolute top-full left-0 mt-2 w-48 bg-white text-radar rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
                         <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a></li>
                         <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a></li>
                         <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a></li>
@@ -90,7 +97,7 @@
             </ul>
         </div>
         <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
-            style="background-image: url(/img/banner.png);">
+            style="background-image: url(../static/img/banner.png);">
             <div class="absolute inset-0 bg-black/20"></div>
             <div class="relative z-10 text-white">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-15 mb-5">
@@ -149,7 +156,7 @@
             <button class="text-left w-full">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-                        <img src="/img/Gastos.png" class="w-full object-cover">
+                        <img src="../static/img/gastos.png" class="w-full object-cover">
                         <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
                         <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se os gastos do seu deputado são úteis.</h1>
                     </div>
@@ -159,7 +166,7 @@
             <button class="text-left">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-                        <img src="/img/Projetos.png" class="w-full object-cover">
+                        <img src="../static/img/projetos.png" class="w-full object-cover">
                         <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
                         <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra sobre os projetos seu deputado. </h1>
                     </div>
@@ -169,7 +176,7 @@
             <button class="text-left">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-                        <img src="/img/Presença.png" class="w-full object-cover">
+                        <img src="../static/img/presenca.png" class="w-full object-cover">
                         <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
                         <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se o seu deputado está faltando muito.</h1>
                     </div>
