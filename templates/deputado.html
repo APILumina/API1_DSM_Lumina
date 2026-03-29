@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="style.css">
     <style type="text/tailwindcss">
         @theme {
-        --color-radar: #3D6CC3; /* Cor principal (Ex: cor da navbar) */
-        --color-dark-blue: #3A4D74; /* Cor dos texto */
+        --color-radar: #1A249D; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #081638; /* Cor dos texto */
+        --color-sec: #efc33c; /* Cor amarela */
+        --color-verde: #34C560 /* Cor verde */
     }
     </style>
 
@@ -54,7 +56,7 @@
                         <!-- Lupinha ⬇️ -->
                         <label for="pesquisa"
                             class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
-                            <div class="bg-radar/30 size-9 rounded-full"></div>
+                            <div class="bg-sec size-9 rounded-full"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
                                 stroke="currentColor"
                                 class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
@@ -185,7 +187,7 @@
             <!-- Informações e foto do deputado ⬇️ -->
             <section class="flex gap-8 w-full">
                 <!-- Área da foto ⬇️ -->
-                <div class="bg-white w-2/7 p-5 shadow-md rounded-lg text-dark-blue relative overflow-hidden">
+                <div class="bg-white w-2/8 p-5 shadow-md rounded-lg text-dark-blue relative overflow-hidden">
                     <!-- Foto ⬇️ -->
                     <div
                         class="aspect-square w-full rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7">
@@ -202,12 +204,12 @@
                     <!-- Botão de acessar site da câmara ⬇️ -->
                     <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
                         <a href="https://www.camara.leg.br"
-                            class="bg-green-600 hover:bg-green-700 text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
+                            class="bg-radar hover:bg-radar text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
                             site da câmara</a>
                     </div>
                 </div>
                 <!-- Área das informações ⬇️ -->
-                <div class="bg-white w-5/7 py-5 px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
+                <div class="bg-white w-6/8 py-5 px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
                     <!-- Nome eleitoral e partido ⬇️ -->
                     <div class="flex flex-col gap-2">
                         <h2 class="text-4xl"><span class="font-bold">João</span> Silva</h2>
@@ -219,30 +221,46 @@
                         <!-- Mandatos, Situação, Total de Proposições e Despesas totais ⬇️ -->
                         <div class="w-1/2 h-full flex flex-col justify-between text-2xl pr-5">
                             <div class="flex flex-col">
-                                <span class="font-bold">Mandatos</span>
-                                1° Mandato (2023 - 2026)
+                                <span class="font-bold mb-5">Mandatos</span>
+                                <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 text-nowrap font-medium text-sm text-center gap-x-5 gap-y-2 w-full 2xl:max-w-[95%]">
+                                    <div class="bg-radar/20 text-blue-800 px-3 py-1 rounded-full">2023 - 2026</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">2019 - 2022</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">2015 - 2018</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">2011 - 2014</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">2007 - 2010</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">2003 - 2006</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1999 - 2002</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1995 - 1998</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1991 - 1994</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1987 - 1990</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1983 - 1986</div>
+                                    <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">1979 - 1982</div>
+                                </div>
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
                                 <span class="font-bold mb-2">Situação na Câmara</span>
                                 <div
-                                    class="bg-green-600 p-2 w-fit text-white text-xl font-semibold tracking-wide rounded-lg">
+                                    class="bg-verde p-2 w-fit text-white text-xl font-semibold tracking-wide rounded-lg">
                                     Em exercício</div>
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
                                 <span class="font-bold">Total de Proposições</span>
-                                <p class="mb-7"><span class="font-bold">10</span> proposições</p>
-                                <div class="relative bg-gray-200 rounded-full">
+                                <p class="mb-5">
+                                    <span class="font-bold text-radar">10</span> proposições
+                                </p>
+                                <div class="relative bg-radar/20 rounded-full">
                                     <div class="bg-radar h-3 rounded-full" style="width: 72%"></div>
                                 </div>
-                                <p class="mt-1 text-xl"><span class="font-bold">92</span> presença <span
-                                        class="font-bold">(72%)</span></p>
+                                <p class="mt-1 text-xl">
+                                    <span class="font-bold text-radar">92</span> presença <span class="font-bold text-radar">(72%)</span>
+                                </p>
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
                                 <span class="font-bold">Despesas Totais</span>
-                                <span class="font-bold text-4xl">R$ 259.786,17</span>
+                                <span class="font-bold text-4xl text-radar">R$ 259.786,17</span>
                             </div>
                         </div>
                         <div class="w-px h-full bg-gray-300"></div>
@@ -253,9 +271,9 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6">
+                                            class="size-6 text-sec">
                                             <path fill-rule="evenodd"
                                                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                                                 clip-rule="evenodd" />
@@ -264,7 +282,7 @@
                                     <!-- Textos ⬇️ -->
                                     <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
+                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
                                         <!-- Descrição ⬇️ -->
                                         <p class="text-lg">Criminalização da Misoginia</p>
                                     </div>
@@ -273,9 +291,9 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6">
+                                            class="size-6 text-sec">
                                             <path fill-rule="evenodd"
                                                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                                                 clip-rule="evenodd" />
@@ -284,7 +302,7 @@
                                     <!-- Textos ⬇️ -->
                                     <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
+                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
                                         <!-- Descrição ⬇️ -->
                                         <p class="text-lg">Criminalização da Misoginia</p>
                                     </div>
@@ -293,9 +311,9 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6">
+                                            class="size-6 text-sec">
                                             <path fill-rule="evenodd"
                                                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                                                 clip-rule="evenodd" />
@@ -304,7 +322,7 @@
                                     <!-- Textos ⬇️ -->
                                     <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
+                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
                                         <!-- Descrição ⬇️ -->
                                         <p class="text-lg">Criminalização da Misoginia</p>
                                     </div>
@@ -313,9 +331,9 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6">
+                                            class="size-6 text-sec">
                                             <path fill-rule="evenodd"
                                                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                                                 clip-rule="evenodd" />
@@ -324,7 +342,7 @@
                                     <!-- Textos ⬇️ -->
                                     <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
+                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
                                         <!-- Descrição ⬇️ -->
                                         <p class="text-lg">Criminalização da Misoginia</p>
                                     </div>
@@ -333,9 +351,9 @@
                                 <!-- PL ⬇️ -->
                                 <div class="flex items-center gap-4">
                                     <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-radar/20 w-fit p-2 rounded-lg">
+                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6">
+                                            class="size-6 text-sec">
                                             <path fill-rule="evenodd"
                                                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                                                 clip-rule="evenodd" />
@@ -344,7 +362,7 @@
                                     <!-- Textos ⬇️ -->
                                     <div class=" text-dark-blue">
                                         <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei nº 123/2023</h4>
+                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
                                         <!-- Descrição ⬇️ -->
                                         <p class="text-lg">Criminalização da Misoginia</p>
                                     </div>
