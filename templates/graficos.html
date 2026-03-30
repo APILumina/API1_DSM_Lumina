@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Gráficos</title>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-deputados');
+            const menu = document.getElementById('menu-deputados');
+            const seta = document.getElementById('seta');
+
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log("Botão clicado!"); 
+                    menu.classList.toggle('hidden');
+                    seta.classList.toggle('rotate-180');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.add('hidden');
+                        seta.classList.remove('rotate-180');
+                    }
+                });
+            } else {
+                console.error("Erro: Elementos não encontrados. Verifique os IDs.");
+            }
+
+            //Código do filtro de estado e partido
+            const setupSelect = (btnId, menuId) => {
+                const b = document.getElementById(btnId);
+                const m = document.getElementById(menuId);
+                if (!b || !m) return;
+
+                b.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Fecha outros menus antes de abrir este
+                    document.querySelectorAll('.dropdown-select').forEach(el => {
+                        if (el !== m) el.classList.add('hidden');
+                    });
+                    m.classList.toggle('hidden');
+                });
+
+                //Atualiza o texto do botão ao clicar em uma opção
+                m.querySelectorAll('li').forEach(item => {
+                    item.addEventListener('click', () => {
+                        b.querySelector('.btn-text').innerText = item.innerText;
+                        m.classList.add('hidden');
+                    });
+                });
+            };
+
+            setupSelect('btn-estado', 'menu-estado');
+            setupSelect('btn-partido', 'menu-partido');
+
+            // Fechar tudo ao clicar fora
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
+                if (menu) menu.classList.add('hidden');
+                if (seta) seta.classList.remove('rotate-180');
+            });
+        });
+    </script>
+
+    <style type="text/tailwindcss">
+        @theme {
+        --color-radar: #1A249D; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #081638; /* Cor dos texto */
+        --color-sec: #efc33c; /* Cor amarela */
+        --color-verde: #34C560 /* Cor verde */
+        }
+
+        .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /*Filtro de partido e estado */
+        .btn-custom-select {
+            @apply bg-white border border-gray-200 rounded-full py-2 px-6 flex items-center justify-between min-w-[220px] cursor-pointer hover:bg-gray-50 transition-all text-dark-blue font-medium shadow-sm;
+        }
+
+        /* Estilo da lista suspensa */
+        .dropdown-select {
+            @apply absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-y-auto;
+            max-height: 250px;
+        }
+
+        .dropdown-select li {
+            @apply px-6 py-2 hover:bg-gray-100 cursor-pointer text-dark-blue transition-colors;
+        }
+
+        /*Barra de rolagem do dropdown de partido e estado*/
+        .dropdown-select::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dropdown-select::-webkit-scrollbar-track {
+            @apply bg-gray-50 rounded-r-2xl; /* Fundo da calha da barra */
+        }
+
+        .dropdown-select::-webkit-scrollbar-thumb {
+            @apply bg-gray-300 rounded-full border-2 border-solid border-gray-50;
+        }
+
+        .dropdown-select::-webkit-scrollbar-thumb:hover {
+            @apply bg-gray-400; 
+        }
+
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!--Navbar-->
+    <header>
+        <div class="h-30 py-5 bg-radar text-white">
+            <div class="w-full flex mx-auto max-w-[100rem]">
+                <a href="./index.html"><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
+                <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
+                    <!-- Barra pesquisa ⬇️ -->
+                    <div class="flex relative">
+                        <!-- Lupinha ⬇️ -->
+                        <label for="pesquisa"
+                            class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
+                            <div class="bg-sec size-9 rounded-full"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
+                                stroke="currentColor"
+                                class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                        </label>
+                        <!-- Parte  ⬇️ -->
+                        <input id="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
+                            placeholder="Pesquisar">
+                    </div>
+                    <!-- Dropdowns ⬇️ -->
+                    <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
+                        <li>
+                            <a href="index.html"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME
+                            </a>
+                        </li>
+                        <div class="relative inline-block group">
+                            <li class="relative flex items-center">
+                                <button id="btn-deputados" type="button"
+                                    class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
+                                    DEPUTADOS
+                                    <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="3" stroke="currentColor"
+                                        class="size-4 ml-1 transition-transform duration-300">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+
+                                <ul id="menu-deputados"
+                                    class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito
+                                            Federal</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito
+                                            Santo</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
+                                            Grosso</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso
+                                            do Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas
+                                            Gerais</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de
+                                            Janeiro</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Norte</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa
+                                            Catarina</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </div>
+                        <li>
+                            <a href="graficos.html"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!--Conteúdo principal-->
+    <main class="flex-grow w-full max-w-[100rem] mx-auto ">
+    
+        <!--Section dos filtros e título da página-->
+        <div class="bg-white px-8 py-6 mb-9">
+
+            <section class="mb-6">
+                <h1 class="text-3xl font-bold text-dark-blue tracking-tight">GRÁFICOS POR PARTIDO</h1>
+            </section>
+
+            <!--FiltroS de estados e partidos-->
+            <section class="flex gap-4">
+        
+                <div class="relative">
+                    <button id="btn-estado" class="btn-custom-select">
+                        <span class="btn-text">Selecionar estado</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <ul id="menu-estado" class="dropdown-select hidden ">
+                        <li>Acre</li>
+                        <li>Alagoas</li>
+                        <li>Amapá</li>
+                        <li>Amazonas</li>
+                        <li>Bahia</li>
+                        <li>Ceará</li>
+                        <li>Distrito Federal</li>
+                        <li>Espírito Santo</li>
+                        <li>Goiás</li>
+                        <li>Maranhão</li>
+                        <li>Mato Grosso</li>
+                        <li>Mato Grosso do Sul</li>
+                        <li>Minas Gerais</li>
+                        <li>Pará</li>
+                        <li>Paraíba</li>
+                        <li>Paraná</li>
+                        <li>Pernambuco</li>
+                        <li>Piauí</li>
+                        <li>Rio de Janeiro</li>
+                        <li>Rio Grande do Norte</li>
+                        <li>Rio Grande do Sul</li>
+                        <li>Rondônia</li>
+                        <li>Roraima</li>
+                        <li>Santa Catarina</li>
+                        <li>São Paulo</li>
+                        <li>Sergipe</li>
+                        <li>Tocantins</li>
+                    </ul>
+                </div>
+
+                <div class="relative">
+                    <button id="btn-partido" class="btn-custom-select">
+                        <span class="btn-text">Selecionar partido</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <ul id="menu-partido" class="dropdown-select hidden">
+                        <li>AGIR</li>
+                        <li>AVANTE</li>
+                        <li>CIDADANIA</li>
+                        <li>DC</li>
+                        <li>DEMOCRATA</li>
+                        <li>MDB</li> 
+                        <li>MISSÃO</li>
+                        <li>MOBILIZA</li>
+                        <li>NOVO</li>
+                        <li>PCB</li>
+                        <li>PCdoB</li>
+                        <li>PCO</li>
+                        <li>PDT</li>
+                        <li>PL</li>
+                        <li>PT</li>
+                        <li>PSB</li>
+                        <li>PSD</li>
+                        <li>PSDB</li>
+                        <li>PSOL</li>
+                        <li>PSTU</li>
+                        <li>PODE</li>
+                        <li>PP</li>
+                        <li>PRD</li>
+                        <li>PRTB</li>
+                        <li>PV</li>
+                        <li>REDE</li>
+                        <li>REPUBLICANOS</li>
+                        <li>SOLIDARIEDADE</li>
+                        <li>UNIÃO</li>
+                        <li>UP</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+
+
+        <!--Gráficos (imagens representativas)-->
+        <section class="bg-white p-8 rounded-2xl shadow-card m-8">
+            <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+                Projetos aprovados <span class="text-dark-blue font-normal text-lg">por partido</span>
+            </h2>
+            <div class="w-full">
+                <img src="../static/img/grafico-projetos-partido.png" alt="Projetos aprovados por partido" class="w-full h-auto">
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 gap-8 m-8">
+            
+            <div class="bg-white p-8 rounded-2xl shadow-card">
+                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+                    Presença <span class="text-dark-blue font-normal text-lg">por partido</span>
+                </h2>
+                <div class="w-full">
+                    <img src="../static/img/grafico-presenca-partido.png" alt="Projetos aprovados por partido" class="w-full h-auto">
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-card">
+                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+                    Gastos <span class="text-dark-blue font-normal text-lg">por partido</span>
+                </h2>
+                <div class="w-full">
+                    <img src="../static/img/grafico-gastos-partido.png" alt="Gastos por partido" class="w-full h-auto">
+                </div>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>
