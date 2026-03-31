@@ -7,12 +7,13 @@
     <title>Index</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
-
+        //Roda o JS somente após carregar o HTML inteiro
         document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('btn-deputados');
             const menu = document.getElementById('menu-deputados');
             const seta = document.getElementById('seta');
-
+            
+            //Abre o dropdown e verifica se o JS está funcionando
             if (btn && menu) {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -21,12 +22,14 @@
                     seta.classList.toggle('rotate-180');
                 });
 
+                //Fecha o dropdown ao clicar fora dele
                 document.addEventListener('click', (e) => {
                     if (!menu.contains(e.target) && !btn.contains(e.target)) {
                         menu.classList.add('hidden');
                         seta.classList.remove('rotate-180');
                     }
                 });
+            //Erro caso os IDs não forem encontrados
             } else {
                 console.error("Erro: Elementos não encontrados. Verifique os IDs.");
             }
@@ -34,17 +37,22 @@
     </script>
 
     <style type="text/tailwindcss">
-        @theme {
-        --color-radar: #3D6CC3; /* Cor principal (Ex: cor da navbar) */
+        @theme{
+        --color-radar: #0D1967; /* Cor principal (Ex: cor da navbar) */
+        --color-hover: #151385; /* Cor do hover (Ex: Botão Pesquisa) */
         --color-dark-blue: #3A4D74; /* Cor dos texto */
         }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col">
+    <!--Deixa o footer sempre no final da página-->
     <main class="flex-grow">
+        <!--Navbar-->
         <div class="h-30 p-5 bg-radar flex items-center justify-between text-white">
+            <!--Logo-->
             <a href="./"><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
+            <!--Botões do Navbar-->
             <ul class="flex gap-8 text-xs md:text-sm mr-20 font-sans font-semibold">
                 <li>
                     <a href="#" class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME</a>
@@ -58,7 +66,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>
-
+                    
+                    <!--Dropdown-->
                     <ul id="menu-deputados" class="absolute top-full left-0 mt-2 w-48 bg-white text-radar rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
                         <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a></li>
                         <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a></li>
@@ -96,11 +105,13 @@
                 </li>
             </ul>
         </div>
+        
+        <!--Banner-->
         <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
             style="background-image: url(../static/img/banner.png);">
             <div class="absolute inset-0 bg-black/20"></div>
             <div class="relative z-10 text-white">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-15 mb-5">
+                <h1 class="text-3xl text-shadow-md sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-15 mb-5">
                     ACOMPANHE SEUS DEPUTADOS FEDERAIS!
                 </h1>
                 <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl mx-15 ">
@@ -109,6 +120,7 @@
             </div>
         </section>
 
+        <!--Barra de pesquisa-->
         <div class="bg-gray-200 p-6">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3">
 
@@ -141,8 +153,8 @@
                     </div>
                 </div>
 
-                <button class="bg-white px-8 py-4 rounded-none md:rounded-r-full hover:bg-gray-100 transition-colors shadow-sm flex items-center justify-center cursor-pointer">
-                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
+                    <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -150,9 +162,11 @@
 
             </div>
         </div>
+        <!--Saiba mais sobre-->
         <h1 class="text-black  pt-10 pl-10 pb-10 md:pt-15 pl-15 pb-15 text-2xl md:text-3xl font-bold font-poppins">Saiba Mais Sobre...</h1>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 mb-15">
 
+            <!--Botões que levam aos gráficos-->
             <button class="text-left w-full">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
@@ -176,7 +190,7 @@
             <button class="text-left">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-                        <img src="../static/img/presenca.png" class="w-full object-cover">
+                        <img src="../static/img/presença.png" class="w-full object-cover">
                         <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
                         <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se o seu deputado está faltando muito.</h1>
                     </div>
@@ -184,6 +198,7 @@
             </button>
         </div>
     </main>
+    <!--Footer-->
     <footer class="bg-[#e5e5e5] py-8 text-center">
         <h1 class="text-sm font-medium text-black">Todos os direitos preservados a Lumina</h1>
     </footer>
