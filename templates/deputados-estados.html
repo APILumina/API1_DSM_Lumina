@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Deputados - Estados</title>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-deputados');
+            const menu = document.getElementById('menu-deputados');
+            const seta = document.getElementById('seta');
+
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log("Botão clicado!"); 
+                    menu.classList.toggle('hidden');
+                    seta.classList.toggle('rotate-180');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.add('hidden');
+                        seta.classList.remove('rotate-180');
+                    }
+                });
+            } else {
+                console.error("Erro: Elementos não encontrados. Verifique os IDs.");
+            }
+        });
+    </script>
+
+    <style type="text/tailwindcss">
+        @theme {
+        --color-radar: #1A249D; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #081638; /* Cor dos texto */
+        --color-sec: #efc33c; /* Cor amarela */
+        --color-verde: #34C560 /* Cor verde */
+        }
+
+        .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /*Grid dos cards dos estados*/
+        .grid-estados {
+            @apply grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 py-8 px-15;
+        }
+
+        /*Card do estado*/
+        .card-estado {
+            @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden 
+                flex flex-col items-center p-4 transition-all hover:shadow-md hover:-translate-y-1 hover:bg-blue-200 text-center;
+        }
+
+        /* Ajuste da Bandeira para não distorcer */
+        .card-estado img {
+            @apply w-full object-contain mb-3 rounded-xl;
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.144);
+
+        }
+
+        /*Nome do estado*/
+        .card-estado span {
+            @apply text-dark-blue font-bold text-sm md:text-base tracking-tight;
+        }
+        
+
+    </style>
+</head>
+
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    
+    <!--Navbar-->
+    <header>
+        <div class="h-30 py-5 bg-radar text-white">
+            <div class="w-full flex mx-auto max-w-[100rem]">
+                <a href="./index.html"><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
+                <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
+                    <!-- Barra pesquisa ⬇️ -->
+                    <div class="flex relative">
+                        <!-- Lupinha ⬇️ -->
+                        <label for="pesquisa"
+                            class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
+                            <div class="bg-sec size-9 rounded-full"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
+                                stroke="currentColor"
+                                class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                        </label>
+                        <!-- Parte  ⬇️ -->
+                        <input id="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
+                            placeholder="Pesquisar">
+                    </div>
+                    <!-- Dropdowns ⬇️ -->
+                    <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
+                        <li>
+                            <a href="index.html"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME
+                            </a>
+                        </li>
+                        <div class="relative inline-block group">
+                            <li class="relative flex items-center">
+                                <button id="btn-deputados" type="button"
+                                    class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
+                                    DEPUTADOS
+                                    <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="3" stroke="currentColor"
+                                        class="size-4 ml-1 transition-transform duration-300">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+
+                                <ul id="menu-deputados"
+                                    class="absolute top-full left-0 mt-2 w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito
+                                            Federal</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito
+                                            Santo</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
+                                            Grosso</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso
+                                            do Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas
+                                            Gerais</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de
+                                            Janeiro</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Norte</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do
+                                            Sul</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa
+                                            Catarina</a></li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a>
+                                    </li>
+                                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a>
+                                    </li>
+                                    <li><a href="#"
+                                            class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </div>
+                        <li>
+                            <a href="graficos.html"
+                                class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-[100rem] mx-auto">
+
+        <!--Section do título da página-->
+        <div class="bg-white px-8 py-10 mb-9">
+
+            <section class="">
+                <h1 class="text-3xl font-bold text-dark-blue tracking-tight">SELECIONE UM ESTADO</h1>
+            </section>
+        </div>
+
+        <!--Estados-->
+        <section class="grid-estados">
+        
+            <a href="detalhes_sp.html" class="card-estado">
+                <img src="../static/img/Estados/Acre.png" alt="AC">
+                <span>Acre</span>
+            </a>
+
+            <a href="detalhes_rj.html" class="card-estado">
+                <img src="../static/img/Estados/Alagoas.png" alt="AL">
+                <span>Alagoas</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Amapá.png" alt="AP">
+                <span>Amapá</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Amazonas.png" alt=AM">
+                <span>Amazonas</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Bahia.png" alt="BA">
+                <span>Bahia</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Ceará.png" alt="BA">
+                <span>Ceará</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Distrito Federal.png" alt="BA">
+                <span>Distrito Federal</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Espírito Santo.png" alt="BA">
+                <span>Espírito Santo</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Goiás.png" alt="BA">
+                <span>Goiás</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Maranhão.png" alt="BA">
+                <span>Maranhão</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Mato G do Sul.png" alt="BA">
+                <span>Mato Grosso do Sul</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Mato Grosso.png" alt="BA">
+                <span>Mato Grosso</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Minas Gerais.png" alt="BA">
+                <span>Minas Gerais</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Pará.png" alt="BA">
+                <span>Pará</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Paraíba.png" alt="BA">
+                <span>Paraíba</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Paraná.png" alt="BA">
+                <span>Paraná</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Pernambuco.png" alt="BA">
+                <span>Pernambuco</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Piauí.png" alt="BA">
+                <span>Piauí</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio do Janeiro.png" alt="BA">
+                <span>Rio de Janeiro</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio G do Norte.png" alt="BA">
+                <span>Rio Grande do Norte</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio G do Sul.png" alt="BA">
+                <span>Rio Grande do Sul</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rondônia.png" alt="BA">
+                <span>Rondônia</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Roraima.png" alt="BA">
+                <span>Roraima</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Santa Catarina.png" alt="BA">
+                <span>Santa Catarina</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/São Paulo.png" alt="BA">
+                <span>São Paulo</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Sergipe.png" alt="BA">
+                <span>Sergipe</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Tocantins.png" alt="BA">
+                <span>Tocantins</span>
+            </a>
+
+        </section>
+        
+    </main>
+</body>
+</html>
