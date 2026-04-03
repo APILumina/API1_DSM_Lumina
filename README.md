@@ -43,7 +43,7 @@ Para garantir que a solução seja funcional, focamos em três perfis de usuári
 
 ### 3. Problema Central
 Atualmente, eleitores e educadores não possuem ferramentas simples e neutras para avaliar o desempenho de deputados federais candidatos à reeleição.
-> **Pergunta Investigativa:** Como os gastos e a assiduidade dos deputados do meu estado se comparam à média nacional e quais entregas reais justificam o custo de suas candidaturas à reeleição? 
+> **Pergunta Investigativa:** Como o desempenho dos deputados do meu estado dá valor à sua candidatura e como se compara a média nacional? 
 
 ---
 
@@ -130,7 +130,7 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 &nbsp;&nbsp;📅 Planejado <br> &nbsp;&nbsp;🕒 Em andamento <br> &nbsp;&nbsp;🟢 Concluída
 </details>
 
-| Sprint | Período | Documentação | Vídeo (Incremento) | Status |
+| Sprint | Período | Documentação | Vídeo | Status |
 | :---: | :---: | :---: | :---: | :---: |
 | **01** | 18/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1.md) | [🎬 Assitir](#) | 🕒 |
 | **02** | 13/04 a 03/05 | -- | -- | 📅 |
