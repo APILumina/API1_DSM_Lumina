@@ -1,7 +1,7 @@
 # Radar Cidadão 🕵️ <a id="topo"></a>
 
 <p align="center">
-      <img src="docs/img/logo-lumina.png" alt="Logo do Grupo Lumina" width="200">
+      <img src="src/docs/img/logo-lumina.png" alt="Logo do Grupo Lumina" width="200">
       <h2 align="center">Lumina </h2>
 </p>
 
