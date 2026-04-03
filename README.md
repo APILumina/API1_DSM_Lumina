@@ -17,7 +17,7 @@
   <a href="#professores">Professores</a>
 </p>
 
-> **Status do Projeto:** Em andamento (Sprint 1) 🛠️
+> **Status do Projeto:** Aguardando entrega da Sprint 1 🕒
 
 ---
 
@@ -35,7 +35,7 @@ Para garantir que a solução seja funcional, focamos em três perfis de usuári
 
 <details open><summary><b>Educação (Profª Ana Lúcia):</b></summary> Necessidade de ensinar cidadania baseada em fatos e dados neutros, mas falta de ferramentas que organizem o desempenho dos candidatos de forma estruturada.</details>
 <br>
-<details open><summary><b>Jornalismo (Carlos Menezes)::</b></summary> Necessidade de avaliar rapidamente o desempenho de deputados estaduais em busca de reeleição, enfrentando o desafio de dados complexos e espalhados.</details>
+<details open><summary><b>Jornalismo (Carlos Menezes):</b></summary> Necessidade de avaliar rapidamente o desempenho de deputados estaduais em busca de reeleição, enfrentando o desafio de dados complexos e espalhados.</details>
 <br>
 <details open><summary><b>Cidadania (Dona Maria):</b></summary> Desejo de votar com consciência, mas sente falta de uma síntese simples e objetiva para decidir se deve ou não reconduzir seu representante.</details>
 
@@ -44,6 +44,33 @@ Para garantir que a solução seja funcional, focamos em três perfis de usuári
 ### 3. Problema Central
 Atualmente, eleitores e educadores não possuem ferramentas simples e neutras para avaliar o desempenho de deputados federais candidatos à reeleição.
 > **Pergunta Investigativa:** Como os gastos e a assiduidade dos deputados do meu estado se comparam à média nacional e quais entregas reais justificam o custo de suas candidaturas à reeleição? 
+
+---
+
+<br>
+
+## 🗺️ Roadmap
+
+<p align="center">
+  <pre>
+       SPRINT 1                          SPRINT 2                          SPRINT 3
+  [Foco: Fundação]                  [Foco: Exploração]               [Foco: Refinamento]
+          |                                 |                                 |
+   18/03 a 05/04                     13/04 a 03/05                     11/05 a 31/05
+          |                                 |                                 |
+  ● Landing Page Inicial            ● Perfil do Deputado              ● UX Responsivo (Mobile)
+  ● Gráficos de Validação           ● Fotos & Identificação           ● Tabelas Roláveis
+  ● Análise no Colab                ● Filtros por Estado/Nome         ● Tratamento de Erros (404)
+  ● Pergunta Investigativa          ● Dashboard de Gastos             ● Legendas Educativas
+  ● Estrutura Flask                 ● Nuvem de Palavras (Discursos)   ● Fontes e Referências
+          |                                 |                                 |
+       ENTREGA:                          ENTREGA:                          ENTREGA:
+   Dados Tratados &                  Banco MariaDB &                   Sistema Final &
+   Esboço de Interface               Busca Avançada                    Manuais Técnicos
+  </pre>
+</p>
+
+---
 
 <br>
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
@@ -54,13 +81,13 @@ O Backlog do Produto representa a lista de todas as funcionalidades e entregas p
 
 
 <details><summary>ℹ️ Legenda</summary>
-&nbsp;&nbsp;🔴 Não iniciado <br> &nbsp;&nbsp;🟡 Em andamento <br> &nbsp;&nbsp;🟢 Concluído
+&nbsp;&nbsp;🔴 Não iniciado <br> &nbsp;&nbsp;🟡 Em andamento <br> &nbsp;&nbsp;🟢 Concluído <br> &nbsp;&nbsp;★ Meta
 </details>
 
 | RANK | PRIORIDADE | USER STORY | STATUS | SPRINT |
 | :---: | :---: | :--- | :---: | :---: |
-| 1 | Alta | Como usuário, quero acessar uma página inicial simples e intuitiva para entender o propósito do projeto. | 🟡 | 1 |
-| 2 | Alta | Como professor, gostaria de visualizar gráficos preliminares sobre os gastos e presença dos deputados para validar se os dados são úteis para minhas aulas de cidadania. | 🟡 | 1 |
+| 1 | Alta <sup>★</sup> | Como usuário, quero acessar uma página inicial simples e intuitiva para entender o propósito do projeto. | 🟢 | 1 |
+| 2 | Alta <sup>★</sup> | Como professor, gostaria de visualizar gráficos preliminares sobre os gastos e presença dos deputados para validar se os dados são úteis para minhas aulas de cidadania. | 🟢 | 1 |
 | 3 | Alta | Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🔴 | 2 |
 | 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🔴 | 2 |
 | 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🔴 | 2 |
@@ -103,34 +130,60 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 &nbsp;&nbsp;📅 Planejado <br> &nbsp;&nbsp;🕒 Em andamento <br> &nbsp;&nbsp;🟢 Concluída
 </details>
 
-| Sprint | Período | Conteúdo (Foco) | Documentação | Vídeo de Entrega | Status |
-| :---: | :---: | :--- | :---: | :---: | :---: |
-| **01** | 18/03 a 05/04 | Análise de dados no Colab e Estrutura Inicial | [Acessar](./docs/sprint1) | [Assistir](#) | 🕒 |
-| **02** | 13/04 a 03/05 | Banco de Dados MariaDB e Filtros de Pesquisa | [Acessar](./docs/sprint2) | [Assistir](#) | 📅 |
-| **03** | 11/05 a 31/05 | Responsividade, Testes e Manual do Usuário | [Acessar](./docs/sprint3) | [Assistir](#) | 📅 |
+| Sprint | Período | Documentação | Vídeo (Incremento) | Status |
+| :---: | :---: | :---: | :---: | :---: |
+| **01** | 18/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1.md) | [🎬 Assitir](#) | 🕒 |
+| **02** | 13/04 a 03/05 | -- | -- | 📅 |
+| **03** | 11/05 a 31/05 | -- | -- | 📅 |
 
 ---
 
 <br>
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
 
-## 🛠️ Tecnologias Utilizadas <a id="tecnologias"></a>
+## 🛠️ Tecnologias e Ferramentas Utilizadas <a id="tecnologias"></a>
 
 Para atender aos requisitos técnicos (RN.P) do desafio Radar Cidadão, utilizamos as seguintes ferramentas:
 
-* **Análise de Dados:** [Google Colab](https://colab.research.google.com/)
-* **Linguagem:** [Python 3.10+](https://www.python.org/)
-* **Framework Web:** [Flask](https://flask.palletsprojects.com/)
-* **Banco de Dados:** [MariaDB/MySQL](https://mariadb.org/)
-* **Interface:** HTML5 e CSS3
-* **Versionamento:** [GitHub](https://github.com/)
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=fff" alt="Python">
+  <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JS">
+  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB">
+  <br>
+  <img src="https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white" alt="VS Code">
+  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/Google%20Colab-%23F9A825.svg?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Colab">
+  <img src="https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <br>
+  <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
+  <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jirasoftware&logoColor=white" alt="Jira">
+  <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
+  <img src="https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
+</p>
 
 ---
 
 ## 📂 Estrutura do Projeto <a id="estrutura"></a>
 
 ```text
-Ainda precisa ser feita
+API1_DSM_Lumina/
+├── data/
+│   └── deputados/          # Base central de dados do projeto
+│     ├── raw/              # Dados brutos extraídos diretamente da API
+│     └── tratado/          # Dados limpos e normalizados após análise no Google Colab
+├── docs/
+│   └── img/               # Imagens utilizadas na documentação do GitHub
+├── notebooks/             # Notebooks do Google Colab
+├── services/              # Lógica de consumo da API e processamento de dados
+├── static/
+│   └── img/               # Ativos estáticos (CSS, JS, Imagens do site)
+├── templates/             # Templates HTML para o Flask 
+├── views/                 # Definição das rotas e lógica de interface
+├── .gitignore             # Arquivos e pastas ignorados pelo controle de versão
+├── README.md              # Documentação principal do projeto
+├── app.py                 # Arquivo principal para execução da aplicação Flask
+└── requirements.txt       # Lista de dependências do Python
 ```
 
 <br>
@@ -141,11 +194,10 @@ Ainda precisa ser feita
 Siga os passos abaixo para configurar o ambiente e executar a aplicação localmente.
 
 ### 1. Pré-requisitos
-* **Python 3.10 ou superior** instalado.
-* **MariaDB/MySQL** instalado e em execução.
-* **Google Colab** (apenas para a etapa de análise e limpeza de dados).
+* **Python 3.10 ou superior** ([Download](https://git-scm.com/install/))
+* **Git** ([Download](https://git-scm.com/install/))
 
-### 2. Instalação e Execução (Provisório)
+### 2. Instalação e Execução
 ```bash
 # 1. Clone o repositório
 git clone https://github.com/APILumina/API1_DSM_Lumina.git
@@ -171,24 +223,24 @@ python src/app.py
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
 
 ## 👥 Equipe <a id="equipe"></a>
-| Função | Nome | GitHub | Linkedin |
-| :----: | :--: | :----: | :----: |
-| Product Owner | Daiane Karine da Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dai4ne) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Scrum Master | Kelwin Felipe Rocha Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kersilva) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kersilva) |
-| Dev Team | Cid Daniel Neves D' Oliveira | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/C1dneve) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Dev Team | Guilherme de Siqueira Marques | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/introspective616) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Dev Team | Guilherme Henrique Campos Ribeiro  | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/guilherme16092007) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Dev Team | Gustavo de Oliveira Azevedo | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gustaft07) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Dev Team | Júlia Carolina dos Santos Inacio | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/juliacarolina728-sudo) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
-| Dev Team | Pamela Emily Iwabuchi Maciel | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pamelaiwabuchi) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pamela-iwabuchi/) |
-| Dev Team | Vinicius de Souza | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vinicius538) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
+| Foto | Função | Nome | GitHub | Linkedin |
+| :--: | :----: | :--: | :----: | :----: |
+| <img src="https://github.com/Dai4ne.png" width="50"> | Product Owner | Daiane Karine da Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dai4ne) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
+| <img src="https://github.com/kersilva.png" width="50"> | Scrum Master | Kelwin Felipe Rocha Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kersilva) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kersilva) |
+| <img src="https://github.com/C1dneve.png" width="50"> | Dev Team | Cid Daniel Neves D' Oliveira | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/C1dneve) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://br.linkedin.com/in/cid-doliveira) |
+| <img src="https://github.com/introspective616.png" width="50"> | Dev Team | Guilherme de Siqueira Marques | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/introspective616) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/guilherme-de-siqueira-marques-34819834a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
+| <img src="https://github.com/guilherme16092007.png" width="50"> | Dev Team | Guilherme Henrique Campos Ribeiro | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/guilherme16092007) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/guilherme-ribeiro-b441bb334) |
+| <img src="https://github.com/gustaft07.png" width="50"> | Dev Team | Gustavo de Oliveira Azevedo | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gustaft07) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gustavo-oliveira-1056303a8) |
+| <img src="https://github.com/juliacarolina728-sudo.png" width="50"> | Dev Team | Júlia Carolina dos Santos Inacio | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/juliacarolina728-sudo) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/júlia-carolina-dos-santos-inácio) |
+| <img src="https://github.com/pamelaiwabuchi.png" width="50"> | Dev Team | Pamela Emily Iwabuchi Maciel | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pamelaiwabuchi) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pamela-iwabuchi/) |
+| <img src="https://github.com/vinicius538.png" width="50"> | Dev Team | Vinicius de Souza | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vinicius538) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vinícius-de-souza-2a55042b8) |
 
 
 ## 🦉 Professores Responsáveis <a id="professores"></a>
-| Função | Nome | GitHub | Linkedin |
-| :----: | :--: | :----: | :----: |
-| Professor P2  | Fernando Masanori Ashikaga | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/fmasanori) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/fmasanori/) |
-| Professor M2 | Jean Carlos Lourenço Costa | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jeancosta4) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jean-carlos-lourenço-costa-12224283/) |
+| Foto | Função | Nome | GitHub | Linkedin |
+| :--: | :----: | :--: | :----: | :----: |
+| <img src="https://github.com/fmasanori.png" width="50"> | Professor P2  | Fernando Masanori Ashikaga | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/fmasanori) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/fmasanori/) |
+| <img src="https://github.com/jeancosta4.png" width="50"> | Professor M2 | Jean Carlos Lourenço Costa | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jeancosta4) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jean-carlos-lourenço-costa-12224283/) |
 
 <br>
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
