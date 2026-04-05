@@ -4,7 +4,7 @@ route_bp =Blueprint("route",__name__)
 
 @route_bp.route("/")
 def home():
-    return render_template ("home.html")
+    return render_template ("index.html")
 
 @route_bp.route("/graficos")
 def graficos():
@@ -14,6 +14,14 @@ def graficos():
 def deputados():
     return render_template("deputados.html")
 
-@route_bp.route("/infodeputados")
+@route_bp.route("/deputado")
 def infodeputados():
-    return render_template("infodeputados.html")
+    return render_template("deputado.html")
+
+@route_bp.route("/estado")
+def estado():
+    return render_template("deputados-estados.html")
+
+@route_bp.route("/partido")
+def partido():
+    return render_template("escolha-partido.html")
