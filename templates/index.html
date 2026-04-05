@@ -38,9 +38,11 @@
 
     <style type="text/tailwindcss">
         @theme{
-        --color-radar: #0D1967; /* Cor principal (Ex: cor da navbar) */
         --color-hover: #151385; /* Cor do hover (Ex: Botão Pesquisa) */
-        --color-dark-blue: #3A4D74; /* Cor dos texto */
+        --color-radar: #1A249D; /* Cor principal (Ex: cor da navbar) */
+        --color-dark-blue: #081638; /* Cor dos texto */
+        --color-sec: #efc33c; /* Cor amarela */
+        --color-verde: #34C560 /* Cor verde */
         }
     </style>
 </head>
@@ -55,10 +57,10 @@
             <!--Botões do Navbar-->
             <ul class="flex gap-8 text-xs md:text-sm mr-20 font-sans font-semibold">
                 <li>
-                    <a href="#" class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME</a>
+                    <a href="#" class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500">HOME</a>
                 </li>
                 <li class="relative flex items-center">
-                    <button id="btn-deputados" type="button"class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
+                    <button id="btn-deputados" type="button"class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
                         DEPUTADOS
                         <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="3" stroke="currentColor"
@@ -101,7 +103,7 @@
                 </li>
                 <li>
                     <a href="#"
-                        class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">GRÁFICOS</a>
+                        class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500">GRÁFICOS</a>
                 </li>
             </ul>
         </div>
@@ -190,7 +192,7 @@
             <button class="text-left">
                 <a href="#">
                     <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-                        <img src="../static/img/presença.png" class="w-full object-cover">
+                        <img src="../static/img/presenca.png" class="w-full object-cover">
                         <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
                         <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">Descubra se o seu deputado está faltando muito.</h1>
                     </div>
