@@ -17,6 +17,8 @@
   <a href="#professores">Professores</a>
 </p>
 
+<br>
+
 > **Status do Projeto:** Aguardando entrega da Sprint 1 🕒
 
 ---
@@ -170,8 +172,6 @@ Para atender aos requisitos técnicos (RN.P) do desafio Radar Cidadão, utilizam
 API1_DSM_Lumina/
 ├── data/
 │   └── deputados/          # Base central de dados do projeto
-│     ├── raw/              # Dados brutos extraídos diretamente da API
-│     └── tratado/          # Dados limpos e normalizados após análise no Google Colab
 ├── docs/
 │   └── img/               # Imagens utilizadas na documentação do GitHub
 ├── notebooks/             # Notebooks do Google Colab
@@ -208,15 +208,19 @@ cd API1_DSM_Lumina
 # 3. Crie um ambiente virtual
 python -m venv venv
 
-# 4. Ative o ambiente virtual
+# 4. Instale as dependências
 # No Windows:
-venv\Scripts\activate
+.\venv\Scripts\pip install -r requirements.txt
 
-# 5. Instale as dependências
-pip install -r requirements.txt
+# No Linux/Mac:
+./venv/bin/pip install -r requirements.txt
 
-# 6. Execute a aplicação
-python src/app.py
+# 5. Execute a aplicação
+# No Windows:
+.\venv\Scripts\python app.py
+
+# No Linux/Mac:
+./venv/bin/python app.py
 ```
 
 <br>
