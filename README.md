@@ -134,7 +134,7 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 
 | Sprint | Período | Documentação | Status |
 | :---: | :---: | :---: | :---: |
-| **01** | 18/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | 🕒 |
+| **01** | 16/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | 🕒 |
 | **02** | 13/04 a 03/05 | -- | 📅 |
 | **03** | 11/05 a 31/05 | -- | 📅 |
 
