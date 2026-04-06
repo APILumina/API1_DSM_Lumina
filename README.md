@@ -132,11 +132,11 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 &nbsp;&nbsp;📅 Planejado <br> &nbsp;&nbsp;🕒 Em andamento <br> &nbsp;&nbsp;🟢 Concluída
 </details>
 
-| Sprint | Período | Documentação | Vídeo | Status |
-| :---: | :---: | :---: | :---: | :---: |
-| **01** | 18/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1.md) | [🎬 Assitir](#) | 🕒 |
-| **02** | 13/04 a 03/05 | -- | -- | 📅 |
-| **03** | 11/05 a 31/05 | -- | -- | 📅 |
+| Sprint | Período | Documentação | Status |
+| :---: | :---: | :---: | :---: |
+| **01** | 18/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | 🕒 |
+| **02** | 13/04 a 03/05 | -- | 📅 |
+| **03** | 11/05 a 31/05 | -- | 📅 |
 
 ---
 
