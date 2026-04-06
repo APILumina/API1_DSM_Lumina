@@ -45,7 +45,7 @@ Para garantir que a solução seja funcional, focamos em três perfis de usuári
 
 ### 3. Problema Central
 Atualmente, eleitores e educadores não possuem ferramentas simples e neutras para avaliar o desempenho de deputados federais candidatos à reeleição.
-> **Pergunta Investigativa:** Como o desempenho dos deputados do meu estado dá valor à sua candidatura e como se compara a média nacional? 
+> **Pergunta Investigativa:** Como o desempenho dos deputados do meu estado dá valor à sua candidatura e como se compara à média nacional? 
 
 ---
 
@@ -58,7 +58,7 @@ Atualmente, eleitores e educadores não possuem ferramentas simples e neutras pa
        SPRINT 1                          SPRINT 2                          SPRINT 3
   [Foco: Fundação]                  [Foco: Exploração]               [Foco: Refinamento]
           |                                 |                                 |
-   18/03 a 05/04                     13/04 a 03/05                     11/05 a 31/05
+   16/03 a 05/04                     13/04 a 03/05                     11/05 a 31/05
           |                                 |                                 |
   ● Landing Page Inicial            ● Perfil do Deputado              ● UX Responsivo (Mobile)
   ● Gráficos de Validação           ● Fotos & Identificação           ● Tabelas Roláveis
