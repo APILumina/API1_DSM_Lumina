@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <title>{{ dep['nome_eleitoral'] }}</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="style.css">
@@ -49,7 +49,7 @@
     <header>
         <div class="h-30 py-5 bg-radar text-white">
             <div class="w-full flex mx-auto max-w-[100rem] px-6">
-                <a href="./index.html"><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
+                <a href="/"><img src="../static/img/logo.png" alt="logo do radar cidadao" class="h-20"></a>
                 <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
                     <!-- Barra pesquisa ⬇️ -->
                     <div class="flex relative">
@@ -71,7 +71,7 @@
                     <!-- Dropdowns ⬇️ -->
                     <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
                         <li>
-                            <a href="index.html"
+                            <a href="/"
                                 class="underline underline-offset-4 decoration-transparent hover:decoration-white transition-all duration-500">HOME
                             </a>
                         </li>
@@ -159,6 +159,7 @@
         </div>
     </header>
     <!-- Conteúdo da página ⬇️ -->
+     {% set nome = dep['nome_eleitoral'].split(' ') %}
     <main>
         <!-- Container ⬇️ -->
         <div class="w-full mx-auto max-w-[100rem] my-20 px-6">
@@ -166,7 +167,7 @@
             <nav class="flex mb-5" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse text-dark-blue">
                     <li class="inline-flex items-center">
-                        <a href="index.html"
+                        <a href="/deputados"
                             class="inline-flex items-center text-lg font-medium text-body text-current/75 hover:text-fg-brand">
                             Deputados
                         </a>
@@ -179,7 +180,7 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m9 5 7 7-7 7" />
                             </svg>
-                            <span class="inline-flex items-center text-lg font-bold text-body-subtle">João Silva</span>
+                            <span class="inline-flex items-center text-lg font-bold text-body-subtle">{{ dep['nome_eleitoral'] }}</span>
                         </div>
                     </li>
                 </ol>
@@ -191,19 +192,19 @@
                     <!-- Foto ⬇️ -->
                     <div
                         class="aspect-square w-full rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7">
-                        <img src="../static/img/joao-silva.jpeg" class="max-h-full" alt="">
+                        <img src="{{ dep['imagem_deputado'] }}" class="h-full" alt="Foto do deputado">
                     </div>
                     <!-- Nome eleitoral do deputado ⬇️ -->
-                    <h2 class="text-4xl mt-4 mb-7"><span class="font-bold">João</span> Silva</h2>
+                    <h2 class="text-4xl mt-4 mb-7"><span class="font-bold">{{ nome[0] }}</span> {{ " ".join(nome[1:]) }}</h2>
                     <!-- Partido, Estado e Email ⬇️ -->
                     <div class="text-xl mb-30">
-                        <p>Partido: <span class="font-bold">MST</span></p>
-                        <p>Estado: <span class="font-bold">Acre</span></p>
-                        <p>Email: <a href="#" class="hover:underline">joao.silva@camara.sp.gov.br</a></p>
+                        <p>Partido: <span class="font-bold">{{ dep['partido'] }}</span></p>
+                        <p>Estado: <span class="font-bold">{{ dep['estado'] }}</span></p>
+                        <p>Email: <a href="#" class="hover:underline"></a>{{ dep['email'] }}</p>
                     </div>
                     <!-- Botão de acessar site da câmara ⬇️ -->
                     <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
-                        <a href="https://www.camara.leg.br"
+                        <a href="https://www.camara.leg.br/deputados/{{ dep['cd_deputado'] }}"
                             class="bg-radar hover:bg-radar text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
                             site da câmara</a>
                     </div>
@@ -212,8 +213,8 @@
                 <div class="bg-white w-6/8 py-5 px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
                     <!-- Nome eleitoral e partido ⬇️ -->
                     <div class="flex flex-col gap-2">
-                        <h2 class="text-4xl"><span class="font-bold">João</span> Silva</h2>
-                        <p class="text-xl mb-5">Partido: MST</p>
+                        <h2 class="text-4xl"><span class="font-bold">{{ nome[0] }}</span> {{ " ".join(nome[1:]) }}</h2>
+                        <p class="text-xl mb-5">Partido: {{ dep['partido'] }}</p>
                         <div class="h-px w-full bg-gray-300"></div>
                     </div>
                     <!-- Principais informações sobre o deputado ⬇️ -->
@@ -248,125 +249,28 @@
                             <div class="flex flex-col">
                                 <span class="font-bold">Total de Proposições</span>
                                 <p class="mb-5">
-                                    <span class="font-bold text-radar">10</span> proposições
+                                    <span class="font-bold text-radar">{{ proposicao['total_proposicao'] }}</span> proposições
                                 </p>
                                 <div class="relative bg-radar/20 rounded-full">
                                     <div class="bg-radar h-3 rounded-full" style="width: 72%"></div>
                                 </div>
                                 <p class="mt-1 text-xl">
-                                    <span class="font-bold text-radar">92</span> presença <span class="font-bold text-radar">(72%)</span>
+                                    <span class="font-bold text-radar">{{ presenca['total_presencas' ]}}</span> presença <span class="font-bold text-radar">(72%)</span>
                                 </p>
                             </div>
                             <div class="h-px w-full bg-gray-300"></div>
                             <div class="flex flex-col">
                                 <span class="font-bold">Despesas Totais</span>
-                                <span class="font-bold text-4xl text-radar">R$ 259.786,17</span>
+                                <span class="font-bold text-4xl text-radar">R${{ gasto['total'] }}</span>
                             </div>
                         </div>
                         <div class="w-px h-full bg-gray-300"></div>
-                        <!-- Últimas proposições ⬇️ -->
+                        <!-- Proposições ⬇️ -->
                         <div class="w-1/2 h-full flex flex-col text-2xl pl-5">
-                            <h3 class="uppercase font-bold mb-5">Últimas proposições</h3>
+                            <h3 class="uppercase font-bold mb-5">Proposições</h3>
                             <div class="flex flex-col flex-1 gap-7">
-                                <!-- PL ⬇️ -->
-                                <div class="flex items-center gap-4">
-                                    <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6 text-sec">
-                                            <path fill-rule="evenodd"
-                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <!-- Textos ⬇️ -->
-                                    <div class=" text-dark-blue">
-                                        <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
-                                        <!-- Descrição ⬇️ -->
-                                        <p class="text-lg">Criminalização da Misoginia</p>
-                                    </div>
-                                </div>
-                                <div class="h-px w-full bg-gray-300"></div>
-                                <!-- PL ⬇️ -->
-                                <div class="flex items-center gap-4">
-                                    <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6 text-sec">
-                                            <path fill-rule="evenodd"
-                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <!-- Textos ⬇️ -->
-                                    <div class=" text-dark-blue">
-                                        <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
-                                        <!-- Descrição ⬇️ -->
-                                        <p class="text-lg">Criminalização da Misoginia</p>
-                                    </div>
-                                </div>
-                                <div class="h-px w-full bg-gray-300"></div>
-                                <!-- PL ⬇️ -->
-                                <div class="flex items-center gap-4">
-                                    <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6 text-sec">
-                                            <path fill-rule="evenodd"
-                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <!-- Textos ⬇️ -->
-                                    <div class=" text-dark-blue">
-                                        <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
-                                        <!-- Descrição ⬇️ -->
-                                        <p class="text-lg">Criminalização da Misoginia</p>
-                                    </div>
-                                </div>
-                                <div class="h-px w-full bg-gray-300"></div>
-                                <!-- PL ⬇️ -->
-                                <div class="flex items-center gap-4">
-                                    <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6 text-sec">
-                                            <path fill-rule="evenodd"
-                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <!-- Textos ⬇️ -->
-                                    <div class=" text-dark-blue">
-                                        <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
-                                        <!-- Descrição ⬇️ -->
-                                        <p class="text-lg">Criminalização da Misoginia</p>
-                                    </div>
-                                </div>
-                                <div class="h-px w-full bg-gray-300"></div>
-                                <!-- PL ⬇️ -->
-                                <div class="flex items-center gap-4">
-                                    <!-- Estrela ⬇️ -->
-                                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="size-6 text-sec">
-                                            <path fill-rule="evenodd"
-                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <!-- Textos ⬇️ -->
-                                    <div class=" text-dark-blue">
-                                        <!-- PL ⬇️ -->
-                                        <h4 class="font-bold text-xl uppercase">Projeto de Lei <span class=" text-radar">nº 123/2023</span></h4>
-                                        <!-- Descrição ⬇️ -->
-                                        <p class="text-lg">Criminalização da Misoginia</p>
-                                    </div>
-                                </div>
+                                {% for prop in proposicoes %}
+                                {% }
                             </div>
                         </div>
                     </div>
