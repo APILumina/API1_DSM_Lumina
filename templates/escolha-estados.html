@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% block title %}Estados{% endblock %}
+
+    {% block extra_style%}
+    <style type="text/tailwindcss">
+        .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /*Grid dos cards dos estados*/
+        .grid-estados {
+            @apply grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 py-8 px-15;
+        }
+
+        /*Card do estado*/
+        .card-estado {
+            @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden 
+                flex flex-col items-center p-4 transition-all hover:shadow-md hover:-translate-y-1 hover:bg-blue-200 text-center;
+        }
+
+        /* Ajuste da Bandeira para não distorcer */
+        .card-estado img {
+            @apply w-full object-contain mb-3 rounded-xl;
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.144);
+
+        }
+
+        /*Nome do estado*/
+        .card-estado span {
+            @apply text-dark-blue font-bold text-sm md:text-base tracking-tight;
+        }
+        
+
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+    <main class="flex-grow w-full max-w-[100rem] mx-auto px-6">
+
+        <!--Section do título da página-->
+        <div class="bg-white px-8 py-10 mb-9">
+            <section class="">
+                <h1 class="text-3xl font-bold text-dark-blue tracking-tight">SELECIONE UM ESTADO</h1>
+            </section>
+        </div>
+
+        <!--Estados-->
+        <section class="grid-estados">
+        
+            <a href="/partido" class="card-estado">
+                <img src="../static/img/Estados/Acre.png" alt="AC">
+                <span>Acre</span>
+            </a>
+
+            <a href="detalhes_rj.html" class="card-estado">
+                <img src="../static/img/Estados/Alagoas.png" alt="AL">
+                <span>Alagoas</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Amapá.png" alt="AP">
+                <span>Amapá</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Amazonas.png" alt=AM">
+                <span>Amazonas</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Bahia.png" alt="BA">
+                <span>Bahia</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Ceará.png" alt="BA">
+                <span>Ceará</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Distrito Federal.png" alt="BA">
+                <span>Distrito Federal</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Espírito Santo.png" alt="BA">
+                <span>Espírito Santo</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Goiás.png" alt="BA">
+                <span>Goiás</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Maranhão.png" alt="BA">
+                <span>Maranhão</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Mato G do Sul.png" alt="BA">
+                <span>Mato Grosso do Sul</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Mato Grosso.png" alt="BA">
+                <span>Mato Grosso</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Minas Gerais.png" alt="BA">
+                <span>Minas Gerais</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Pará.png" alt="BA">
+                <span>Pará</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Paraíba.png" alt="BA">
+                <span>Paraíba</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Paraná.png" alt="BA">
+                <span>Paraná</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Pernambuco.png" alt="BA">
+                <span>Pernambuco</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Piauí.png" alt="BA">
+                <span>Piauí</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio do Janeiro.png" alt="BA">
+                <span>Rio de Janeiro</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio G do Norte.png" alt="BA">
+                <span>Rio Grande do Norte</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rio G do Sul.png" alt="BA">
+                <span>Rio Grande do Sul</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Rondônia.png" alt="BA">
+                <span>Rondônia</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Roraima.png" alt="BA">
+                <span>Roraima</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Santa Catarina.png" alt="BA">
+                <span>Santa Catarina</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/São Paulo.png" alt="BA">
+                <span>São Paulo</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Sergipe.png" alt="BA">
+                <span>Sergipe</span>
+            </a>
+
+            <a href="detalhes_mg.html" class="card-estado">
+                <img src="../static/img/Estados/Tocantins.png" alt="BA">
+                <span>Tocantins</span>
+            </a>
+
+        </section>
+        
+    </main>
+{% endblock %}

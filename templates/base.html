@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Passion+One&display=swap" rel="stylesheet">
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-radar: #1A249D;
+            --color-dark-blue: #081638;
+            --color-sec: #efc33c;
+            --color-verde: #34C560;
+        }
+        .shadow-card { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+    </style>
+    
+    {% block extra_style %}{% endblock %}
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <div class="bg-radar text-white relative"> <!-- cor de fundo navbar e texto branco -->
+    <div class="flex items-center justify-between p-5">
+      <!-- LOGO -->
+      <img src="../static/img/logo.png" alt="Logo" class="h-20 ml-10"> <!-- altura e margem da logo -->
+      <!-- BOTÃO que aparce diminuir tela -->
+      <button id="btn-menu" class="md:hidden  text-3xl">
+        ☰
+      </button>
+
+      <!-- CONTAINER DA PESQUISA E MENU -->
+      <div class="flex flex-col mr-[5%]">
+        <div class="relative w-full  mb-2 md:block">
+            <form action="{{ url_for('route.procurar') }}" method="GET">
+                <label for="pesquisa" class="absolute top-1/2 left-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer">
+                    <div class="w-[35px] h-[35px] bg-[#FBBC0E] rounded-full"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-[14px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-black" fill="none"
+                        viewBox="0 0 24 24" stroke-width="3.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </label>
+
+                <input id="pesquisa" name="pesquisa" type="text" placeholder="Pesquisar"
+                value="{{ request.args.get('pesquisa', '') }}"
+                class="w-full pl-12 pr-3 py-3 rounded-full border-none text-black bg-[#FFFFFF] focus:outline-none" />
+            </form>
+        </div>
+        <!-- MENU PRINCIPAL -->
+
+        <ul id="menu-principal" class="hidden md:flex flex-col md:flex-row gap-4 md:gap-8 text-sm font-sans font-semibold 
+                absolute md:static top-full left-0 w-full md:w-auto bg-[#3D6CC3] md:bg-transparent 
+                p-5 md:p-0 menu-anim z-40">
+
+            <li>
+            <a href="/" class="underline underline-offset-4 decoration-transparent hover:decoration-[#FBBC0E] transition-all duration-300">
+                HOME
+            </a>
+            </li>
+
+            <li class="relative">
+                <a href="/deputados" class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500 text-white font-sans font-semibold text-xs md:text-sm"> DEPUTADOS </a>
+                <button id="btn-deputados" type="button" class="flex items-center cursor-pointer select-none outline-none border-none bg-transparent text-white ml-1 inline">
+                    <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                        stroke="currentColor" class="size-4 transition-transform duration-300">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                
+                <!-- DROPDOWN DE DEPUTADOS -->
+                <ul id="menu-deputados"
+                    class="hidden md:absolute mt-2 w-full md:w-48 bg-white text-[#3D6CC3] rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Acre</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Alagoas</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Bahia</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Ceará</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito Federal</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito Santo</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato Grosso do Sul</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas Gerais</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio de Janeiro</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Norte</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio Grande do Sul</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa Catarina</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">São Paulo</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a></li>
+                </ul>
+            </li>
+            <!-- GRÁFICOS -->
+            <li>
+            <a href="/estado"
+                class="underline underline-offset-4 decoration-transparent hover:decoration-[#FBBC0E] transition-all duration-300">
+                GRÁFICOS
+            </a>
+            </li>
+        </ul>
+        </div>
+        </div>
+  </div>
+
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("btn-deputados");
+            const menu = document.getElementById("menu-deputados");
+            const seta = document.getElementById("seta");
+
+            if (btn && menu) {
+                btn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle("hidden");
+                    seta.classList.toggle("rotate-180");
+                });
+
+                document.addEventListener("click", (e) => {
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.add("hidden");
+                        seta.classList.remove("rotate-180");
+                    }
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

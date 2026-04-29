@@ -176,7 +176,7 @@ def infodeputados(id):
 
 @route_bp.route("/estado")
 def estado():
-    return render_template("deputados-estados.html")
+    return render_template("escolha-estados.html")
 
 @route_bp.route("/partido")
 def partido():
