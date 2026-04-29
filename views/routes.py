@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template,request,jsonify
 import mysql
 from database import conectar
+import unicodedata
 
 route_bp = Blueprint("route",__name__)
 
@@ -141,10 +142,12 @@ def infodeputados(id):
     """
     
     query5 = """
-    SELECT p.cd_proposicoes, p.nome
+    SELECT p.cd_proposicoes, p.keywords
     FROM proposicao_deputados pd
     INNER JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-    WHERE pd.fk_deputado = %s;
+    WHERE pd.fk_deputado = %s
+    AND p.keywords IS NOT NULL
+    AND p.keywords <> 'None' LIMIT 5
     """
     
 
@@ -161,13 +164,13 @@ def infodeputados(id):
     total_proposicao = cursor.fetchone()
     
     cursor.execute(query5,(id,))
-    proposicao = cursor.fetchall()
+    proposicoes = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto = gasto, presenca = presenca, total_proposicao = total_proposicao, proposicao = proposicao)
+        return render_template("deputado.html", dep=deputado, gasto = gasto, presenca = presenca, total_proposicao = total_proposicao, proposicoes = proposicoes)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 
@@ -244,20 +247,17 @@ def buscar():
     cursor = conexao.cursor(dictionary=True)
     
     # Usando GROUP BY para garantir que cada nome apareça apenas uma vez
+
     query = f"""
-    SELECT ANY_VALUE(d.cd_deputado) as cd_deputado, 
-           d.nome_eleitoral, 
-           ANY_VALUE(d.nome) as nome,
-           ANY_VALUE(d.imagem_deputado) as imagem_deputado,
-           ANY_VALUE(e.uf) AS estado, 
-           ANY_VALUE(p.abreviacao) AS partido
-            FROM deputado d
-            JOIN estado e ON d.fk_estado = e.cd_estado
-            JOIN partido p ON d.fk_partido = p.cd_partido
-            {where_clause}
-            GROUP BY d.nome_eleitoral
-            ORDER BY d.nome_eleitoral
-            """
+    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+           e.uf AS estado, p.abreviacao AS partido
+    FROM deputado d
+    JOIN estado e ON d.fk_estado = e.cd_estado
+    JOIN partido p ON d.fk_partido = p.cd_partido
+    {where_clause}
+    GROUP BY d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado, e.uf, p.abreviacao
+    ORDER BY d.nome_eleitoral
+    """
 
     cursor.execute(query, params)
     resultados = cursor.fetchall()
@@ -266,3 +266,45 @@ def buscar():
     conexao.close()
     
     return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido)
+
+def remover_acentos(texto):
+    # Normaliza para a forma NFKD (separa o caractere do acento)
+    nfkd_form = unicodedata.normalize('NFKD', texto)
+    return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
+
+@route_bp.route('/procurar')
+def procurar():
+    pesquisa = request.args.get('pesquisa', '').strip()
+    pesquisa = remover_acentos(pesquisa).lower()
+
+    filtros = []
+    params = []
+    
+    if pesquisa:
+        filtros.append("(d.nome COLLATE utf8mb4_unicode_ci LIKE %s OR d.nome_eleitoral COLLATE utf8mb4_unicode_ci LIKE %s)")
+        
+        termo = f"%{pesquisa}%"
+        params.extend([termo, termo])
+    
+    causa = "WHERE " + " AND ".join(filtros) if filtros else ""
+    
+    conexao = conectar()
+    cursor = conexao.cursor(dictionary=True)
+    
+    query = f"""
+    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+           e.uf AS estado, p.abreviacao AS partido
+    FROM deputado d
+    JOIN estado e ON d.fk_estado = e.cd_estado
+    JOIN partido p ON d.fk_partido = p.cd_partido
+    {causa}
+    ORDER BY d.nome_eleitoral
+    """
+
+    cursor.execute(query, params)
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    conexao.close()
+
+    return render_template('deputados.html', deputados=resultados)
