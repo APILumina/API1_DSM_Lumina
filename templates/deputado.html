@@ -239,9 +239,9 @@
               Partido: <span class="font-bold">{{ dep['partido'] }}</span>
             </p>
             <p>Estado: <span class="font-bold">{{ dep['estado'] }}</span></p>
-            <p>
-              Email: <a href="#" class="hover:underline"></a>{{ dep['email']
-              }}
+            <p class="flex gap-1 min-w-0 ">
+              Email: <a href="#" class="truncate hover:whitespace-normal hover:break-all bg-white transition-all">{{ dep['email']
+              }}</a>
             </p>
           </div>
           <!-- Botão de acessar site da câmara ⬇️ -->
@@ -255,9 +255,8 @@
         <div class="bg-white w-6/8 py-5 px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
           <!-- Nome eleitoral e partido ⬇️ -->
           <div class="flex flex-col gap-2">
-            <h2 class="text-4xl">
-              <span class="font-bold">{{ nome[0] }}</span> {{ "
-              ".join(nome[1:]) }}
+            <h2 class="text-4xl font-bold capitalize">
+              {{ dep['nome'] | lower }}
             </h2>
             <p class="text-xl mb-5">Partido: {{ dep['partido'] }}</p>
             <div class="h-px w-full bg-gray-300"></div>
@@ -267,7 +266,7 @@
             <!-- Mandatos, Situação, Total de Proposições e Despesas totais ⬇️ -->
             <div class="w-1/2 h-full flex flex-col justify-between text-2xl pr-5">
               <div class="flex flex-col">
-                <span class="font-bold mb-5">Mandatos</span>
+                <!-- <span class="font-bold mb-5">Mandatos</span>
                 <div
                   class="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 text-nowrap font-medium text-sm text-center gap-x-5 gap-y-2 w-full 2xl:max-w-[95%]">
                   <div class="bg-radar/20 text-blue-800 px-3 py-1 rounded-full">
@@ -306,9 +305,8 @@
                   <div class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">
                     1979 - 1982
                   </div>
-                </div>
+                </div> -->
               </div>
-              <div class="h-px w-full bg-gray-300"></div>
               <div class="flex flex-col">
                 <span class="font-bold mb-2">Situação na Câmara</span>
                 <div class="bg-verde p-2 w-fit text-white text-xl font-semibold tracking-wide rounded-lg">
@@ -323,11 +321,11 @@
                   proposições
                 </p>
                 <div class="relative bg-radar/20 rounded-full">
-                  <div class="bg-radar h-3 rounded-full" style="width: 72%"></div>
+                  <div class="bg-radar h-3 rounded-full" style="width: {{ presenca['taxa_assiduidade']}}%"></div>
                 </div>
                 <p class="mt-1 text-xl">
-                  <span class="font-bold text-radar">{{ presenca['total_presencas' ]}}</span>
-                  presença <span class="font-bold text-radar">(72%)</span>
+                  <span class="font-bold text-radar">{{ presenca['presencas_nominais']}}</span>
+                  presença <span class="font-bold text-radar">({{ presenca['taxa_assiduidade']}}%)</span>
                 </p>
               </div>
               <div class="h-px w-full bg-gray-300"></div>
@@ -338,7 +336,7 @@
             </div>
             <div class="w-px h-full bg-gray-300"></div>
             <!-- Proposições ⬇️ -->
-            <div class="w-1/2 h-full flex flex-col text-2xl pl-5">
+            <div class="w-1/2 h-full flex flex-col text-2xl pl-5 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin">
               <h3 class="uppercase font-bold mb-5">Proposições</h3>
               <div class="flex flex-col flex-1 gap-7">
                 {% for prop in proposicoes %}
@@ -356,12 +354,8 @@
                   <!-- Textos ⬇️ -->
                   <div class="text-dark-blue">
                     <!-- PL ⬇️ -->
-                    <h4 class="font-bold text-xl uppercase">
+                    <h4 class="font-bold text-xl/5.5 capitalize">
                       {{ prop['keywords']}}
-                      <span class="text-radar">nº 123/2023</span>
-                    </h4>
-                    <!-- Descrição ⬇️ -->
-                    <p class="text-lg">Criminalização da Misoginia</p>
                   </div>
                 </div>
                 {% endfor %}

@@ -242,86 +242,126 @@
             <!--FiltroS de estados e partidos-->
             <section class="flex gap-4">
         
-                <div class="relative">
-                    <button id="btn-estado" class="btn-custom-select">
-                        <span class="btn-text">Selecionar estado</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <ul id="menu-estado" class="dropdown-select hidden ">
-                        <li>Acre</li>
-                        <li>Alagoas</li>
-                        <li>Amapá</li>
-                        <li>Amazonas</li>
-                        <li>Bahia</li>
-                        <li>Ceará</li>
-                        <li>Distrito Federal</li>
-                        <li>Espírito Santo</li>
-                        <li>Goiás</li>
-                        <li>Maranhão</li>
-                        <li>Mato Grosso</li>
-                        <li>Mato Grosso do Sul</li>
-                        <li>Minas Gerais</li>
-                        <li>Pará</li>
-                        <li>Paraíba</li>
-                        <li>Paraná</li>
-                        <li>Pernambuco</li>
-                        <li>Piauí</li>
-                        <li>Rio de Janeiro</li>
-                        <li>Rio Grande do Norte</li>
-                        <li>Rio Grande do Sul</li>
-                        <li>Rondônia</li>
-                        <li>Roraima</li>
-                        <li>Santa Catarina</li>
-                        <li>São Paulo</li>
-                        <li>Sergipe</li>
-                        <li>Tocantins</li>
-                    </ul>
-                </div>
+                <div class="relative w-full md:w-[20%]">
 
-                <div class="relative">
-                    <button id="btn-partido" class="btn-custom-select">
-                        <span class="btn-text">Selecionar partido</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <ul id="menu-partido" class="dropdown-select hidden">
-                        <li>AGIR</li>
-                        <li>AVANTE</li>
-                        <li>CIDADANIA</li>
-                        <li>DC</li>
-                        <li>DEMOCRATA</li>
-                        <li>MDB</li> 
-                        <li>MISSÃO</li>
-                        <li>MOBILIZA</li>
-                        <li>NOVO</li>
-                        <li>PCB</li>
-                        <li>PCdoB</li>
-                        <li>PCO</li>
-                        <li>PDT</li>
-                        <li>PL</li>
-                        <li>PT</li>
-                        <li>PSB</li>
-                        <li>PSD</li>
-                        <li>PSDB</li>
-                        <li>PSOL</li>
-                        <li>PSTU</li>
-                        <li>PODE</li>
-                        <li>PP</li>
-                        <li>PRD</li>
-                        <li>PRTB</li>
-                        <li>PV</li>
-                        <li>REDE</li>
-                        <li>REPUBLICANOS</li>
-                        <li>SOLIDARIEDADE</li>
-                        <li>UNIÃO</li>
-                        <li>UP</li>
-                    </ul>
-                </div>
-            </section>
-        </div>
+                    <form action="/graficos/" method="get" id="form-filtro">
+                        <select name="estado" id="estado" onchange="this.form.submit()"
+                        class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+
+                            <option value="">Selecionar Estado</option>
+
+                            <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
+
+                            <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
+
+                            <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
+
+                            <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
+
+                            <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
+
+                            <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
+
+                            <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
+
+                            <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
+
+                            <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
+
+                            <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
+
+                            <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
+
+                            <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
+
+                            <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
+
+                            <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
+
+                            <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
+
+                            <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
+
+                            <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
+
+                            <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
+
+                            <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
+
+                            <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
+
+                            <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
+
+                            <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
+
+                            <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
+
+                            <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
+
+                            <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
+
+                            <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
+
+                            <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
+
+                        </select>
+
+
+
+                    <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
+                    
+                      ▼
+                    
+                    </span>
+
+                 </div>
+
+
+                <div class="relative w-full md:w-[20%]">
+
+                    <select name="partido" id="estado" onchange="this.form.submit()"
+                    class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+
+                        <option value="">Selecionar partido</option>
+
+                        <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
+
+                        <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
+
+                        <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
+
+                        <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
+
+                        <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
+
+                        <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
+
+                        <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
+
+                        <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
+
+                        <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
+
+                        <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
+
+                        <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
+
+                        <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
+
+                        <option value="UNIAO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
+
+                        <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
+
+                        <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
+
+                        <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
+
+                        <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
+                    </select>
+                <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+            </div>
+                </section>
+            </div>
         
 
 

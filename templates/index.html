@@ -322,12 +322,13 @@
       <!--Barra de pesquisa-->
       <div class="bg-gray-200 p-6">
         <form
-          action="/buscar"
+          action="/procurar"
           method="GET"
           class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3"
         >
           <input
             type="text"
+            name="pesquisa"
             placeholder="Buscar por deputado"
             class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm"
           />
@@ -383,29 +384,9 @@
               class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer"
             >
             <option value="">Partido</option>
-            <option value="PT">PT</option>
-            <option value="PL">PL</option>
-            <option value="PSDB">PSDB</option>
-            <option value="PP">PP</option>
-            <option value="PRD">PRD</option>
-            <option value="PDT">PDT</option>
-            <option value="PSB">PSB</option>
-            <option value="PSD">PSD</option>
-            <option value="PSOL">PSOL</option>
-            <option value="REPUBLICANOS">REPUBLICANOS</option>
-            <option value="AVANTE">AVANTE</option>
-            <option value="MDB">MDB</option>
-            <option value="UNIAO">UNIÃO</option>
-            <option value="PV">PV</option>
-            <option value="DC">DC</option>
-            <option value="PROS">PROS</option>
-            <option value="PTB">PTB</option>
-            <option value="AGIR">AGIR</option>
-            <option value="PCdoB">PCdoB</option>
-            <option value="UP">UP</option>
-            <option value="REDE">REDE</option>
-            <option value="NOVO">NOVO</option>
-            <option value="MOBILIZA">MOBILIZA</option>
+            {% for p in partidos %}
+              <option value="{{ p }}">{{ p }}</option>
+            {% endfor %}
             </select>
             <div
               class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400"

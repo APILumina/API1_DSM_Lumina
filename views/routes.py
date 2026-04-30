@@ -5,9 +5,42 @@ import unicodedata
 
 route_bp = Blueprint("route",__name__)
 
+partidos = ["PT","PL","PSDB","PP","PRD","PDT","PSB","PSD","PSOL","REPUBLICANOS","AVANTE","MDB","UNIAO","PV","PCdoB","REDE","NOVO"]
+
+# Lista de dicionários
+estados = [
+    {'uf': 'AC', 'nome': 'Acre'},
+    {'uf': 'AL', 'nome': 'Alagoas'},
+    {'uf': 'AP', 'nome': 'Amapá'},
+    {'uf': 'AM', 'nome': 'Amazonas'},
+    {'uf': 'BA', 'nome': 'Bahia'},
+    {'uf': 'CE', 'nome': 'Ceará'},
+    {'uf': 'DF', 'nome': 'Distrito Federal'},
+    {'uf': 'ES', 'nome': 'Espírito Santo'},
+    {'uf': 'GO', 'nome': 'Goiás'},
+    {'uf': 'MA', 'nome': 'Maranhão'},
+    {'uf': 'MT', 'nome': 'Mato Grosso'},
+    {'uf': 'MS', 'nome': 'Mato Grosso do Sul'},
+    {'uf': 'MG', 'nome': 'Minas Gerais'},
+    {'uf': 'PA', 'nome': 'Pará'},
+    {'uf': 'PB', 'nome': 'Paraíba'},
+    {'uf': 'PR', 'nome': 'Paraná'},
+    {'uf': 'PE', 'nome': 'Pernambuco'},
+    {'uf': 'PI', 'nome': 'Piauí'},
+    {'uf': 'RJ', 'nome': 'Rio de Janeiro'},
+    {'uf': 'RN', 'nome': 'Rio Grande do Norte'},
+    {'uf': 'RS', 'nome': 'Rio Grande do Sul'},
+    {'uf': 'RO', 'nome': 'Rondônia'},
+    {'uf': 'RR', 'nome': 'Roraima'},
+    {'uf': 'SC', 'nome': 'Santa Catarina'},
+    {'uf': 'SP', 'nome': 'São Paulo'},
+    {'uf': 'SE', 'nome': 'Sergipe'},
+    {'uf': 'TO', 'nome': 'Tocantins'}
+]
+
 @route_bp.route("/")
 def home():
-    return render_template ("index.html")
+    return render_template ("index.html", partidos = sorted(partidos))
 
 @route_bp.route("/graficos")
 def graficos():
@@ -55,7 +88,7 @@ def deputados():
     cursor.close()
     conn.close()
     
-    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido)
+    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido, partidos = sorted(partidos))
 
 from flask import jsonify, request
 
@@ -130,9 +163,9 @@ def infodeputados(id):
     """
     
     query3 = """
-    SELECT COUNT(*) AS total_presencas
-    FROM presencas f 
-    WHERE f.fk_deputado = %s
+    SELECT presencas_nominais, taxa_assiduidade
+    FROM taxa_presenca t
+    WHERE t.fk_deputado = %s
     """
     
     query4 = """
@@ -174,137 +207,90 @@ def infodeputados(id):
     else:
         return {"erro": "Deputado não encontrado"}, 404
 
-@route_bp.route("/estado")
+@route_bp.route("/graficos/estado")
 def estado():
-    return render_template("deputados-estados.html")
-
-@route_bp.route("/partido")
-def partido():
-    return render_template("escolha-partido.html")
-
-@route_bp.route("/tudo")
-def tudo():
-    conn = conectar()
-    cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT * FROM deputado WHERE nome LIKE 'Arlindo%'")
-    dados = cursor.fetchall()
+    for e in estados:
+        e['img'] = f"img/estados/{e['uf'].lower()}.png"
+        e['link'] = f"partido/{e['uf'].lower()}"
+        e['alt'] = e['uf']
+        e['texto'] = e['nome']
     
-    cursor.close()
-    conn.close()
-    
-    return render_template("teste.html", deputados=dados)
+    return render_template("escolha-estados.html", lista=estados)
 
-@route_bp.route("/tudo/<int:id>")
-def deputado_por_id(id):
-    conn = conectar()
-    cursor = conn.cursor(dictionary=True)
-
-    query = """
-    SELECT 
-        d.cd_deputado,
-        d.nome,
-        d.nome_eleitoral,
-        d.email,
-        d.imagem_deputado,
-        e.uf AS estado,
-        p.abreviacao AS partido
-        FROM deputado d
-        JOIN estado e ON fk_estado = e.cd_estado
-        JOIN partido p ON fk_partido = p.cd_partido
-        WHERE d.cd_deputado = %s
-    """
-
-    cursor.execute(query, (id,))
-    deputado = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    if deputado:
-        return render_template("teste.html", dep=deputado)
-    else:
-        return {"erro": "Deputado não encontrado"}, 404
-
-@route_bp.route('/buscar')
-def buscar():
-    estado = request.args.get('estado', '')
-    partido = request.args.get('partido', '')
+@route_bp.route("/graficos/partido/<uf>")
+def partido(uf):
     
-    filtros = []
-    params = []
+    partido_lista = []
+    nome_estado = False
     
-    if estado:
-        filtros.append("e.uf = %s")
-        params.append(estado)
-    if partido:
-        filtros.append("p.abreviacao = %s")
-        params.append(partido)
+    for e in estados:
+        if e['uf'].lower() == uf.lower():
+            nome_estado = e['nome']
+            break
     
-    where_clause = "WHERE " + " AND ".join(filtros) if filtros else ""
+    if not nome_estado:
+        return {"erro": f"Estado não encontrado"}, 404
     
-    conexao = conectar()
-    cursor = conexao.cursor(dictionary=True)
-    
-    # Usando GROUP BY para garantir que cada nome apareça apenas uma vez
+    for p in sorted(partidos):
+        dicionario = {
+            'img' : f"img/partidos/{p.lower()}.png",
+            'link' : f"#",
+            'alt' : p,
+            'texto' : p
+        }
+        partido_lista.append(dicionario)
 
-    query = f"""
-    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
-           e.uf AS estado, p.abreviacao AS partido
-    FROM deputado d
-    JOIN estado e ON d.fk_estado = e.cd_estado
-    JOIN partido p ON d.fk_partido = p.cd_partido
-    {where_clause}
-    GROUP BY d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado, e.uf, p.abreviacao
-    ORDER BY d.nome_eleitoral
-    """
-
-    cursor.execute(query, params)
-    resultados = cursor.fetchall()
-    
-    cursor.close()
-    conexao.close()
-    
-    return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido)
+    return render_template("escolha-partido.html", lista=partido_lista, estado=nome_estado)
 
 def remover_acentos(texto):
     # Normaliza para a forma NFKD (separa o caractere do acento)
     nfkd_form = unicodedata.normalize('NFKD', texto)
     return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
+
 @route_bp.route('/procurar')
 def procurar():
+    estado   = request.args.get('estado', '').strip()
+    partido  = request.args.get('partido', '').strip()
     pesquisa = request.args.get('pesquisa', '').strip()
-    pesquisa = remover_acentos(pesquisa).lower()
 
     filtros = []
-    params = []
-    
+    params  = []
+
+    # Filtro de texto (search bar)
     if pesquisa:
-        filtros.append("(d.nome COLLATE utf8mb4_unicode_ci LIKE %s OR d.nome_eleitoral COLLATE utf8mb4_unicode_ci LIKE %s)")
-        
-        termo = f"%{pesquisa}%"
+        pesquisa_limpa = remover_acentos(pesquisa).lower()
+        termo = f"%{pesquisa_limpa}%"
+        filtros.append("(d.nome LIKE %s OR d.nome_eleitoral LIKE %s)")
         params.extend([termo, termo])
-    
-    causa = "WHERE " + " AND ".join(filtros) if filtros else ""
-    
+
+    # Filtros de estado e partido
+    if estado:
+        filtros.append("e.uf = %s")
+        params.append(estado)
+    if partido:
+        filtros.append("p.abreviacao = %s")
+        params.append(partido)
+
+    where_clause = "WHERE " + " AND ".join(filtros) if filtros else ""
+
     conexao = conectar()
-    cursor = conexao.cursor(dictionary=True)
-    
+    cursor  = conexao.cursor(dictionary=True)
+
     query = f"""
-    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+    SELECT DISTINCT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
            e.uf AS estado, p.abreviacao AS partido
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
-    {causa}
+    {where_clause}
     ORDER BY d.nome_eleitoral
     """
-
     cursor.execute(query, params)
     resultados = cursor.fetchall()
-    
+
     cursor.close()
     conexao.close()
 
-    return render_template('deputados.html', deputados=resultados)
+    return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido, pesquisa=pesquisa, partidos = sorted(partidos))

@@ -1,0 +1,10 @@
+{% extends 'escolha-base.html' %}
+{% block title %}Estados{% endblock %}
+
+{% block titulo %}Selecione um estado{% endblock %}
+
+{% block content %}
+    {% for item in lista %}
+        {% include "partials/_card-escolha.html" %}
+    {% endfor %}
+{% endblock %}

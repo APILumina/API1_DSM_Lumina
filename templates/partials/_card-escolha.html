@@ -1,0 +1,7 @@
+<a href="{{ item.link }}"
+    class="bg-[#fafafa] aspect-square rounded-lg shadow-md p-5 flex flex-col items-center justify-center text-xl font-semibold hover:bg-blue-100 hover:text-blue-900 hover:scale-105 transition duration-300 gap-5">
+    <div class="w-full flex flex-1 overflow-hidden sm:p-2 md:p-4">
+        <img src="{{ url_for('static', filename=item.img) }}" alt="{{ item.alt }}" class="m-auto max-w-full max-h-full object-contain">
+    </div>
+    <p class="truncate max-w-full">{{ item.texto }}</p>
+</a>

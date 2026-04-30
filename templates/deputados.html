@@ -223,51 +223,9 @@
 
             <option value="">Selecionar partido</option>
 
-            <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
-
-            <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
-
-            <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
-
-            <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
-
-            <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
-
-            <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
-
-            <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
-
-            <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
-
-            <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
-
-            <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
-
-            <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
-
-            <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
-
-            <option value="UNIAO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
-
-            <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
-
-            <option value="DC" {{ 'selected' if partido=='DC' }}>DC</option>
-
-            <option value="PROS" {{ 'selected' if partido=='PROS' }}>PROS</option>
-
-            <option value="PTB" {{ 'selected' if partido=='PTB' }}>PTB</option>
-
-            <option value="AGIR" {{ 'selected' if partido=='AGIR' }}>AGIR</option>
-
-            <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
-
-            <option value="UP" {{ 'selected' if partido=='UP' }}>UP</option>
-
-            <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
-
-            <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
-
-            <option value="MOBILIZA" {{ 'selected' if partido=='MOBILIZA' }}>MOBILIZA</option>
+            {% for p in partidos %}
+              <option value="{{ p }}" {{ 'selected' if partido==p }}>{{ p }}</option>
+            {% endfor %}
           </select>
           <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
         </div>
@@ -323,71 +281,77 @@
       }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      let paginaAtual = 1;
-      let carregando = false;
-      let fimDados = false;
+    const parametros = new URLSearchParams(window.location.search);
 
-      const lista = document.getElementById('lista-deputados');
-      const sentinela = document.getElementById('sentinela');
-      const loader = document.getElementById('loader');
+    const pesquisa = parametros.get('pesquisa');
 
-      // Função que cria o HTML do card (ajuste as classes conforme seu design)
-      function criarCard(deputado) {
-        return `
-            <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
-              <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
-                <div class="p-6">
-                  <img src="${deputado.imagem_deputado}"
-                  class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-                  <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
-                  <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
+    if (!pesquisa) {
+      document.addEventListener('DOMContentLoaded', () => {
+        let paginaAtual = 1;
+        let carregando = false;
+        let fimDados = false;
+
+        const lista = document.getElementById('lista-deputados');
+        const sentinela = document.getElementById('sentinela');
+        const loader = document.getElementById('loader');
+
+        // Função que cria o HTML do card (ajuste as classes conforme seu design)
+        function criarCard(deputado) {
+          return `
+              <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+                  <div class="p-6">
+                    <img src="${deputado.imagem_deputado}"
+                    class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+                    <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
+                    <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
+                  </div>
+                  <div class="bg-[#FEE9B1] py-5"> </div>
                 </div>
-                <div class="bg-[#FEE9B1] py-5"> </div>
-              </div>
-            </a>
-        `;
-      }
+              </a>
+          `;
+        }
 
-      async function carregarMaisDeputados() {
-        if (carregando || fimDados) return;
+        async function carregarMaisDeputados() {
+          if (carregando || fimDados) return;
 
-        carregando = true;
-        loader.classList.remove('hidden');
-        paginaAtual++;
+          carregando = true;
+          loader.classList.remove('hidden');
+          paginaAtual++;
 
-        // Pega os filtros atuais da URL para manter a busca consistente
-        const params = new URLSearchParams(window.location.search);
-        params.set('page', paginaAtual);
+          // Pega os filtros atuais da URL para manter a busca consistente
+          const params = new URLSearchParams(window.location.search);
+          params.set('page', paginaAtual);
 
-        try {
-          const response = await fetch(`/dados/deputados?${params.toString()}`);
-          const novosDeputados = await response.json();
+          try {
+            const response = await fetch(`/dados/deputados?${params.toString()}`);
+            const novosDeputados = await response.json();
 
-          if (novosDeputados.length === 0) {
-            fimDados = true;
-          } else {
-            novosDeputados.forEach(dep => {
-              lista.insertAdjacentHTML('beforeend', criarCard(dep));
-            });
+            if (novosDeputados.length === 0) {
+              fimDados = true;
+            } else {
+              novosDeputados.forEach(dep => {
+                lista.insertAdjacentHTML('beforeend', criarCard(dep));
+              });
+            }
+          } catch (error) {
+            console.error("Erro ao carregar mais deputados:", error);
+          } finally {
+            carregando = false;
+            loader.classList.add('hidden');
           }
-        } catch (error) {
-          console.error("Erro ao carregar mais deputados:", error);
-        } finally {
-          carregando = false;
-          loader.classList.add('hidden');
         }
-      }
 
-      // INTERSECTION OBSERVER: O vigia do fim da página
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          carregarMaisDeputados();
-        }
-      }, { threshold: 0.5 });
+        // INTERSECTION OBSERVER: O vigia do fim da página
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            carregarMaisDeputados();
+          }
+        }, { threshold: 0.5 });
 
-      observer.observe(sentinela);
-    });
+        observer.observe(sentinela);
+      });
+    }
   </script>
 
 </body>
