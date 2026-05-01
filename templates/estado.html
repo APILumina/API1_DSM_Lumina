@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Radar Cidadão - Selecione o Estado</title>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-deputados');
+            const menu = document.getElementById('menu-deputados');
+            const seta = document.getElementById('seta');
+
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                    seta.classList.toggle('rotate-180');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.add('hidden');
+                        seta.classList.remove('rotate-180');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-radar: #1A249D;
+            --color-dark-blue: #081638;
+            --color-sec: #efc33c;
+            --color-verde: #34C560;
+        }
+
+        .grid-estados {
+            @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 py-8 px-4 md:px-15;
+        }
+
+        .card-estado {
+            @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden 
+                   flex flex-col items-center p-4 transition-all hover:shadow-md hover:-translate-y-1 
+                   hover:bg-blue-50 text-center;
+        }
+
+        .card-estado img {
+            @apply w-full h-24 object-contain mb-3 rounded-xl;
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-estado span {
+            @apply text-dark-blue font-bold text-sm md:text-base tracking-tight;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    
+    <header>
+        <div class="h-30 py-5 bg-radar text-white">
+            <div class="w-full flex mx-auto max-w-[100rem] px-6 items-center">
+                <a href="{{ url_for('route.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="h-20">
+                </a>
+                
+                <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
+                    <div class="flex relative">
+                        <label for="pesquisa" class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
+                            <div class="bg-sec size-9 rounded-full"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5" stroke="currentColor" class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                        </label>
+                        <input id="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full outline-none" type="text" placeholder="Pesquisar">
+                    </div>
+
+                    <ul class="flex justify-between gap-6 w-full text-sm font-sans font-semibold">
+                        <li><a href="{{ url_for('route.home') }}" class="hover:underline underline-offset-4">HOME</a></li>
+                        <li class="relative">
+                            <button id="btn-deputados" class="flex items-center cursor-pointer hover:underline underline-offset-4 outline-none">
+                                DEPUTADOS
+                                <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-4 ml-1 transition-transform">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <ul id="menu-deputados" class="absolute top-full left-0 mt-2 w-48 bg-white text-radar rounded-md shadow-lg hidden z-50 max-h-60 overflow-y-auto">
+                                <li><a href="{{ url_for('estados.lista_estados') }}" class="block px-4 py-2 hover:bg-gray-100">Ver por Estado</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" class="hover:underline underline-offset-4">GRÁFICOS</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-[100rem] mx-auto px-6">
+        <div class="bg-white px-8 py-10 my-9 rounded-2xl shadow-sm border border-gray-100">
+            <h1 class="text-3xl font-bold text-dark-blue tracking-tight uppercase">Selecione um Estado para análise</h1>
+            <p class="text-gray-500 mt-2">Clique em um estado para visualizar os gráficos de gastos parlamentares.</p>
+        </div>
+
+        <section class="grid-estados">
+            <a href="{{ url_for('estados.estado_detalhe', uf='AC') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/Acre.png') }}" alt="Acre">
+                <span>Acre</span>
+            </a>
+
+            <a href="{{ url_for('estados.estado_detalhe', uf='AL') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/Alagoas.png') }}" alt="Alagoas">
+                <span>Alagoas</span>
+            </a>
+
+            <a href="{{ url_for('estados.estado_detalhe', uf='AM') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/Amazonas.png') }}" alt="Amazonas">
+                <span>Amazonas</span>
+            </a>
+
+            <a href="{{ url_for('estados.estado_detalhe', uf='SP') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/São Paulo.png') }}" alt="São Paulo">
+                <span>São Paulo</span>
+            </a>
+
+            <a href="{{ url_for('estados.estado_detalhe', uf='RJ') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/Rio de Janeiro.png') }}" alt="Rio de Janeiro">
+                <span>Rio de Janeiro</span>
+            </a>
+            
+            <a href="{{ url_for('estados.estado_detalhe', uf='MG') }}" class="card-estado">
+                <img src="{{ url_for('static', filename='img/Estados/Minas Gerais.png') }}" alt="Minas Gerais">
+                <span>Minas Gerais</span>
+            </a>
+        </section>
+    </main>
+
+    <footer class="bg-radar text-white py-6 text-center mt-10">
+        <p class="text-sm opacity-80">© 2026 Radar Cidadão - Projeto DSM</p>
+    </footer>
+
+</body>
+</html>

@@ -58,7 +58,7 @@
         
                 <div class="relative w-full md:w-[20%]">
 
-                    <form action="/graficos/" method="get" id="form-filtro">
+                    <form action="/graficos" method="get" id="form-filtro">
                         <select name="estado" id="estado" onchange="this.form.submit()"
                         class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
@@ -129,6 +129,7 @@
                     </span>
 
                  </div>
+                
 
 
                 <div class="relative w-full md:w-[20%]">
@@ -176,40 +177,55 @@
             </div>
                 </section>
             </div>
-        
+                </form>
 
 
         <!--Gráficos (imagens representativas)-->
-        <section class="bg-white p-8 rounded-2xl shadow-card m-8">
-            <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                Projetos aprovados <span class="text-dark-blue font-normal text-lg">por partido</span>
-            </h2>
-            <div class="w-full">
-                <img src="../static/img/grafico-projetos-partido.png" alt="Projetos aprovados por partido" class="w-full h-auto">
-            </div>
-        </section>
+        <!--Gráfico 1: Projetos-->
+<section class="bg-white p-8 rounded-2xl shadow-card m-8">
+    <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+        Projetos aprovados <span class="font-normal text-lg">por partido</span>
+    </h2>
+    <div class="w-full">
+        {% if grafico_projetos %}
+            <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
+        {% else %}
+            <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
+        {% endif %}
+    </div>
+</section>
 
-        <section class="grid grid-cols-1 lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1 gap-8 m-8">
-            
-            <div class="bg-white p-8 rounded-2xl shadow-card">
-                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                    Presença <span class="text-dark-blue font-normal text-lg">por partido</span>
-                </h2>
-                <div class="w-full">
-                    <img src="../static/img/grafico-presenca-partido.png" alt="Projetos aprovados por partido" class="w-full h-auto">
-                </div>
-            </div>
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-8 m-8">
 
-            <div class="bg-white p-8 rounded-2xl shadow-card">
-                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                    Gastos <span class="text-dark-blue font-normal text-lg">por partido</span>
-                </h2>
-                <div class="w-full">
-                    <img src="../static/img/grafico-gastos-partido.png" alt="Gastos por partido" class="w-full h-auto">
-                </div>
-            </div>
+    <!--Gráfico 2: Presença-->
+    <div class="bg-white p-8 rounded-2xl shadow-card">
+        <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+            Presença <span class="font-normal text-lg">por partido</span>
+        </h2>
+        <div class="w-full">
+            {% if grafico_presenca %}
+                <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
+            {% else %}
+                <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
+            {% endif %}
+        </div>
+    </div>
 
-        </section>
+    <!--Gráfico 3: Gastos-->
+    <div class="bg-white p-8 rounded-2xl shadow-card">
+        <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+            Gastos <span class="font-normal text-lg">por partido</span>
+        </h2>
+        <div class="w-full">
+            {% if grafico_gastos %}
+                <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
+            {% else %}
+                <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</section>
     </main>
 
     {% block extra_js %}
