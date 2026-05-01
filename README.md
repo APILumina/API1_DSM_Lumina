@@ -19,7 +19,7 @@
 
 <br>
 
-> **Status do Projeto:** Aguardando entrega da Sprint 1 🕒
+> **Status do Projeto:** Sprint 2 concluída ✔️
 
 ---
 
@@ -90,13 +90,13 @@ O Backlog do Produto representa a lista de todas as funcionalidades e entregas p
 | :---: | :---: | :--- | :---: | :---: |
 | 1 | Alta <sup>★</sup> | Como usuário, quero acessar uma página inicial simples e intuitiva para entender o propósito do projeto. | 🟢 | 1 |
 | 2 | Alta <sup>★</sup> | Como professor, gostaria de visualizar gráficos preliminares sobre os gastos e presença dos deputados para validar se os dados são úteis para minhas aulas de cidadania. | 🟢 | 1 |
-| 3 | Alta | Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🔴 | 2 |
-| 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🔴 | 2 |
-| 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🔴 | 2 |
-| 6 | Alta | Como eleitor, quero ver com o que o meu deputado está gastando para analisar e avaliar se a despesa é necessária. | 🔴 | 2 |
-| 7 | Alta | Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🔴 | 2 |
-| 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🔴 | 2 |
-| 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🔴 | 2 |
+| 3 | Alta <sup>★</sup>| Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🟢 | 2 |
+| 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🟢 | 2 |
+| 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🟢 | 2 |
+| 6 | Alta <sup>★</sup>| Como eleitor, quero ver com o que o meu deputado está gastando para analisar e avaliar se a despesa é necessária. | 🟢 | 2 |
+| 7 | Alta <sup>★</sup>| Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🟢 | 2 |
+| 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🟢 | 2 |
+| 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🟢 | 2 |
 | 10 | Alta | Como usuário, quero uma página de erro caso procure por um deputado inexistente. | 🔴 | 3 |
 | 11 | Alta | Como professor, quero ver legendas explicativas nos gráficos (ex.: o que é "cota parlamentar" etc). | 🔴 | 3 |
 | 12 | Média | Como usuário, quero saber de onde são as fontes utilizadas no levantamento dos dados. | 🔴 | 3 |
@@ -134,8 +134,8 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 
 | Sprint | Período | Documentação | Status |
 | :---: | :---: | :---: | :---: |
-| **01** | 16/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | 🕒 |
-| **02** | 13/04 a 03/05 | -- | 📅 |
+| **01** | 16/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | ✔️ |
+| **02** | 13/04 a 03/05 | [📄 Acessar](./docs/sprints/sprint2/README.md) | ✔️ |
 | **03** | 11/05 a 31/05 | -- | 📅 |
 
 ---
