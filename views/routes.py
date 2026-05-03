@@ -79,7 +79,7 @@ def gerar_grafico(df, col_x, col_y, titulo):
     
     df = df.sort_values(by=col_y, ascending=True)  # <- aqui
     
-    cores = ["#1C1A9D","#F4E04D"]
+    cores = ["#1C1A9D","#3c66ef"]
     
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.barh(df[col_x], df[col_y], color=cores)
@@ -364,63 +364,92 @@ def dados_deputados():
 
     return jsonify(dados)
 
-
 @route_bp.route("/deputado/<int:id>")
 def infodeputados(id):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
-    query = """
-    SELECT 
-        d.cd_deputado, d.nome, d.nome_eleitoral, d.email, d.imagem_deputado,
-        e.uf AS estado, p.abreviacao AS partido
-    FROM deputado d
-    JOIN estado e ON fk_estado = e.cd_estado
-    JOIN partido p ON fk_partido = p.cd_partido
-    WHERE d.cd_deputado = %s
-    """
-    query2 = """
-    SELECT COALESCE(SUM(CAST(REPLACE(g.gasto_total, ',', '.') AS DECIMAL(10,2))), 0) AS total
-    FROM despesas g
-    WHERE g.fk_deputado = %s
-    """
-    query3 = """
-    SELECT presencas_nominais, taxa_assiduidade
-    FROM taxa_presenca t
-    WHERE t.fk_deputado = %s
-    """
-    query4 = """
-    SELECT COUNT(*) AS total_proposicao
-    FROM proposicao_deputados p
-    WHERE p.fk_deputado = %s
-    """
-    query5 = """
-    SELECT p.cd_proposicoes, p.keywords, p.nome
-    FROM proposicao_deputados pd
-    INNER JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-    WHERE pd.fk_deputado = %s
-    """
-    query6 = """
-    SELECT d.tipo, d.gasto_total
-    FROM despesas d
-    WHERE d.fk_deputado = %s
-    ORDER BY d.gasto_total DESC
-    """
-    query7 = """
-    SELECT d.tipo, d.transcricao AS texto, d.titulo, d.keywords, d.data_inicio
-    FROM discursos d
-    WHERE d.fk_deputado = %s
-    ORDER BY d.data_inicio DESC
+    # ═══════════════════════════════════════════════════════════
+    # DEFINIÇÃO DE QUERIES
+    # ═══════════════════════════════════════════════════════════
+    
+    # Query 1: Dados básicos do deputado
+    query1 = """
+        SELECT 
+            d.cd_deputado, d.nome, d.nome_eleitoral, d.email, d.imagem_deputado,
+            e.uf AS estado, p.abreviacao AS partido
+        FROM deputado d
+        JOIN estado e ON fk_estado = e.cd_estado
+        JOIN partido p ON fk_partido = p.cd_partido
+        WHERE d.cd_deputado = %s
     """
     
+    # Query 2: Total de gastos
+    query2 = """
+        SELECT COALESCE(SUM(CAST(REPLACE(g.gasto_total, ',', '.') AS DECIMAL(10,2))), 0) AS total
+        FROM despesas g
+        WHERE g.fk_deputado = %s
+    """
+    
+    # Query 3: Taxa de presença
+    query3 = """
+        SELECT presencas_nominais, taxa_assiduidade
+        FROM taxa_presenca t
+        WHERE t.fk_deputado = %s
+    """
+    
+    # Query 4: Total de proposições
+    query4 = """
+        SELECT COUNT(*) AS total_proposicao
+        FROM proposicao_deputados p
+        WHERE p.fk_deputado = %s
+    """
+    
+    # Query 5: Proposições detalhes
+    query5 = """
+        SELECT p.cd_proposicoes, p.keywords, p.nome
+        FROM proposicao_deputados pd
+        INNER JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE pd.fk_deputado = %s
+    """
+    
+    # Query 6: Despesas por tipo
+    query6 = """
+        SELECT d.tipo, d.gasto_total
+        FROM despesas d
+        WHERE d.fk_deputado = %s
+        ORDER BY d.gasto_total DESC
+    """
+    
+    # Query 7: Discursos
+    query7 = """
+        SELECT d.tipo, d.transcricao AS texto, d.titulo, d.keywords, d.data_inicio
+        FROM discursos d
+        WHERE d.fk_deputado = %s
+        ORDER BY d.data_inicio DESC
+    """
+    
+    # Query 8: Proposições aprovadas
     query8 = """
-        SELECT  p.nome
+        SELECT p.nome
         FROM proposicoes p
         INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
         WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica'
     """
+    
+    # Query 9: Média de presença e gasto
+    query9 = """
+        SELECT ROUND(AVG(t.presencas_nominais), 2) AS presenca
+        FROM taxa_presenca t
+    """
 
-    cursor.execute(query, (id,))
+    # Query 10: Média de gasto
+    query10 = """
+        SELECT ROUND(AVG(e.despesa_total), 2) AS gasto
+        FROM economia e
+    """
+    
+    cursor.execute(query1, (id,))
     deputado = cursor.fetchone()
 
     cursor.execute(query2, (id,))
@@ -444,16 +473,16 @@ def infodeputados(id):
     cursor.execute(query8, (id,))
     aprovadas = cursor.fetchall()
 
+    cursor.execute(query9)
+    media_presenca = cursor.fetchone()
 
-    for discurso in discursos:
-        dt = datetime.fromisoformat(discurso['data_inicio'])
-        discurso['data'] = dt.strftime('%d/%m/%Y')
-        discurso['hora'] = dt.strftime('%H:%M')
-    
+    cursor.execute(query10)
+    media_gasto = cursor.fetchone()
+
+
+
     def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
-    
         fig, ax = plt.subplots(figsize=(6, 6)) 
-
         if not labels:
             ax.text(0.5, 0.5, 'Nenhum projeto aprovado associado a um tema.', 
                     ha='center', va='center', fontsize=12, color='#081638')
@@ -461,94 +490,83 @@ def infodeputados(id):
         else:
             x = range(len(labels))
             width = 0.35 
-
             x_dep = [pos - width/2 for pos in x]
             x_med = [pos + width/2 for pos in x]
-
             ax.bar(x_dep, valores_deputado, width, label='Este Deputado', color='#1A249D')
             ax.bar(x_med, valores_media, width, label='Média da Câmara', color='#efc33c')
-
             ax.set_title(titulo, pad=15, fontsize=12, fontweight='bold', color='#081638')
             ax.set_xticks(list(x))
-
-            # Textos na vertical (90 graus) e sem encurtar os nomes
             ax.set_xticklabels(labels, rotation=90, ha='center', fontsize=9)
             ax.legend()
-
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.spines['left'].set_visible(False)
             ax.spines['bottom'].set_color('#cccccc')
-
         plt.tight_layout()
         buf = io.BytesIO()
         plt.savefig(buf, format='png', transparent=True, dpi=100)
         plt.close(fig)
         buf.seek(0)
-
         return base64.b64encode(buf.getvalue()).decode('utf-8')
     
-    
-    cursor.execute("SELECT COUNT(*) as total FROM proposicao_deputados WHERE fk_deputado = %s", (id,))
-    total_deputado = cursor.fetchone()['total'] or 0
-    # Média da câmara para projetos propostos
-    cursor.execute("SELECT COUNT(fk_proposicao) / COUNT(DISTINCT fk_deputado) as media FROM proposicao_deputados")
-    media_camara = cursor.fetchone()['media'] or 0
-    
-    query_aprovados = """
-        SELECT COUNT(*) as total_aprovado 
-        FROM proposicao_deputados pd
-        JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-        WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica'
+    # Query 11: Combinar todas as métricas em uma única query
+    query11 = """
+        SELECT 
+            (SELECT COUNT(*) FROM proposicao_deputados WHERE fk_deputado = %s) as total_deputado,
+            (SELECT COUNT(fk_proposicao) / COUNT(DISTINCT fk_deputado) FROM proposicao_deputados) as media_camara,
+            (SELECT COUNT(*) FROM proposicao_deputados pd 
+             JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
+             WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica') as aprovados_deputado,
+            (SELECT COUNT(pd.fk_proposicao) / COUNT(DISTINCT pd.fk_deputado) 
+             FROM proposicao_deputados pd
+             JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
+             WHERE p.status = 'Transformado em Norma Jurídica') as media_aprovados_camara
     """
-    cursor.execute(query_aprovados, (id,))
-    aprovados_deputado = cursor.fetchone()['total_aprovado'] or 0
-    # Média da câmara para projetos aprovados
-    query_media_aprovados = """
-        SELECT COUNT(pd.fk_proposicao) / COUNT(DISTINCT pd.fk_deputado) as media_aprovados 
-        FROM proposicao_deputados pd
-        JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-        WHERE p.status = 'Transformado em Norma Jurídica'
-    """
-    cursor.execute(query_media_aprovados)
-    media_aprovados_camara = cursor.fetchone()['media_aprovados'] or 0
     
-    query_temas_deputado = """
-        SELECT tp.nome, COUNT(p.cd_proposicoes) as qtd
+    # Query 12: Temas dos projetos aprovados - eliminar N+1
+    query12 = """
+        SELECT 
+            tp.nome,
+            COUNT(p.cd_proposicoes) as qtd_deputado,
+            COUNT(p.cd_proposicoes) / COUNT(DISTINCT pd.fk_deputado) as media_tema
         FROM proposicao_deputados pd
         JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
         JOIN proposicao_tema pt ON p.cd_proposicoes = pt.id_proposicao
         JOIN tema_proposicoes tp ON pt.id_tema = tp.cd_tema
-        WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica'
+        WHERE p.status = 'Transformado em Norma Jurídica'
         GROUP BY tp.nome
-        ORDER BY qtd DESC
+        ORDER BY (
+            SELECT COUNT(p2.cd_proposicoes)
+            FROM proposicao_deputados pd2
+            JOIN proposicoes p2 ON pd2.fk_proposicao = p2.cd_proposicoes
+            JOIN proposicao_tema pt2 ON p2.cd_proposicoes = pt2.id_proposicao
+            JOIN tema_proposicoes tp2 ON pt2.id_tema = tp2.cd_tema
+            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.nome = tp.nome
+        ) DESC
         LIMIT 5
     """
-    cursor.execute(query_temas_deputado, (id,))
-    temas_dados = cursor.fetchall()
+    
+    cursor.execute(query11, (id, id))
+    stats = cursor.fetchone()
+    
+    total_deputado = stats['total_deputado'] or 0
+    media_camara = stats['media_camara'] or 0
+    aprovados_deputado = stats['aprovados_deputado'] or 0
+    media_aprovados_camara = stats['media_aprovados_camara'] or 0
+    
+    cursor.execute(query12, (id,))
+    temas_com_media = cursor.fetchall()
     
     labels_tema = []
     valores_dep_tema = []
     valores_med_tema = []
-    # Para cada tema que o deputado aprovou, buscamos a média da câmara naquele tema específico
-    query_media_tema_especifico = """
-        SELECT COUNT(p.cd_proposicoes) / COUNT(DISTINCT pd.fk_deputado) as media_tema
-        FROM proposicao_deputados pd
-        JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-        JOIN proposicao_tema pt ON p.cd_proposicoes = pt.id_proposicao
-        JOIN tema_proposicoes tp ON pt.id_tema = tp.cd_tema
-        WHERE p.status = 'Transformado em Norma Jurídica' AND tp.nome = %s
-    """
-        
-    for row in temas_dados:
-        tema_nome = row['nome']
-        labels_tema.append(tema_nome)
-        valores_dep_tema.append(row['qtd'])
-        
-        cursor.execute(query_media_tema_especifico, (tema_nome,))
-        media_t = cursor.fetchone()['media_tema'] or 0
-        valores_med_tema.append(round(media_t, 1))
-    # --- GERAÇÃO DOS GRÁFICOS EM PYTHON ---
+    
+    for tema in temas_com_media:
+        labels_tema.append(tema['nome'])
+        valores_dep_tema.append(tema['qtd_deputado'])
+        valores_med_tema.append(round(tema['media_tema'], 1))
+    
+    # --- GERAÇÃO DOS GRÁFICOS ---
     grafico_proposicoes_img = gerar_grafico_deputado(
         total_deputado, round(media_camara, 1), 'Total de Projetos Propostos'
     )
@@ -564,8 +582,13 @@ def infodeputados(id):
     cursor.close()
     conn.close()
 
+    for discurso in discursos:
+        dt = datetime.fromisoformat(discurso['data_inicio'])
+        discurso['data'] = dt.strftime('%d/%m/%Y')
+        discurso['hora'] = dt.strftime('%H:%M')
+
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 

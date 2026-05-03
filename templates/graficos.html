@@ -190,7 +190,7 @@
         </h2>
         <div class="w-full">
             {% if grafico_projetos %}
-            <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
+            <img id="projetos" src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
             {% else %}
             <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
             {% endif %}
@@ -206,7 +206,7 @@
             </h2>
             <div class="w-full">
                 {% if grafico_presenca %}
-                <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
+                <img id="presenca" src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
                 {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
                 {% endif %}
@@ -220,7 +220,7 @@
             </h2>
             <div class="w-full">
                 {% if grafico_gastos %}
-                <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
+                <img id="gastos" src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
                 {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
                 {% endif %}

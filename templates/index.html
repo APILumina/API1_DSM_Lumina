@@ -70,8 +70,8 @@
 
     <!--Barra de pesquisa-->
     <div class="bg-gray-200 py-6">
-      <form action="/procurar" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
-        <input type="text" name="pesquisa" placeholder="Buscar por deputado"
+      <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
+        <input type="text" autocomplete="off" name="pesquisa" placeholder="Buscar por deputado"
           class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" />
 
         <div class="relative flex-1">
@@ -145,9 +145,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-15">
         <!--Botões que levam aos gráficos-->
         <button class="text-left w-full">
-          <a href="#">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-              <img src="../static/img/gastos.png" class="w-full object-cover" />
+          <a href="{{ url_for('route.graficos') }}#gastos">
+            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
+              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl"/>
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
               <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
                 Descubra se os gastos do seu deputado são úteis.
@@ -157,9 +157,9 @@
         </button>
 
         <button class="text-left">
-          <a href="#">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-              <img src="../static/img/projetos.png" class="w-full object-cover" />
+          <a href="{{ url_for('route.graficos') }}#projetos">
+            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
+              <img src="../static/img/projetos.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
               <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
                 Descubra sobre os projetos seu deputado.
@@ -169,9 +169,9 @@
         </button>
 
         <button class="text-left">
-          <a href="#">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300">
-              <img src="../static/img/presenca.png" class="w-full object-cover" />
+          <a href="{{ url_for('route.graficos') }}#presenca">
+            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
+              <img src="../static/img/presenca.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
               <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
                 Descubra se o seu deputado está faltando muito.

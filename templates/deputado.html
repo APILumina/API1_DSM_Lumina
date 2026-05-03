@@ -60,7 +60,7 @@
                 <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
                     <a href="https://www.camara.leg.br/deputados/{{ dep['cd_deputado'] }}"
                         class="bg-radar hover:bg-radar text-center text-white text-xl font-semibold tracking-wide w-full py-4 rounded-xl">Acessar
-                        site da câmara</a>
+                        site da Câmara</a>
                 </div>
             </div>
 
@@ -104,15 +104,37 @@
                             <div class="flex flex-col mt-5">
                                 <span class="font-bold mb-2">Presença total</span>
                                 <div class="relative bg-radar/20 rounded-full">
-                                    <div class="bg-radar h-3 rounded-full"
-                                        style="width: {{ presenca['taxa_assiduidade'] }}%"></div>
+                                    <div class="bg-radar h-3 rounded-full" style="width: {{ presenca['taxa_assiduidade'] }}%"></div>
                                 </div>
-                                <p class="mt-1 text-xl">
-                                    <span class="font-bold text-radar">{{ presenca['presencas_nominais'] }}</span> de
-                                    presença
+                                <p class="mt-1 text-xl ">
+                                    <span class="font-bold text-radar">{{ presenca['presencas_nominais'] }}</span> <span
+                                        class="font-semibold">de presença</span>
                                     <span class="font-bold text-radar">({{ presenca['taxa_assiduidade'] | real
                                         }}%)</span>
+                                    {% set diff_presenca = (presenca['presencas_nominais'] * 100 /
+                                    media_presenca['presenca'] - 100) %}
+                                    {% set presenca_maior = presenca['presencas_nominais'] > media_presenca['presenca']
+                                    %}
+
+                                <div class="text-lg font-semibold flex items-center gap-1">
+                                    <span
+                                        class="{{ 'text-green-700' if presenca_maior else 'text-red-500' }} flex items-center">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                            class="size-4 transition-transform {{ '' if presenca_maior else 'rotate-180' }}">
+                                            <path fill-rule="evenodd"
+                                                d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                        {{ diff_presenca | abs | porcentagem }}%
+                                    </span>
+
+                                    {{ 'maior' if presenca_maior else 'menor' }} que a média da Câmara
+                                </div>
+
                                 </p>
+
                             </div>
 
                             <div class="h-px w-full bg-gray-300 mt-3"></div>
@@ -122,9 +144,30 @@
                                 <span class="font-bold">Despesas Totais</span>
                                 <span class="font-bold text-4xl text-radar">R${{ gasto['total'] | real }}</span>
 
-                                <button onclick="document.getElementById('modal').showModal()"
+                                {% set diff_porcentagem = (gasto['total'] * 100 / media_gasto['gasto'] - 100) %}
+                                {% set gasto_maior = gasto['total'] > media_gasto['gasto'] %}
+
+                                <span class="font-semibold text-lg flex items-center gap-1">
+                                    <span
+                                        class="{{ 'text-green-700' if not gasto_maior else 'text-red-500' }} flex items-center">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                            class="size-4 transition-transform {{ '' if gasto_maior else 'rotate-180' }}">
+                                            <path fill-rule="evenodd"
+                                                d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+
+                                        {{ diff_porcentagem | abs | porcentagem }}%
+                                    </span>
+
+                                    {{ 'maior' if gasto_maior else 'menor' }} que a média da Câmara
+                                </span>
+                                <button onclick=" document.getElementById('modal').showModal()"
                                     class="bg-radar/30 font-medium text-radar text-sm px-3 py-1 rounded-full w-2/10 mt-2 cursor-pointer hover:bg-radar hover:transition hover:text-white">Ver
-                                    mais</button>
+                                    mais
+                                </button>
                             </div>
 
                             <!--Modal das despesas-->
@@ -272,19 +315,20 @@
 
                     <div class="flex flex-col gap-7 overflow-y-auto pr-2 scrollbar-thin">
                         {% for prop in proposicoes %}
-                            {% if prop['keywords'] or prop['nome'] %}
-                            <div class="flex items-center gap-4">
-                                <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                        class="size-6 text-sec">
-                                        <path fill-rule="evenodd"
-                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <h4 class="font-[550] text-xl text-dark-blue capitalize">{{ prop['nome'] or 'Não informado' }}</h4>
+                        {% if prop['keywords'] or prop['nome'] and prop['nome'] != 'aaaaa' %}
+                        <div class="flex items-center gap-4">
+                            <div class="relative bg-sec/20 w-fit p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                    class="size-6 text-sec">
+                                    <path fill-rule="evenodd"
+                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </div>
-                            {% endif %}
+                            <h4 class="font-[550] text-xl text-dark-blue capitalize">{{ prop['nome'] or 'Não informado'
+                                }}</h4>
+                        </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </section>
@@ -358,7 +402,7 @@
 
         document.getElementById('keywords-lista').innerHTML = (btn.dataset.keywords || '')
             .split(',').map(p => p.trim()).filter(Boolean)
-            .map(p => `<span class="bg-radar/20 text-blue-800 px-3 py-1 rounded-full">${p}</span>`)
+            .map(p => `<span class="bg-radar/20 capitalize text-blue-800 px-3 py-1 rounded-full">${p}</span>`)
             .join('') || '<span class="text-black/40">Nenhuma palavra-chave.</span>';
 
         document.getElementById('card-keywords').classList.replace('hidden', 'flex');

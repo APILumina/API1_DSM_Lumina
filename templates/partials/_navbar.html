@@ -17,21 +17,21 @@
                         </svg>
                     </label>
                     <!-- Parte  ⬇️ -->
-                    <input id="pesquisa" name="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
+                    <input id="pesquisa" autocomplete="off" name="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
                         placeholder="Pesquisar">
                 </form>
                 {% endif %}
                 <!-- Dropdowns ⬇️ -->
                 <ul class="flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold">
                     <li>
-                        <a href="/"
+                        <a href="{{ url_for('route.home') }}"
                             class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500">HOME
                         </a>
                     </li>
                     <li class="relative flex items-center">
                         <button id="btn-deputados" type="button"
                             class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm">
-                            <a href="/deputados">DEPUTADOS</a>
+                            <a href="{{ url_for('route.deputados') }}">DEPUTADOS</a>
                             <svg id="seta" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="3" stroke="currentColor"
                                 class="size-4 ml-1 transition-transform duration-300">
@@ -43,117 +43,117 @@
                         <ul id="menu-deputados"
                             class="absolute top-full left-0 mt-2 w-48 bg-white text-radar rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin">
                             <li>
-                                <a href="/buscar?estado=AC"
+                                <a href="{{ url_for('route.buscar') }}?estado=AC"
                                     class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline">Acre</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=AL"
+                                <a href="{{ url_for('route.buscar') }}?estado=AL"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Alagoas</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=AP"
+                                <a href="{{ url_for('route.buscar') }}?estado=AP"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Amapá</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=AM"
+                                <a href="{{ url_for('route.buscar') }}?estado=AM"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Amazonas</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=BA"
+                                <a href="{{ url_for('route.buscar') }}?estado=BA"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Bahia</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=CE"
+                                <a href="{{ url_for('route.buscar') }}?estado=CE"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Ceará</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=DF"
+                                <a href="{{ url_for('route.buscar') }}?estado=DF"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Distrito Federal</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=ES"
+                                <a href="{{ url_for('route.buscar') }}?estado=ES"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Espirito Santo</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=GO"
+                                <a href="{{ url_for('route.buscar') }}?estado=GO"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Goiás</a>
                             </li>z
                             <li>
-                                <a href="/buscar?estado=MA"
+                                <a href="{{ url_for('route.buscar') }}?estado=MA"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Maranhão</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=MT" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
+                                <a href="{{ url_for('route.buscar') }}?estado=MT" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
                                     Grosso</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=MS" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
+                                <a href="{{ url_for('route.buscar') }}?estado=MS" class="block px-4 py-2 hover:bg-gray-100 no-underline">Mato
                                     Grosso do Sul</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=MG" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas
+                                <a href="{{ url_for('route.buscar') }}?estado=MG" class="block px-4 py-2 hover:bg-gray-100 no-underline">Minas
                                     Gerais</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=PA"
+                                <a href="{{ url_for('route.buscar') }}?estado=PA"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Pará</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=PB"
+                                <a href="{{ url_for('route.buscar') }}?estado=PB"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraiba</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=PR"
+                                <a href="{{ url_for('route.buscar') }}?estado=PR"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Paraná</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=PE"
+                                <a href="{{ url_for('route.buscar') }}?estado=PE"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Pernanbuco</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=PI"
+                                <a href="{{ url_for('route.buscar') }}?estado=PI"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Piauí</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=RJ" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
+                                <a href="{{ url_for('route.buscar') }}?estado=RJ" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
                                     de Janeiro</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=RN" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
+                                <a href="{{ url_for('route.buscar') }}?estado=RN" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
                                     Grande do Norte</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=RS" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
+                                <a href="{{ url_for('route.buscar') }}?estado=RS" class="block px-4 py-2 hover:bg-gray-100 no-underline">Rio
                                     Grande do Sul</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=RO"
+                                <a href="{{ url_for('route.buscar') }}?estado=RO"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Rondônia</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=RR"
+                                <a href="{{ url_for('route.buscar') }}?estado=RR"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Roraima</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=SC" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa
+                                <a href="{{ url_for('route.buscar') }}?estado=SC" class="block px-4 py-2 hover:bg-gray-100 no-underline">Santa
                                     Catarina</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=SP" class="block px-4 py-2 hover:bg-gray-100 no-underline">São
+                                <a href="{{ url_for('route.buscar') }}?estado=SP" class="block px-4 py-2 hover:bg-gray-100 no-underline">São
                                     Paulo</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=SE"
+                                <a href="{{ url_for('route.buscar') }}?estado=SE"
                                     class="block px-4 py-2 hover:bg-gray-100 no-underline">Sergipe</a>
                             </li>
                             <li>
-                                <a href="/buscar?estado=TO"
+                                <a href="{{ url_for('route.buscar') }}?estado=TO"
                                     class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline">Tocantins</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="/graficos"
+                        <a href="{{ url_for('route.graficos') }}"
                             class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500">GRÁFICOS</a>
                     </li>
                 </ul>

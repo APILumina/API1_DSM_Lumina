@@ -14,8 +14,8 @@
 {% block content %}
   
   <!-- TÍTULO E FILTROS -->
-  <form action="/deputados" method="get" id="form-filtro">
-    <div class="p-6 bg-[#F5F7FA]">
+  <form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro">
+    <div class="p-5 bg-[#F5F7FA] max-w-[100rem] mx-auto">
       <h2 class="text-[#0D1967] text-[2.2rem] mb-2" style="font-family: 'Passion One'">
         Deputados Federais por Estado
       </h2>
@@ -124,7 +124,7 @@
     </div>
   </form>
 
-  <div id="lista-deputados" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+  <div id="lista-deputados" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
     {% for deputado in deputados %}
     <a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full">
       <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
@@ -134,7 +134,6 @@
           <p class="text-[#0D1967] font-passion-one">{{ deputado['nome_eleitoral'] }} </p>
           <p class="text-[#0D1967] font-passion-one">{{ deputado['partido'] }}</p>
         </div>
-        <div class="bg-[#FEE9B1] py-5"> </div>
       </div>
     </a>
     {% endfor %}
@@ -171,7 +170,6 @@
                     <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
                     <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
                   </div>
-                  <div class="bg-[#FEE9B1] py-5"> </div>
                 </div>
               </a>
           `;

@@ -6,5 +6,6 @@ def conectar():
     user = "root",
     password = "lumina1234",
     database = "Lumina2",
-    port = 3306
+    port = 3306,
+    use_pure = True
     )
