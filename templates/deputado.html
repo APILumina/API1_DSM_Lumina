@@ -296,7 +296,21 @@
                             <!--Proposições aprovadas -->
                             <div class="flex flex-col max-h-[300px] overflow-y-auto pr-2 scrollbar-thin">
                                 <h3 class="font-bold">Proposições aprovadas</h3>
-                                <p class="text-md">Este deputado não tem proposições aprovadas.</p>
+                                <div class="flex flex-col gap-7 overflow-y-auto pr-2 scrollbar-thin">
+
+                                    {% if aprovadas %}
+                                        {% for prop in aprovadas %}
+                                            {% if prop['nome'] %}
+                                            <div class="flex items-start gap-4">
+                                                <h4 class="font-semibold text-lg text-dark-blue mb-2"> <span class="font-bold">-</span> {{ prop['nome'] }}</h4>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <p class="text-black text-base mt-2">Este deputado não tem projeto aprovado.</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
 
