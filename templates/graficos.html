@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Gráficos{% endblock %}
 
-    {% block extra_style %}
-    <style type="text/tailwindcss">
-        .shadow-card {
+{% block extra_style %}
+<style type="text/tailwindcss">
+    .shadow-card {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
@@ -40,238 +40,241 @@
         }
 
     </style>
-    {% endblock %}
+{% endblock %}
 
 {% block content %}
-    <!--Conteúdo principal-->
-    <main class="flex-grow w-full max-w-[100rem] mx-auto ">
-    
-        <!--Section dos filtros e título da página-->
-        <div class="bg-white px-8 py-6 mb-9">
+<!--Conteúdo principal-->
+<main class="flex-grow">
 
-            <section class="mb-6">
-                <h1 class="text-3xl font-bold text-dark-blue tracking-tight">GRÁFICOS POR PARTIDO</h1>
-            </section>
+    <!--Section dos filtros e título da página-->
+    <div class="bg-white px-8 py-6 mb-9">
 
-            <!--FiltroS de estados e partidos-->
-            <section class="flex gap-4">
-        
-                <div class="relative w-full md:w-[20%]">
+        <section class="mb-6  w-full max-w-[100rem] mx-auto px-5">
+            <h1 class="text-3xl font-bold text-dark-blue tracking-tight">GRÁFICOS POR PARTIDO</h1>
+        </section>
 
-                    <form action="/graficos" method="get" id="form-filtro">
-                        <select name="estado" id="estado" onchange="this.form.submit()"
+        <!--FiltroS de estados e partidos-->
+        <section class="flex gap-4 w-full max-w-[100rem] mx-auto px-5">
+
+            <div class="relative w-full md:w-[20%]">
+
+                <form action="/graficos" method="get" id="form-filtro">
+                    <select name="estado" id="estado" onchange="this.form.submit()"
                         class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
-                            <option value="">Selecionar Estado</option>
+                        <option value="">Selecionar Estado</option>
 
-                            <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
+                        <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
 
-                            <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
+                        <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
 
-                            <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
+                        <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
 
-                            <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
+                        <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
 
-                            <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
+                        <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
 
-                            <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
+                        <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
 
-                            <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
+                        <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
 
-                            <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
+                        <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
 
-                            <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
+                        <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
 
-                            <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
+                        <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
 
-                            <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
+                        <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
 
-                            <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
+                        <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
 
-                            <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
+                        <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
 
-                            <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
+                        <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
 
-                            <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
+                        <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
 
-                            <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
+                        <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
 
-                            <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
+                        <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
 
-                            <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
+                        <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
 
-                            <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
+                        <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
 
-                            <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
+                        <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
 
-                            <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
+                        <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
 
-                            <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
+                        <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
 
-                            <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
+                        <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
 
-                            <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
+                        <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
 
-                            <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
+                        <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
 
-                            <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
+                        <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
 
-                            <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
+                        <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
 
-                        </select>
+                    </select>
 
 
 
                     <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-                    
-                      ▼
-                    
+
+                        ▼
+
                     </span>
 
-                 </div>
-                
+            </div>
 
 
-                <div class="relative w-full md:w-[20%]">
 
-                    <select name="partido" id="estado" onchange="this.form.submit()"
+            <div class="relative w-full md:w-[20%]">
+
+                <select name="partido" id="estado" onchange="this.form.submit()"
                     class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
-                        <option value="">Selecionar partido</option>
+                    <option value="">Selecionar partido</option>
 
-                        <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
+                    <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
 
-                        <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
+                    <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
 
-                        <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
+                    <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
 
-                        <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
+                    <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
 
-                        <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
+                    <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
 
-                        <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
+                    <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
 
-                        <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
+                    <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
 
-                        <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
+                    <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
 
-                        <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
+                    <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
 
-                        <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
+                    <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
 
-                        <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
+                    <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
 
-                        <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
+                    <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
 
-                        <option value="UNIAO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
+                    <option value="UNIAO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
 
-                        <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
+                    <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
 
-                        <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
+                    <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
 
-                        <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
+                    <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
 
-                        <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
-                    </select>
-                <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+                    <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
+                </select>
+                <span
+                    class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
             </div>
-                </section>
-            </div>
-                </form>
+        </section>
+    </div>
+    </form>
 
 
-        <!--Gráficos (imagens representativas)-->
-        <!--Gráfico 1: Projetos-->
-<section class="bg-white p-8 rounded-2xl shadow-card m-8">
-    <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-        Projetos aprovados <span class="font-normal text-lg">por partido</span>
-    </h2>
-    <div class="w-full">
-        {% if grafico_projetos %}
+    <!--Gráficos (imagens representativas)-->
+    <!--Gráfico 1: Projetos-->
+    <div class="w-full max-w-[100rem] mx-auto px-5">
+        <section class="bg-white p-8 rounded-2xl shadow-card">
+        <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+            Projetos aprovados <span class="font-normal text-lg">por partido</span>
+        </h2>
+        <div class="w-full">
+            {% if grafico_projetos %}
             <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
-        {% else %}
+            {% else %}
             <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
-        {% endif %}
-    </div>
-</section>
+            {% endif %}
+        </div>
+    </section>
 
-<section class="grid grid-cols-1 lg:grid-cols-2 gap-8 m-8">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8">
 
-    <!--Gráfico 2: Presença-->
-    <div class="bg-white p-8 rounded-2xl shadow-card">
-        <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-            Presença <span class="font-normal text-lg">por partido</span>
-        </h2>
-        <div class="w-full">
-            {% if grafico_presenca %}
+        <!--Gráfico 2: Presença-->
+        <div class="bg-white p-8 rounded-2xl shadow-card">
+            <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+                Presença <span class="font-normal text-lg">por partido</span>
+            </h2>
+            <div class="w-full">
+                {% if grafico_presenca %}
                 <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
-            {% else %}
+                {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
-    </div>
 
-    <!--Gráfico 3: Gastos-->
-    <div class="bg-white p-8 rounded-2xl shadow-card">
-        <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-            Gastos <span class="font-normal text-lg">por partido</span>
-        </h2>
-        <div class="w-full">
-            {% if grafico_gastos %}
+        <!--Gráfico 3: Gastos-->
+        <div class="bg-white p-8 rounded-2xl shadow-card">
+            <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
+                Gastos <span class="font-normal text-lg">por partido</span>
+            </h2>
+            <div class="w-full">
+                {% if grafico_gastos %}
                 <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
-            {% else %}
+                {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhum dado encontrado.</p>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
+
+    </section>
     </div>
+</main>
 
-</section>
-    </main>
-
-    {% block extra_js %}
-    <!--JS do drowndown do filtro-->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('btn-deputados');
-            const menu = document.getElementById('menu-deputados');
-            const seta = document.getElementById('seta');
+{% block extra_js %}
+<!--JS do drowndown do filtro-->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('btn-deputados');
+        const menu = document.getElementById('menu-deputados');
+        const seta = document.getElementById('seta');
 
 
-            //Código do filtro de estado e partido
-            const setupSelect = (btnId, menuId) => {
-                const b = document.getElementById(btnId);
-                const m = document.getElementById(menuId);
-                if (!b || !m) return;
+        //Código do filtro de estado e partido
+        const setupSelect = (btnId, menuId) => {
+            const b = document.getElementById(btnId);
+            const m = document.getElementById(menuId);
+            if (!b || !m) return;
 
-                b.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    // Fecha outros menus antes de abrir este
-                    document.querySelectorAll('.dropdown-select').forEach(el => {
-                        if (el !== m) el.classList.add('hidden');
-                    });
-                    m.classList.toggle('hidden');
+            b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Fecha outros menus antes de abrir este
+                document.querySelectorAll('.dropdown-select').forEach(el => {
+                    if (el !== m) el.classList.add('hidden');
                 });
-
-                //Atualiza o texto do botão ao clicar em uma opção
-                m.querySelectorAll('li').forEach(item => {
-                    item.addEventListener('click', () => {
-                        b.querySelector('.btn-text').innerText = item.innerText;
-                        m.classList.add('hidden');
-                    });
-                });
-            };
-
-            setupSelect('btn-estado', 'menu-estado');
-            setupSelect('btn-partido', 'menu-partido');
-
-            // Fechar tudo ao clicar fora
-            document.addEventListener('click', () => {
-                document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
-                if (menu) menu.classList.add('hidden');
-                if (seta) seta.classList.remove('rotate-180');
+                m.classList.toggle('hidden');
             });
+
+            //Atualiza o texto do botão ao clicar em uma opção
+            m.querySelectorAll('li').forEach(item => {
+                item.addEventListener('click', () => {
+                    b.querySelector('.btn-text').innerText = item.innerText;
+                    m.classList.add('hidden');
+                });
+            });
+        };
+
+        setupSelect('btn-estado', 'menu-estado');
+        setupSelect('btn-partido', 'menu-partido');
+
+        // Fechar tudo ao clicar fora
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
+            if (menu) menu.classList.add('hidden');
+            if (seta) seta.classList.remove('rotate-180');
         });
-    </script>
-    {% endblock %}
+    });
+</script>
+{% endblock %}
 
 {% endblock %}

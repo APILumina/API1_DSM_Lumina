@@ -7,6 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io, base64
 import pandas as pd
+from datetime import datetime
 
 route_bp = Blueprint("route", __name__)
 
@@ -41,6 +42,7 @@ estados = [
     {'uf': 'SE', 'nome': 'Sergipe'},
     {'uf': 'TO', 'nome': 'Tocantins'}
 ]
+
 
 def gerar_grafico_deputado(valor_deputado, valor_media, titulo):
     # Ajustado para o mesmo tamanho do gráfico de temas
@@ -92,7 +94,7 @@ def gerar_grafico(df, col_x, col_y, titulo):
 
 @route_bp.route("/")
 def home():
-    return render_template("index.html", partidos=sorted(partidos))
+    return render_template("index.html", partidos=sorted(partidos), hide_pesquisa=True, sticky_navbar=True)
 
 
 @route_bp.route("/graficos")
@@ -315,7 +317,7 @@ def deputados():
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido, partidos=sorted(partidos))
+    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido, partidos=sorted(partidos), sticky_navbar=True)
 
 
 @route_bp.route("/dados/deputados")
@@ -393,12 +395,29 @@ def infodeputados(id):
     WHERE p.fk_deputado = %s
     """
     query5 = """
-    SELECT p.cd_proposicoes, p.keywords
+    SELECT p.cd_proposicoes, p.keywords, p.nome
     FROM proposicao_deputados pd
     INNER JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
     WHERE pd.fk_deputado = %s
-    AND p.keywords IS NOT NULL
-    AND p.keywords <> 'None' LIMIT 5
+    """
+    query6 = """
+    SELECT d.tipo, d.gasto_total
+    FROM despesas d
+    WHERE d.fk_deputado = %s
+    ORDER BY d.gasto_total DESC
+    """
+    query7 = """
+    SELECT d.tipo, d.transcricao AS texto, d.titulo, d.keywords, d.data_inicio
+    FROM discursos d
+    WHERE d.fk_deputado = %s
+    ORDER BY d.data_inicio DESC
+    """
+    
+    query8 = """
+        SELECT  p.nome
+        FROM proposicoes p
+        INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica'
     """
 
     cursor.execute(query, (id,))
@@ -415,7 +434,21 @@ def infodeputados(id):
 
     cursor.execute(query5, (id,))
     proposicoes = cursor.fetchall()
-    
+
+    cursor.execute(query6, (id,))
+    despesas = cursor.fetchall()
+
+    cursor.execute(query7, (id,))
+    discursos = cursor.fetchall()
+
+    cursor.execute(query8, (id,))
+    aprovadas = cursor.fetchall()
+
+
+    for discurso in discursos:
+        dt = datetime.fromisoformat(discurso['data_inicio'])
+        discurso['data'] = dt.strftime('%d/%m/%Y')
+        discurso['hora'] = dt.strftime('%H:%M')
     
     def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
     
@@ -532,49 +565,55 @@ def infodeputados(id):
     conn.close()
 
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos)
     else:
         return {"erro": "Deputado não encontrado"}, 404
-
-
-@route_bp.route("/graficos/estado")
-def estado():
-    for e in estados:
-        e['img']   = f"img/estados/{e['uf'].lower()}.png"
-        e['link']  = f"partido/{e['uf'].lower()}"
-        e['alt']   = e['uf']
-        e['texto'] = e['nome']
-
-    return render_template("escolha-estados.html", lista=estados)
-
-
-@route_bp.route("/graficos/partido/<uf>")
-def partido(uf):
-    partido_lista = []
-    nome_estado   = False
-
-    for e in estados:
-        if e['uf'].lower() == uf.lower():
-            nome_estado = e['nome']
-            break
-
-    if not nome_estado:
-        return {"erro": "Estado não encontrado"}, 404
-
-    for p in sorted(partidos):
-        partido_lista.append({
-            'img'   : f"img/partidos/{p.lower()}.png",
-            'link'  : "#",
-            'alt'   : p,
-            'texto' : p
-        })
-
-    return render_template("escolha-partido.html", lista=partido_lista, estado=nome_estado)
 
 
 def remover_acentos(texto):
     nfkd_form = unicodedata.normalize('NFKD', texto)
     return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
+
+@route_bp.route('/buscar')
+def buscar():
+    estado = request.args.get('estado', '')
+    partido = request.args.get('partido', '')
+    
+    filtros = []
+    params = []
+    
+    if estado:
+        filtros.append("e.uf = %s")
+        params.append(estado)
+    if partido:
+        filtros.append("p.abreviacao = %s")
+        params.append(partido)
+    
+    where_clause = "WHERE " + " AND ".join(filtros) if filtros else ""
+    
+    conexao = conectar()
+    cursor = conexao.cursor(dictionary=True)
+    
+    # Usando GROUP BY para garantir que cada nome apareça apenas uma vez
+
+    query = f"""
+    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+           e.uf AS estado, p.abreviacao AS partido
+    FROM deputado d
+    JOIN estado e ON d.fk_estado = e.cd_estado
+    JOIN partido p ON d.fk_partido = p.cd_partido
+    {where_clause}
+    GROUP BY d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado, e.uf, p.abreviacao
+    ORDER BY d.nome_eleitoral
+    """
+
+    cursor.execute(query, params)
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    conexao.close()
+    
+    return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido)
 
 
 @route_bp.route('/procurar')
