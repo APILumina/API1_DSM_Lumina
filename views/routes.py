@@ -156,10 +156,11 @@ def graficos():
         cursor.execute("""
             SELECT e.uf AS label, COUNT(*) AS total
             FROM proposicao_deputados pd
+            JOIN proposicoes pr ON pd.fk_proposicao = pr.cd_proposicoes
             JOIN deputado d ON pd.fk_deputado = d.cd_deputado
             JOIN partido p  ON d.fk_partido   = p.cd_partido
             JOIN estado e   ON d.fk_estado    = e.cd_estado
-            WHERE p.abreviacao = %s
+            WHERE p.abreviacao = %s AND pr.status = 'Transformado em Norma Jurídica'
             GROUP BY e.uf ORDER BY total DESC
         """, (partido,))
         grafico_projetos = gerar_grafico(pd.DataFrame(cursor.fetchall()), 'label', 'total', f'Projetos por Estado — {partido}')
@@ -195,10 +196,11 @@ def graficos():
         cursor.execute("""
             SELECT d.nome_eleitoral AS label, COUNT(*) AS total
             FROM proposicao_deputados pd
+            JOIN proposicoes pr ON pd.fk_proposicao = pr.cd_proposicoes
             JOIN deputado d ON pd.fk_deputado = d.cd_deputado
             JOIN partido p  ON d.fk_partido   = p.cd_partido
             JOIN estado e   ON d.fk_estado    = e.cd_estado
-            WHERE e.uf = %s AND p.abreviacao = %s
+            WHERE e.uf = %s AND p.abreviacao = %s AND pr.status = 'Transformado em Norma Jurídica'
             GROUP BY d.cd_deputado, d.nome_eleitoral ORDER BY total DESC
             LIMIT 20
         """, (estado, partido))
@@ -235,11 +237,15 @@ def graficos():
     else:
 
         cursor.execute("""
-            SELECT p.abreviacao AS label, COUNT(*) AS total
+            SELECT e.uf AS label, COUNT(*) AS total
             FROM proposicao_deputados pd
+            JOIN proposicoes pr ON pd.fk_proposicao = pr.cd_proposicoes
             JOIN deputado d ON pd.fk_deputado = d.cd_deputado
             JOIN partido p  ON d.fk_partido   = p.cd_partido
-            GROUP BY p.abreviacao ORDER BY total DESC
+            JOIN estado e   ON d.fk_estado    = e.cd_estado
+            WHERE pr.status = 'Transformado em Norma Jurídica'
+            GROUP BY e.uf 
+            ORDER BY total DESC
         """)
         grafico_projetos = gerar_grafico(pd.DataFrame(cursor.fetchall()), 'label', 'total', 'Projetos por Partido — Brasil')
 
