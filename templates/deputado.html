@@ -175,12 +175,14 @@
                                     class="bg-radar/30 font-medium text-radar text-sm px-3 py-1 rounded-full w-2/10 mt-2 cursor-pointer hover:bg-radar hover:transition hover:text-white">Ver
                                     mais</button>
 
+
                                 <!--Modal do discurso-->
                                 <dialog id="modal-discurso"
-                                    class="fixed top-1/2 left-1/2 -translate-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-1/2 max-h-[80vh]">
+                                    class="fixed top-1/2 left-1/2 -translate-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-1/2 max-h-[80vh] overflow-visible">
+
                                     <div class="p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
 
-                                        <h2 class="text-2xl font-medium mb-2">Palavras-chave do discurso</h2>
+                                        <h2 class="text-2xl font-medium mb-2">Discursos de {{ dep['nome_eleitoral']}}</h2>
 
                                         <div class="flex-1 overflow-y-auto pr-2 space-y-2 font-medium text-black/80">
                                             {% for discurso in discursos %}
@@ -189,22 +191,16 @@
 
                                                 <!-- Cabeçalho clicável -->
                                                 <div class="flex flex-row items-center w-full p-4 hover:bg-gray-200 gap-4 cursor-pointer transition-all">
-
-                                                    <!-- Lado Esquerdo: Conteúdo resumido -->
                                                     <div class="flex flex-col gap-3 flex-1 overflow-hidden">
                                                         <div class="text-xs text-white bg-radar py-1 px-2 rounded-full capitalize w-fit">
                                                             <span class="font-bold">Tipo:</span> {{ discurso['tipo'] | lower }}
                                                         </div>
-
                                                         <h3 class="truncate text-medium">{{ discurso['texto'] }}</h3>
-
                                                         <div class="flex justify-between text-black/50 text-sm">
                                                             <div class="truncate mr-4">{{ discurso['titulo'] }}</div>
                                                             <div class="whitespace-nowrap">{{ discurso['data'] }} às {{ discurso['hora'] }}</div>
                                                         </div>
                                                     </div>
-
-                                                    <!-- Chevron rotacionável -->
                                                     <div class="flex-none text-black/30 group-hover:text-radar transition-colors chevron-icon">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -215,9 +211,14 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Conteúdo expandido (oculto por padrão) -->
-                                                <div class="conteudo-discurso hidden bg-gray-50 px-4 pb-4 text-base text-black/70 border-t border-gray-200">
-                                                    <p class="pt-3 leading-relaxed">{{ discurso['conteudo_completo'] }}</p>
+                                                <!-- Discurso transcrito que fica oculto -->
+                                                <div class="conteudo-discurso hidden bg-gray-60 px-4 py-4 text-base text-black/70 border-t border-gray-200">
+                                                    <div class="text-xs bg-radar/30 p-2 rounded-full w-fit cursor-pointer transition-all hover:bg-radar hover:text-white"
+                                                        data-keywords="{{ discurso['keywords'] }}"
+                                                        onclick="abrirKeywords(event, this)">
+                                                        <span class="font-bold">Palavras-chave</span>
+                                                    </div>
+                                                    <p class="pt-3 leading-relaxed">{{ discurso['texto'] }}</p>
                                                 </div>
 
                                             </div>
@@ -225,12 +226,24 @@
                                         </div>
 
                                         <div class="flex justify-end pt-2">
-                                            <button onclick="document.getElementById('modal-discurso').close()"
+                                            <button onclick="document.getElementById('modal-discurso').close(); fecharKeywords()"
                                                 class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
                                                 Fechar
                                             </button>
                                         </div>
                                     </div>
+
+                                    <!-- Card de keywords posicionado à direita -->
+                                    <div id="card-keywords"
+                                        class="hidden absolute top-0 left-[calc(100%+12px)] bg-white rounded-lg shadow-xl border border-gray-200 p-5 w-64 max-h-[80vh] overflow-y-auto flex-col gap-3">
+                                        <div class="flex justify-between items-center">
+                                            <h3 class="font-bold text-dark-blue text-base">Palavras-chave</h3>
+                                            <button onclick="fecharKeywords()"
+                                                class="text-black/40 hover:text-black transition cursor-pointer text-lg leading-none">&times;</button>
+                                        </div>
+                                        <div id="keywords-lista" class="flex flex-wrap gap-2 text-sm"></div>
+                                    </div>
+
                                 </dialog>
 
                             </div>
@@ -324,19 +337,35 @@
 <!--Accordion do discurso-->
 <script>
     function toggleDiscurso(card) {
-        const chevron = card.querySelector('.chevron-icon svg');
         const conteudo = card.querySelector('.conteudo-discurso');
+        const chevron = card.querySelector('.chevron-icon svg');
+
         const estaAberto = !conteudo.classList.contains('hidden');
+
+        //Fecha os outros
+        document.querySelectorAll('.conteudo-discurso').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.chevron-icon svg').forEach(el => el.style.transform = '');
+
+        // Abre o clicado (se estava fechado)
+        if (!estaAberto) {
+            conteudo.classList.remove('hidden');
+            chevron.style.transform = 'rotate(90deg)';
+        }
     }
 
-    document.querySelectorAll('.conteudo-discurso').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('chevron-icon svg').forEach(el => el.style.transform = '');
+    function abrirKeywords(event, btn) {
+        event.stopPropagation();
 
-    //abre quando clicar
-    if (!estaAberto) {
-        conteudo.classList.remove('hidden');
-        chevron.style.transform = 'rotate(90deg)';
+        document.getElementById('keywords-lista').innerHTML = (btn.dataset.keywords || '')
+            .split(',').map(p => p.trim()).filter(Boolean)
+            .map(p => `<span class="bg-radar/20 text-blue-800 px-3 py-1 rounded-full">${p}</span>`)
+            .join('') || '<span class="text-black/40">Nenhuma palavra-chave.</span>';
+
+        document.getElementById('card-keywords').classList.replace('hidden', 'flex');
     }
 
+    function fecharKeywords() {
+        document.getElementById('card-keywords').classList.replace('flex', 'hidden');
+    }
 </script>
 {% endblock %}
