@@ -48,7 +48,7 @@ def gerar_grafico_deputado(valor_deputado, valor_media, titulo):
     # Ajustado para o mesmo tamanho do gráfico de temas
     fig, ax = plt.subplots(figsize=(6, 6)) 
     
-    cores = ['#1A249D', "#3c66ef"]
+    cores = ['#1A249D', "#efc33c"]
     labels = ['Este Deputado', 'Média da Câmara']
     valores = [valor_deputado, valor_media]
     
@@ -89,6 +89,42 @@ def gerar_grafico(df, col_x, col_y, titulo):
     buf = io.BytesIO()
     plt.savefig(buf, format='png', transparent=True)
     plt.close(fig)
+    return base64.b64encode(buf.getvalue()).decode('utf-8')
+
+
+def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
+    """Gera gráfico de barras horizontais comparando deputado vs média da câmara por tema."""
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    if not labels:
+        ax.text(0.5, 0.5, 'Nenhum projeto aprovado associado a um tema.', 
+                ha='center', va='center', fontsize=12, color='#081638')
+        ax.axis('off')
+    else:
+        y = range(len(labels))
+        height = 0.35
+        y_dep = [pos - height/2 for pos in y]
+        y_med = [pos + height/2 for pos in y]
+        
+        # Barras horizontais - texto legível naturalmente
+        ax.barh(y_dep, valores_deputado, height, label='Este Deputado', color='#1A249D')
+        ax.barh(y_med, valores_media, height, label='Média da Câmara', color='#efc33c')
+        
+        ax.set_title(titulo, pad=15, fontsize=12, fontweight='bold', color='#081638')
+        ax.set_yticks(list(y))
+        ax.set_yticklabels(labels, fontsize=10)
+        ax.legend()
+        
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_color('#cccccc')
+        ax.spines['bottom'].set_color('#cccccc')
+    
+    plt.tight_layout()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', transparent=True, dpi=100)
+    plt.close(fig)
+    buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf-8')
 
 
@@ -485,36 +521,6 @@ def infodeputados(id):
     cursor.execute(query10)
     media_gasto = cursor.fetchone()
 
-
-
-    def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
-        fig, ax = plt.subplots(figsize=(6, 6)) 
-        if not labels:
-            ax.text(0.5, 0.5, 'Nenhum projeto aprovado associado a um tema.', 
-                    ha='center', va='center', fontsize=12, color='#081638')
-            ax.axis('off')
-        else:
-            x = range(len(labels))
-            width = 0.35 
-            x_dep = [pos - width/2 for pos in x]
-            x_med = [pos + width/2 for pos in x]
-            ax.bar(x_dep, valores_deputado, width, label='Este Deputado', color='#1A249D')
-            ax.bar(x_med, valores_media, width, label='Média da Câmara', color='#efc33c')
-            ax.set_title(titulo, pad=15, fontsize=12, fontweight='bold', color='#081638')
-            ax.set_xticks(list(x))
-            ax.set_xticklabels(labels, rotation=90, ha='center', fontsize=9)
-            ax.legend()
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
-            ax.spines['left'].set_visible(False)
-            ax.spines['bottom'].set_color('#cccccc')
-        plt.tight_layout()
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png', transparent=True, dpi=100)
-        plt.close(fig)
-        buf.seek(0)
-        return base64.b64encode(buf.getvalue()).decode('utf-8')
-    
     # Query 11: Combinar todas as métricas em uma única query
     query11 = """
         SELECT 
