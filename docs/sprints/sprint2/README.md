@@ -18,26 +18,25 @@
   <a href="#professores">Professores</a>
 </p>
 
-> Status da Sprint: Em andamento 🟨
+> Status da Sprint: Concluída 🟩
 
 ## 🏅 Meta <a id="meta"></a>
-...
+Para a Sprint 2, foi definida como prioridade a inserção dos dados reais dos deputados no site (US 3), um filtro de pesquisa por estado e partido para ajudar na análise de desempenho (US 7) e a implementação de uma funcionalidade para que o eleitor consiga ver e avaliar os gastos individuais do deputado. 
 
-## 📌 Demonstração (vídeos)<a id="demonstracao"></a>
-  - <a href="">Google Colab</a> 
-  - <a href="">Site</a> 
+## 📌 Demonstração (vídeos)<a id="demonstracao"></a> 
+  - <a href="https://youtu.be/BTGHa1jO4tM?si=K4X5c1tOQDxV-UyW">Site</a> 
 
 
 ## 📝 User Stories <a id="us"></a>
 | RANK | PRIORIDADE | USER STORY | STATUS |
 | :---: | :---: | :--- | :---: | 
-| 3 | Alta | Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🟡 |
-| 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🟡 |
-| 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🟡 |
-| 6 | Alta | Como eleitor, quero ver com o que o meu deputado está gastando para analisar e avaliar se a despesa é necessária. | 🟡 |
-| 7 | Alta | Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🟡 |
-| 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🟡 |
-| 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🟡 |
+| 3 | Alta <sup>★</sup>| Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🟢 |
+| 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🟢 |
+| 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🟢 |
+| 6 | Alta <sup>★</sup>| Como eleitor, quero ver com o que o meu deputado está gastando para analisar e avaliar se a despesa é necessária. | 🟢 |
+| 7 | Alta <sup>★</sup>| Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🟢 |
+| 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🟢 |
+| 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🟢 |
 --- 
 <br>
 
