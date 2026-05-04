@@ -1,1 +1,1 @@
-#Aqui ficarão as funções
+#Aqui fica as funções
