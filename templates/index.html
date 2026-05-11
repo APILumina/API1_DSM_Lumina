@@ -70,7 +70,8 @@
 
     <!--Barra de pesquisa-->
     <div class="bg-gray-200 py-6">
-      <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
+      <form action="{{ url_for('route.procurar') }}" method="GET"
+        class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
         <input type="text" autocomplete="off" name="pesquisa" placeholder="Buscar por deputado"
           class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" />
 
@@ -78,33 +79,9 @@
           <select name="estado"
             class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
             <option value="">Selecionar Estado</option>
-            <option value="AC">Acre (AC)</option>
-            <option value="AL">Alagoas (AL)</option>
-            <option value="AP">Amapá (AP)</option>
-            <option value="AM">Amazonas (AM)</option>
-            <option value="BA">Bahia (BA)</option>
-            <option value="CE">Ceará (CE)</option>
-            <option value="DF">Distrito Federal (DF)</option>
-            <option value="ES">Espírito Santo (ES)</option>
-            <option value="GO">Goiás (GO)</option>
-            <option value="MA">Maranhão (MA)</option>
-            <option value="MT">Mato Grosso (MT)</option>
-            <option value="MS">Mato Grosso do Sul (MS)</option>
-            <option value="MG">Minas Gerais (MG)</option>
-            <option value="PA">Pará (PA)</option>
-            <option value="PB">Paraíba (PB)</option>
-            <option value="PR">Paraná (PR)</option>
-            <option value="PE">Pernambuco (PE)</option>
-            <option value="PI">Piauí (PI)</option>
-            <option value="RJ">Rio de Janeiro (RJ)</option>
-            <option value="RN">Rio Grande do Norte (RN)</option>
-            <option value="RS">Rio Grande do Sul (RS)</option>
-            <option value="RO">Rondônia (RO)</option>
-            <option value="RR">Roraima (RR)</option>
-            <option value="SC">Santa Catarina (SC)</option>
-            <option value="SP">São Paulo (SP)</option>
-            <option value="SE">Sergipe (SE)</option>
-            <option value="TO">Tocantins (TO)</option>
+            {% for est in estados %}
+            <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
+            {% endfor %}
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
             <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
@@ -117,8 +94,8 @@
           <select name="partido"
             class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
             <option value="">Partido</option>
-            {% for p in partidos %}
-            <option value="{{ p }}">{{ p }}</option>
+            {% for part in partidos %}
+            <option value="{{ part['abreviacao'] | lower}}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
             {% endfor %}
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
@@ -147,7 +124,7 @@
         <button class="text-left w-full">
           <a href="{{ url_for('route.graficos') }}#gastos">
             <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
-              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl"/>
+              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
               <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
                 Descubra se os gastos do seu deputado são úteis.

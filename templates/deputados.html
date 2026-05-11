@@ -1,167 +1,120 @@
 {% extends 'base.html' %}
 {% block title %}Deputados{% endblock %}
 
-  {% block extra_style %}
-  <style>
-    /* animação seta menu */
-    .menu-anim {
-      transition: all 0.3s ease;
-    }
-  </style>
-  {% endblock %}
+{% block extra_style %}
+<style>
+  /* animação seta menu */
+  .menu-anim {
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock %}
 
 
 {% block content %}
-  
-  <!-- TÍTULO E FILTROS -->
-  <form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro">
-    <div class="p-5 bg-[#F5F7FA] max-w-[100rem] mx-auto">
-      <h2 class="text-[#0D1967] text-[2.2rem] mb-2" style="font-family: 'Passion One'">
-        Deputados Federais por Estado
-      </h2>
-      <!-- FILTRO -->
 
-      <div class="flex gap-[2%]">
+<!-- TÍTULO E FILTROS -->
+<form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro">
+  <div class="p-5 bg-[#F5F7FA] max-w-[100rem] mx-auto">
+    <h2 class="text-[#0D1967] text-[2.2rem] mb-2" style="font-family: 'Passion One'">
+      Deputados Federais por Estado
+    </h2>
+    <!-- FILTRO -->
 
-
-
-        <!-- ESTADO -->
-
-
-        <div class="relative w-full md:w-[20%]">
-
-
-          <select name="estado" id="estado" onchange="this.form.submit()"
-            class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-
-            <option value="">Selecionar Estado</option>
-
-            <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
-
-            <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
-
-            <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
-
-            <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
-
-            <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
-
-            <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
-
-            <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
-
-            <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
-
-            <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
-
-            <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
-
-            <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
-
-            <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
-
-            <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
-
-            <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
-
-            <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
-
-            <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
-
-            <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
-
-            <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
-
-            <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
-
-            <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
-
-            <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
-
-            <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
-
-            <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
-
-            <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
-
-            <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
-
-            <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
-
-            <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
-
-          </select>
+    <div class="flex gap-[2%]">
 
 
 
-          <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-
-            ▼
-
-          </span>
-
-        </div>
+      <!-- ESTADO -->
 
 
+      <div class="relative w-full md:w-[20%]">
 
-        <!-- PARTIDOS -->
 
-        <div class="relative w-full md:w-[20%]">
+        <select name="estado" id="estado" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
-          <select name="partido" id="estado" onchange="this.form.submit()"
-            class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+          <option value="">Selecionar Estado</option>
 
-            <option value="">Selecionar partido</option>
+          {% for est in estados %}
+          <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{
+            est['uf'] }})</option>
+          {% endfor %}
 
-            {% for p in partidos %}
-              <option value="{{ p }}" {{ 'selected' if partido==p }}>{{ p }}</option>
-            {% endfor %}
-          </select>
-          <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
-        </div>
+        </select>
 
+
+
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
+
+          ▼
+
+        </span>
+
+      </div>
+
+
+
+      <!-- PARTIDOS -->
+
+      <div class="relative w-full md:w-[20%]">
+
+        <select name="partido" id="estado" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+
+          <option value="">Selecionar partido</option>
+
+          {% for part in partidos %}
+          <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{
+            part['abreviacao'] }})</option>
+          {% endfor %}
+        </select>
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+<div id="lista-deputados"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
+  {% for deputado in deputados %}
+  <a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full">
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+      <div class="p-6">
+        <img src="{{ deputado['imagem_deputado'] }}"
+          class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+        <p class="text-[#0D1967] font-passion-one">{{ deputado['nome_eleitoral'] }} </p>
+        <p class="text-[#0D1967] font-passion-one">{{ deputado['partido'] }}</p>
       </div>
     </div>
-  </form>
+  </a>
+  {% endfor %}
+</div>
 
-  <div id="lista-deputados" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
-    {% for deputado in deputados %}
-    <a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full">
-      <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
-        <div class="p-6">
-          <img src="{{ deputado['imagem_deputado'] }}"
-            class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-          <p class="text-[#0D1967] font-passion-one">{{ deputado['nome_eleitoral'] }} </p>
-          <p class="text-[#0D1967] font-passion-one">{{ deputado['partido'] }}</p>
-        </div>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
+<div id="sentinela" class="flex justify-center p-10">
+  <div id="loader" class="hidden animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-radar"></div>
+</div>
 
-  <div id="sentinela" class="flex justify-center p-10">
-    <div id="loader" class="hidden animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-radar"></div>
-  </div>
+{% block extra_js %}
+<script>
+  const parametros = new URLSearchParams(window.location.search);
 
-  {% block extra_js %}
-  <script>
-    const parametros = new URLSearchParams(window.location.search);
+  const pesquisa = parametros.get('pesquisa');
 
-    const pesquisa = parametros.get('pesquisa');
+  if (!pesquisa) {
+    document.addEventListener('DOMContentLoaded', () => {
+      let paginaAtual = 1;
+      let carregando = false;
+      let fimDados = false;
 
-    if (!pesquisa) {
-      document.addEventListener('DOMContentLoaded', () => {
-        let paginaAtual = 1;
-        let carregando = false;
-        let fimDados = false;
+      const lista = document.getElementById('lista-deputados');
+      const sentinela = document.getElementById('sentinela');
+      const loader = document.getElementById('loader');
 
-        const lista = document.getElementById('lista-deputados');
-        const sentinela = document.getElementById('sentinela');
-        const loader = document.getElementById('loader');
-
-        // Função que cria o HTML do card (ajuste as classes conforme seu design)
-        function criarCard(deputado) {
-          return `
+      // Função que cria o HTML do card (ajuste as classes conforme seu design)
+      function criarCard(deputado) {
+        return `
               <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
                   <div class="p-6">
@@ -173,49 +126,49 @@
                 </div>
               </a>
           `;
-        }
+      }
 
-        async function carregarMaisDeputados() {
-          if (carregando || fimDados) return;
+      async function carregarMaisDeputados() {
+        if (carregando || fimDados) return;
 
-          carregando = true;
-          loader.classList.remove('hidden');
-          paginaAtual++;
+        carregando = true;
+        loader.classList.remove('hidden');
+        paginaAtual++;
 
-          // Pega os filtros atuais da URL para manter a busca consistente
-          const params = new URLSearchParams(window.location.search);
-          params.set('page', paginaAtual);
+        // Pega os filtros atuais da URL para manter a busca consistente
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', paginaAtual);
 
-          try {
-            const response = await fetch(`/dados/deputados?${params.toString()}`);
-            const novosDeputados = await response.json();
+        try {
+          const response = await fetch(`/dados/deputados?${params.toString()}`);
+          const novosDeputados = await response.json();
 
-            if (novosDeputados.length === 0) {
-              fimDados = true;
-            } else {
-              novosDeputados.forEach(dep => {
-                lista.insertAdjacentHTML('beforeend', criarCard(dep));
-              });
-            }
-          } catch (error) {
-            console.error("Erro ao carregar mais deputados:", error);
-          } finally {
-            carregando = false;
-            loader.classList.add('hidden');
+          if (novosDeputados.length === 0) {
+            fimDados = true;
+          } else {
+            novosDeputados.forEach(dep => {
+              lista.insertAdjacentHTML('beforeend', criarCard(dep));
+            });
           }
+        } catch (error) {
+          console.error("Erro ao carregar mais deputados:", error);
+        } finally {
+          carregando = false;
+          loader.classList.add('hidden');
         }
+      }
 
-        // INTERSECTION OBSERVER: O vigia do fim da página
-        const observer = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            carregarMaisDeputados();
-          }
-        }, { threshold: 0.5 });
+      // INTERSECTION OBSERVER: O vigia do fim da página
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          carregarMaisDeputados();
+        }
+      }, { threshold: 0.5 });
 
-        observer.observe(sentinela);
-      });
-    }
-  </script>
-  {% endblock %}
+      observer.observe(sentinela);
+    });
+  }
+</script>
+{% endblock %}
 
 {% endblock %}

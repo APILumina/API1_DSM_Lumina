@@ -11,7 +11,29 @@ from datetime import datetime
 
 route_bp = Blueprint("route", __name__)
 
-partidos = ["PT","PL","PSDB","PP","PRD","PDT","PSB","PSD","PSOL","REPUBLICANOS","AVANTE","MDB","UNIAO","PV","PCdoB","REDE","NOVO"]
+partidos = [
+    {'abreviacao': 'AVANTE', 'nome': 'Avante'},
+    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'},
+    {'abreviacao': 'MDB', 'nome': 'Movimento Democrático Brasileiro'},
+    {'abreviacao': 'MISSÃO', 'nome': 'Partido Missão'},
+    {'abreviacao': 'NOVO', 'nome': 'Partido Novo'},
+    {'abreviacao': 'PCdoB', 'nome': 'Partido Comunista do Brasil'},
+    {'abreviacao': 'PDT', 'nome': 'Partido Democrático Trabalhista'},
+    {'abreviacao': 'PL', 'nome': 'Partido Liberal'},
+    {'abreviacao': 'PODE', 'nome': 'Podemos'},
+    {'abreviacao': 'PP', 'nome': 'Progressistas'},
+    {'abreviacao': 'PRD', 'nome': 'Partido da Mobilização Nacional'},
+    {'abreviacao': 'PSB', 'nome': 'Partido Socialista Brasileiro'},
+    {'abreviacao': 'PSD', 'nome': 'Partido Social Democrático'},
+    {'abreviacao': 'PSDB', 'nome': 'Partido da Social Democracia Brasileira'},
+    {'abreviacao': 'PSOL', 'nome': 'Partido Socialismo e Liberdade'},
+    {'abreviacao': 'PT', 'nome': 'Partido dos Trabalhadores'},
+    {'abreviacao': 'PV', 'nome': 'Partido Verde'},
+    {'abreviacao': 'REDE', 'nome': 'Rede Sustentabilidade'},
+    {'abreviacao': 'REPUBLICANOS', 'nome': 'Republicanos'},
+    {'abreviacao': 'SOLIDARIEDADE', 'nome': 'Solidariedade'},
+    {'abreviacao': 'UNIÃO', 'nome': 'União Brasil'}
+]
 
 estados = [
     {'uf': 'AC', 'nome': 'Acre'},
@@ -42,6 +64,9 @@ estados = [
     {'uf': 'SE', 'nome': 'Sergipe'},
     {'uf': 'TO', 'nome': 'Tocantins'}
 ]
+
+def obter_partidos_abreviados():
+    return sorted([p['abreviacao'] for p in partidos])
 
 
 def gerar_grafico_deputado(valor_deputado, valor_media, titulo):
@@ -130,7 +155,7 @@ def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
 
 @route_bp.route("/")
 def home():
-    return render_template("index.html", partidos=sorted(partidos), hide_pesquisa=True, sticky_navbar=True)
+    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True)
 
 
 @route_bp.route("/graficos")
@@ -309,8 +334,9 @@ def graficos():
 
     return render_template("graficos.html",
         estado=estado,
+        estados=estados,
         partido=partido,
-        partidos=sorted(partidos),
+        partidos=partidos,
         grafico_projetos=grafico_projetos,
         grafico_presenca=grafico_presenca,
         grafico_gastos=grafico_gastos,
@@ -359,7 +385,7 @@ def deputados():
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido, partidos=sorted(partidos), sticky_navbar=True)
+    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
 
 
 @route_bp.route("/dados/deputados")
@@ -648,7 +674,7 @@ def buscar():
     cursor.close()
     conexao.close()
     
-    return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido)
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
 
 
 @route_bp.route('/procurar')
@@ -693,8 +719,7 @@ def procurar():
     cursor.close()
     conexao.close()
 
-    return render_template('deputados.html', deputados=resultados, estado=estado,
-                           partido=partido, pesquisa=pesquisa, partidos=sorted(partidos))
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, pesquisa=pesquisa, sticky_navbar=True)
 
 
 @route_bp.route('/estados')
