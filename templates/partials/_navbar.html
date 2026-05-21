@@ -17,8 +17,17 @@
                         </svg>
                     </label>
                     <!-- Parte  ⬇️ -->
-                    <input id="pesquisa" autocomplete="off" name="pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text"
-                        placeholder="Pesquisar">
+                    <input id="pesquisa" autocomplete="off" name="pesquisa" list="dep_pesquisa" class="bg-white w-full text-black p-3 pl-[3rem] rounded-full" type="text" placeholder="Pesquisar">
+                    <datalist id="dep_pesquisa">
+                        {% for dep in todos_deputados %}
+
+                            <option value="{{ dep.nome }}">
+                                {{ dep.imagem_deputado }}
+                                <img src="{{ dep.imagem_deputado }}" alt="">
+                            </option>
+
+                        {% endfor %}
+                    </datalist>
                 </form>
                 {% endif %}
                 <!-- Dropdowns ⬇️ -->

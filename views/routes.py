@@ -381,11 +381,19 @@ def deputados():
 
     cursor.execute(query, params)
     dados = cursor.fetchall()
+    
+    cursor.execute("""
+    SELECT nome,imagem_deputado
+    FROM deputado
+    ORDER BY nome
+    """)
+
+    todos_deputados = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
+    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos,todos_deputados=todos_deputados, sticky_navbar=True)
 
 
 @route_bp.route("/dados/deputados")
@@ -689,7 +697,7 @@ def procurar():
     if pesquisa:
         pesquisa_limpa = remover_acentos(pesquisa).lower()
         termo = f"%{pesquisa_limpa}%"
-        filtros.append("(d.nome LIKE %s OR d.nome_eleitoral LIKE %s)")
+        filtros.append("(LOWER(d.nome) LIKE %s OR LOWER(d.nome_eleitoral) LIKE %s)")
         params.extend([termo, termo])
 
     if estado:
