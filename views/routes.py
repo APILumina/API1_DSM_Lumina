@@ -155,7 +155,20 @@ def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
 
 @route_bp.route("/")
 def home():
-    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True)
+    conn   = conectar()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("""
+    SELECT nome,imagem_deputado
+    FROM deputado
+    ORDER BY nome
+    """)
+
+    todos_deputados = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True,todos_deputados=todos_deputados)
 
 
 @route_bp.route("/graficos")
@@ -329,6 +342,14 @@ def graficos():
         """)
         grafico_gastos = gerar_grafico(pd.DataFrame(cursor.fetchall()), 'label', 'total', 'Gastos por Partido — Brasil')
 
+    cursor.execute("""
+    SELECT nome,imagem_deputado
+    FROM deputado
+    ORDER BY nome
+    """)
+
+    todos_deputados = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
@@ -340,6 +361,7 @@ def graficos():
         grafico_projetos=grafico_projetos,
         grafico_presenca=grafico_presenca,
         grafico_gastos=grafico_gastos,
+        todos_deputados=todos_deputados
     )
 
 
@@ -624,6 +646,14 @@ def infodeputados(id):
     grafico_temas_img = gerar_grafico_temas(
         labels_tema, valores_dep_tema, valores_med_tema, 'Aprovados vs Média por Tema (Top 5)'
     )
+    
+    cursor.execute("""
+    SELECT nome,imagem_deputado
+    FROM deputado
+    ORDER BY nome
+    """)
+
+    todos_deputados = cursor.fetchall()
 
     cursor.close()
     conn.close()
@@ -634,7 +664,7 @@ def infodeputados(id):
         discurso['hora'] = dt.strftime('%H:%M')
 
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 

@@ -73,7 +73,15 @@
       <form action="{{ url_for('route.procurar') }}" method="GET"
         class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
         <input type="text" autocomplete="off" name="pesquisa" placeholder="Buscar por deputado"
-          class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" />
+          class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" list="dep_pesquisa_home" />
+          <datalist id="dep_pesquisa_home">
+            {% for dep in todos_deputados %}
+                <option value="{{ dep.nome }}">
+                    {{ dep.imagem_deputado }}
+                    <img src="{{ dep.imagem_deputado }}" alt="">
+                </option>
+            {% endfor %}
+          </datalist>
 
         <div class="relative flex-1">
           <select name="estado"
