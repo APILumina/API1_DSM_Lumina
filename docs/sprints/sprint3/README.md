@@ -1,6 +1,6 @@
 # Radar Cidadão 🕵️
 
-## Documentação da Sprint 1 <a id="topo"></a>
+## Documentação da Sprint 2 <a id="topo"></a>
 
 <p align="center">
   <img src="https://github.com/APILumina/API1_DSM_Lumina/blob/e2683c74bb54ceb58f7418bf0fff174a317e647a/docs/img/logo-lumina.png" alt="Logo do Grupo Lumina" width="200">
@@ -18,21 +18,23 @@
   <a href="#professores">Professores</a>
 </p>
 
-> Status da Sprint: Concluída 🟩
+> Status da Sprint: Em andamento 🟨
 
 ## 🏅 Meta <a id="meta"></a>
-As metas da Sprint 1 foram definidas como sendo as US 1 e 2, onde se teve a criação das telas principais com foco em um design intuitivo e simples (US 1), além da coleta e tratamento de dados para o desenvolvimento de gráficos exploratórios (US 2).
+Na Sprint 3, foi definida como meta a responsividade (US 14), para que a aplicação seja bem visualizada em qualquer dispositivo, além de legendas explicativas (US 12), para que o usuário tenha clareza do que se trata o gráfico mostrado em caso de dúvidas.
 
-## 📌 Demonstração (vídeos)<a id="demonstracao"></a>
-  - <a href="https://youtu.be/4DmUEi5Si7M">Google Colab</a> 
-  - <a href="https://youtu.be/ED5b2YN3RUs">Site</a> 
+## 📌 Demonstração (vídeo)<a id="demonstracao"></a> 
+  - <a href="">Site</a> 
 
 
 ## 📝 User Stories <a id="us"></a>
 | RANK | PRIORIDADE | USER STORY | STATUS |
-| :---: | :---: | :--- | :---: |
-| 1 | Alta <sup>★</sup> | Como usuário, quero acessar uma página inicial simples e intuitiva para entender o propósito do projeto. | 🟢 |
-| 2 | Alta <sup>★</sup> | Como professor, gostaria de visualizar gráficos preliminares sobre os gastos e presença dos deputados para validar se os dados são úteis para minhas aulas de cidadania. | 🟢 |
+| :---: | :---: | :--- | :---: | 
+| 10 | Alta | Como usuário, quero uma página de erro caso procure por um deputado inexistente. | 🟢 |
+| 11 | Alta | Como eleitor, gostaria de poder ver o desempenho do meu deputado avaliado através de uma nota. | 🟡 |
+| 12 | Alta <sup>★</sup>| Como professor, quero ver legendas explicativas nos gráficos (ex.: o que é "cota parlamentar" etc). | 🟡 |
+| 13 | Média | Como usuário, quero saber de onde são as fontes utilizadas no levantamento dos dados. | 🟡 |
+| 14 | Alta <sup>★</sup>| Como usuário de smartphone, quero que as tabelas de dados sejam roláveis lateralmente para não quebrar o layout. | 🟡 |
 --- 
 <br>
 
