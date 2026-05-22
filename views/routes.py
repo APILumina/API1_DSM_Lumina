@@ -753,3 +753,54 @@ def estado_detalhe(uf):
     grafico_url = gerar_grafico(df, 'partido', 'total_gasto', f'Ranking de Gastos por Partido - {uf.upper()}')
 
     return render_template('estados_detalhes.html', uf=uf.upper(), grafico_url=grafico_url)
+
+#start
+@route_bp.route("/api/filtros-dinamicos")
+def filtros_dinamicos():
+    conn = conectar()
+    estado_selecionado = request.args.get('estado', '')
+    partido_selecionado = request.args.get('partido', '')
+
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    # 2. Query de Estados (Passando por deputado para chegar no partido)
+    query_estados = """
+        SELECT DISTINCT e.uf 
+        FROM estado e 
+        JOIN deputado d ON e.cd_estado = d.fk_estado
+        JOIN partido p ON d.fk_partido = p.cd_partido
+    """
+    params_estados = []
+    # Se o usuário escolheu um partido na tela, filtramos os estados que têm deputados desse partido
+    if partido_selecionado:
+        query_estados += " WHERE p.abreviacao = %s"
+        params_estados.append(partido_selecionado)
+        
+    cursor.execute(query_estados, params_estados)
+    estados_disponiveis = [row['uf'] for row in cursor.fetchall()]
+
+    # 3. Query de Partidos (Passando por deputado para chegar no estado)
+    query_partidos = """
+        SELECT DISTINCT p.abreviacao 
+        FROM partido p 
+        JOIN deputado d ON p.cd_partido = d.fk_partido
+        JOIN estado e ON d.fk_estado = e.cd_estado
+    """
+    params_partidos = []
+    # Se o usuário escolheu um estado na tela, filtramos os partidos que têm deputados nesse estado
+    if estado_selecionado:
+        query_partidos += " WHERE e.uf = %s"
+        params_partidos.append(estado_selecionado)
+
+    cursor.execute(query_partidos, params_partidos)
+    partidos_disponiveis = [row['abreviacao'] for row in cursor.fetchall()]
+
+    cursor.close()
+    conn.close()
+
+    # 4. Retorna a resposta para o JavaScript
+    return jsonify({
+        'estados': estados_disponiveis,
+        'partidos': partidos_disponiveis
+    })
