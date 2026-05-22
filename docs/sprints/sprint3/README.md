@@ -1,6 +1,6 @@
 # Radar Cidadão 🕵️
 
-## Documentação da Sprint 2 <a id="topo"></a>
+## Documentação da Sprint 3 <a id="topo"></a>
 
 <p align="center">
   <img src="https://github.com/APILumina/API1_DSM_Lumina/blob/e2683c74bb54ceb58f7418bf0fff174a317e647a/docs/img/logo-lumina.png" alt="Logo do Grupo Lumina" width="200">
