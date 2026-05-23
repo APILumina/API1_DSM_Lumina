@@ -791,3 +791,9 @@ def estado_detalhe(uf):
     grafico_url = gerar_grafico(df, 'partido', 'total_gasto', f'Ranking de Gastos por Partido - {uf.upper()}')
 
     return render_template('estados_detalhes.html', uf=uf.upper(), grafico_url=grafico_url)
+
+
+#PÁGINA "SOBRE"
+@route_bp.route('/sobre')
+def sobre():
+    return render_template('sobre.html')
