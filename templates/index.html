@@ -48,158 +48,136 @@
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col relative">
   <!--Deixa o footer sempre no final da página-->
   <main class="flex-grow">
     <!--Navbar-->
     {% include 'partials/_navbar.html' %}
-
+    {% include 'partials/_navbar-bottom.html' %}
+    
     <!--Banner-->
     <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
-      style="background-image: url(../static/img/banner.png)">
-      <div class="absolute inset-0 bg-black/20"></div>
-      <div class="relative z-10 text-white w-full max-w-[100rem] mx-auto px-5">
-        <h1 class="text-3xl text-shadow-md sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mb-5">
-          ACOMPANHE SEUS DEPUTADOS FEDERAIS!
-        </h1>
-        <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl">
-          Saiba como votar com consciencia
-        </p>
-      </div>
-    </section>
-
-    <!--Barra de pesquisa-->
-    <div class="bg-gray-200 py-6">
-      <form action="{{ url_for('route.procurar') }}" method="GET"
-        class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
-        <input type="text" autocomplete="off" name="pesquisa" placeholder="Buscar por deputado"
-          class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" list="dep_pesquisa_home" />
-          <datalist id="dep_pesquisa_home">
-            {% for dep in todos_deputados %}
-                <option value="{{ dep.nome }}">
-                    {{ dep.imagem_deputado }}
-                    <img src="{{ dep.imagem_deputado }}" alt="">
-                </option>
-            {% endfor %}
-          </datalist>
-
-        <div class="relative flex-1">
-          <select name="estado"
-            class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-            <option value="">Selecionar Estado</option>
-            {% for est in estados %}
-            <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
-            {% endfor %}
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
-
-        <div class="relative flex-1">
-          <select name="partido"
-            class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-            <option value="">Partido</option>
-            {% for part in partidos %}
-            <option value="{{ part['abreviacao'] | lower}}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
-            {% endfor %}
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
-
-        <button
-          class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
-          <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </button>
-      </form>
-    </div>
-    <!--Saiba mais sobre-->
-    <div class="w-full max-w-[100rem] mx-auto px-5">
-      <h1 class="text-black text-2xl md:text-3xl font-bold font-poppins py-10">
-        Saiba Mais Sobre...
+    style="background-image: url(../static/img/banner.png)">
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="relative z-10 text-white w-full max-w-[100rem] mx-auto px-5">
+      <h1 class="text-3xl text-shadow-md sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mb-5">
+        ACOMPANHE SEUS DEPUTADOS FEDERAIS!
       </h1>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-15">
-        <!--Botões que levam aos gráficos-->
-        <button class="text-left w-full">
-          <a href="{{ url_for('route.graficos') }}#gastos">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
-              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl" />
-              <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
-              <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-                Descubra se os gastos do seu deputado são úteis.
-              </h1>
-            </div>
-          </a>
-        </button>
-
-        <button class="text-left">
-          <a href="{{ url_for('route.graficos') }}#projetos">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
-              <img src="../static/img/projetos.png" class="w-full object-cover rounded-t-2xl" />
-              <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
-              <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-                Descubra sobre os projetos seu deputado.
-              </h1>
-            </div>
-          </a>
-        </button>
-
-        <button class="text-left">
-          <a href="{{ url_for('route.graficos') }}#presenca">
-            <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
-              <img src="../static/img/presenca.png" class="w-full object-cover rounded-t-2xl" />
-              <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
-              <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-                Descubra se o seu deputado está faltando muito.
-              </h1>
-            </div>
-          </a>
-        </button>
+      <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl">
+        Saiba como votar com consciência
+      </p>
+    </div>
+  </section>
+  
+  <!--Barra de pesquisa-->
+  <div class="bg-gray-200 py-6">
+    <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
+      <div class="flex-1 relative z-1">
+        {% set show_icon = false %}
+        {% set input_class = "px-6 py-4 w-full rounded-none md:rounded-l-full bg-white text-gray-500 border-none shadow-sm focus:shadow-none" %}
+        {% set input_placeholder = "Buscar por deputado" %}
+        {% include 'partials/_autocomplete.html' %}
+      </div>
+      
+      <div class="relative flex-1">
+        <select name="estado"
+        class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+        <option value="">Selecionar Estado</option>
+        {% for est in estados %}
+          <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
+        {% endfor %}
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
       </div>
     </div>
-  </main>
+    
+    <div class="relative flex-1">
+      <select name="partido"
+      class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+      <option value="">Partido</option>
+      {% for part in partidos %}
+       <option value="{{ part['abreviacao'] | lower}}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
+      {% endfor %}
+    </select>
+    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+      <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+      </svg>
+    </div>
+  </div>
   
-  <!--Footer-->
-  <footer class="bg-radar text-white mt-8 py-8">
-        <div class="max-w-6xl mx-auto px-5 flex flex-col items-center">
-            <h1 class="text-lg font-bold tracking-widest">RADAR CIDADÃO</h1>
-
-            <!-- Github-->
-            <a href="https://github.com/APILumina/API1_DSM_Lumina" target="_blank" class="hover:opacity-70 transition my-3">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-            </a>
-
-            <!--Contato -->
-            <div class="flex items-center gap-2 text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                </svg>
-                fatec.luminaapi@gmail.com
-            </div>
-
-            <!-- Links de navegação -->
-            <nav class="flex gap-6 text-sm font-medium">
-                <a href="/" class="hover:underline">Página inicial</a>
-                <a href="/deputados" class="hover:underline">Deputados</a>
-                <a href="/graficos" class="hover:underline">Gráficos</a>
-                <a href="/sobre" class="hover:underline">Sobre</a>
-            </nav>
-
-            <!-- Copyright -->
-            <p class="text-sm">© 2026 Lumina - Código aberto sob licença MIT</p>
+  <button
+  class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
+  <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  </svg>
+</button>
+</form>
+</div>
+<!--Saiba mais sobre-->
+<div class="w-full max-w-[100rem] mx-auto px-5">
+  <h1 class="text-radar text-2xl md:text-3xl font-bold font-poppins my-10 md:my-15">
+    Saiba Mais Sobre...
+  </h1>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-15
+  [&>button]:text-left [&>button]:w-full [&>button]:h-full [&>button]:bg-gray-50 [&>button]:border [&>button]:border-gray-200 [&>button]:shadow-md [&>button]:hover:scale-105 [&>button]:duration-300 [&>button]:rounded-2xl">
+    <!--Botões que levam aos gráficos-->
+    <button>
+      <a href="{{ url_for('route.graficos') }}#gastos">
+        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
+          <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl"/>
+          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
+          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
+            Descubra se os gastos do seu deputado são úteis.
+          </h1>
         </div>
-  </footer>
+      </a>
+    </button>
+    
+    <button>
+      <a href="{{ url_for('route.graficos') }}#projetos">
+        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
+          <img src="../static/img/projetos.png" class="w-full object-cover rounded-t-2xl" />
+          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
+          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
+            Descubra sobre os projetos seu deputado.
+          </h1>
+        </div>
+      </a>
+    </button>
+    
+    <button>
+      <a href="{{ url_for('route.graficos') }}#presenca">
+        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
+          <img src="../static/img/presenca.png" class="w-full object-cover rounded-t-2xl" />
+          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
+          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
+            Descubra se o seu deputado está faltando muito.
+          </h1>
+        </div>
+      </a>
+    </button>
+    
+    <button>
+      <a href="{{ url_for('route.graficos') }}#ranking">
+        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
+          <img src="../static/img/ranking.png" class="w-full object-cover rounded-t-2xl" />
+          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Ranking</h1>
+          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
+            Descubra a colocação de desempenho do seu deputado.
+          </h1>
+        </div>
+      </a>
+    </button>
+  </div>
+</div>
+</main>
+<!--Footer-->
+{% include 'partials/_footer.html' %}
 </body>
 
 </html>

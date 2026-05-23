@@ -104,54 +104,67 @@
 
 
     <!--Gráficos (imagens representativas)-->
-    <!--Gráfico 1: Projetos-->
+    
     <div class="w-full max-w-[100rem] mx-auto px-5">
-        <section class="bg-white p-8 rounded-2xl shadow-card">
-            <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                Projetos aprovados <span class="font-normal text-lg">por partido</span>
-            </h2>
-            <div class="w-full">
+    <section class="bg-white p-8 rounded-2xl shadow-card mb-8">
+        
+        <div class="flex gap-4 mb-8 border-b border-gray-100 pb-4">
+            <button onclick="mostrarGrafico('projetos', this)" class="btn-tab px-4 py-2 font-bold text-dark-blue border-b-2 border-blue-600 transition-all">Projetos</button>
+            <button onclick="mostrarGrafico('presenca', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Presença</button>
+            <button onclick="mostrarGrafico('gastos', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Gastos</button>
+        </div>
+
+        <div id="container-graficos">
+            <!--Gráfico 1: Projetos-->
+            <div id="box-projetos" class="grafico-box">
+                <h2 class="text-xl font-bold text-dark-blue mb-6">Projetos aprovados <span class="font-normal text-lg">por partido</span></h2>
                 {% if grafico_projetos %}
-                <img id="projetos" src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
+                <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
                 {% else %}
-                <p class="text-gray-400 text-center py-10">Nenhuma proposição aprovada encontrada nesse partido.</p>
+                <p class="text-gray-400 text-center py-10">Nenhuma proposição aprovada encontrada.</p>
                 {% endif %}
             </div>
-        </section>
-
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-8">
-
             <!--Gráfico 2: Presença-->
-            <div class="bg-white p-8 rounded-2xl shadow-card">
-                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                    Presença <span class="font-normal text-lg">por partido</span>
-                </h2>
-                <div class="w-full">
-                    {% if grafico_presenca %}
-                    <img id="presenca" src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
-                    {% else %}
-                    <p class="text-gray-400 text-center py-10">Nenhuma presença encontrada nesse partido.</p>
-                    {% endif %}
-                </div>
+            <div id="box-presenca" class="grafico-box hidden">
+                <h2 class="text-xl font-bold text-dark-blue mb-6">Presença <span class="font-normal text-lg">por partido</span></h2>
+                {% if grafico_presenca %}
+                <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-400 text-center py-10">Nenhuma presença encontrada.</p>
+                {% endif %}
             </div>
-
             <!--Gráfico 3: Gastos-->
-            <div class="bg-white p-8 rounded-2xl shadow-card">
-                <h2 class="text-xl font-bold text-dark-blue mb-6 flex items-baseline gap-2">
-                    Gastos <span class="font-normal text-lg">por partido</span>
-                </h2>
-                <div class="w-full">
-                    {% if grafico_gastos %}
-                    <img id="gastos" src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
-                    {% else %}
-                    <p class="text-gray-400 text-center py-10">Nenhum gasto encontrado nesse partido.</p>
-                    {% endif %}
-                </div>
+            <div id="box-gastos" class="grafico-box hidden">
+                <h2 class="text-xl font-bold text-dark-blue mb-6">Gastos <span class="font-normal text-lg">por partido</span></h2>
+                {% if grafico_gastos %}
+                <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-400 text-center py-10">Nenhum gasto encontrado.</p>
+                {% endif %}
             </div>
+        </div>
+    </section>
+</div>
 
-        </section>
-    </div>
-</main>
+<script>
+function mostrarGrafico(id, btnElement) {
+    
+    document.querySelectorAll('.grafico-box').forEach(box => box.classList.add('hidden'));
+    
+    
+    document.getElementById('box-' + id).classList.remove('hidden');
+    
+    
+    document.querySelectorAll('.btn-tab').forEach(btn => {
+        btn.classList.remove('border-b-2', 'border-blue-600', 'text-dark-blue');
+        btn.classList.add('text-gray-400');
+    });
+    
+    
+    btnElement.classList.remove('text-gray-400');
+    btnElement.classList.add('border-b-2', 'border-blue-600', 'text-dark-blue');
+}
+</script>
 
 {% block extra_js %}
 <!--JS do drowndown do filtro-->
@@ -196,6 +209,25 @@
             if (seta) seta.classList.remove('rotate-180');
         });
     });
+</script>
+<script>
+  // Lê o parâmetro ?tab= da URL
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get('tab');
+
+  // Esconde todos os gráficos
+  document.querySelectorAll('.grafico-box').forEach(box => {
+    box.classList.add('hidden');
+  });
+
+  // Mostra o gráfico correspondente ao tab, ou projetos por padrão
+  const alvo = document.getElementById('box-' + tab) || document.getElementById('box-projetos');
+  if (alvo) alvo.classList.remove('hidden');
+
+  // Atualiza o estilo do botão de navegação ativo (se houver tabs/nav na página)
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
 </script>
 {% endblock %}
 

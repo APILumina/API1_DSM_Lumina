@@ -75,6 +75,13 @@
     </div>
   </div>
 </form>
+  {% if not deputados %}
+  <div id="erro-nao-encontrado" class="flex flex-col items-center justify-center p-10 text-center max-w-[100rem] mx-auto">
+    <div class="text-red-500 text-5xl mb-4">⚠️</div>
+    <h3 class="text-[#0D1967] text-2xl font-bold mb-2">Erro: Deputado inexistente / não encontrado</h3>
+    <p class="text-gray-500">Tente ajustar os filtros ou digitar outro nome na busca.</p>
+  </div>
+  {% endif %}
 
 <div id="lista-deputados"
   class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
@@ -119,7 +126,7 @@
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
                   <div class="p-6">
                     <img src="${deputado.imagem_deputado}"
-                    class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+                    class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
                     <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
                     <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
                   </div>
