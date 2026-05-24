@@ -59,7 +59,7 @@
             <div class="relative w-full md:w-[20%]">
 
                 <form action="/graficos" method="get" id="form-filtro">
-                    <select name="estado" id="estado" onchange="this.form.submit()"
+                  <select id="select-estado" name="estado"
                         class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
                         <option value="">Selecionar Estado</option>
@@ -85,7 +85,7 @@
 
             <div class="relative w-full md:w-[20%]">
 
-                <select name="partido" id="estado" onchange="this.form.submit()"
+               <select id="select-partido" name="partido"
                     class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
                     <option value="">Selecionar partido</option>
@@ -169,62 +169,96 @@ function mostrarGrafico(id, btnElement) {
 {% block extra_js %}
 <!--JS do drowndown do filtro-->
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('btn-deputados');
-        const menu = document.getElementById('menu-deputados');
-        const seta = document.getElementById('seta');
+document.addEventListener('DOMContentLoaded', () => {
+    const formFiltro = document.getElementById('form-filtro');
+    const selectEstado = document.getElementById('select-estado');
+    const selectPartido = document.getElementById('select-partido');
 
+    // guarda opções originais
+    const estadosOriginais = Array.from(selectEstado.options).map(opt => ({
+        value: opt.value,
+        text: opt.text
+    }));
 
-        //Código do filtro de estado e partido
-        const setupSelect = (btnId, menuId) => {
-            const b = document.getElementById(btnId);
-            const m = document.getElementById(menuId);
-            if (!b || !m) return;
+    const partidosOriginais = Array.from(selectPartido.options).map(opt => ({
+        value: opt.value,
+        text: opt.text
+    }));
 
-            b.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Fecha outros menus antes de abrir este
-                document.querySelectorAll('.dropdown-select').forEach(el => {
-                    if (el !== m) el.classList.add('hidden');
+    function atualizarFiltros() {
+        fetch(`/api/filtros-dinamicos?estado=${selectEstado.value}&partido=${selectPartido.value}`)
+            .then(res => res.json())
+            .then(data => {
+
+                const estadoAtual = selectEstado.value;
+                selectEstado.innerHTML = '';
+
+                estadosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.estados.includes(opt.value)) {
+                        selectEstado.innerHTML += `
+                            <option value="${opt.value}" ${opt.value === estadoAtual ? 'selected' : ''}>
+                                ${opt.text}
+                            </option>`;
+                    }
                 });
-                m.classList.toggle('hidden');
-            });
 
-            //Atualiza o texto do botão ao clicar em uma opção
-            m.querySelectorAll('li').forEach(item => {
-                item.addEventListener('click', () => {
-                    b.querySelector('.btn-text').innerText = item.innerText;
-                    m.classList.add('hidden');
+                const partidoAtual = selectPartido.value;
+                selectPartido.innerHTML = '';
+
+                partidosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.partidos.includes(opt.value.toUpperCase())) {
+                        selectPartido.innerHTML += `
+                            <option value="${opt.value}" ${opt.value === partidoAtual ? 'selected' : ''}>
+                                ${opt.text}
+                            </option>`;
+                    }
                 });
+
             });
-        };
+    }
 
-        setupSelect('btn-estado', 'menu-estado');
-        setupSelect('btn-partido', 'menu-partido');
+    let timerBusca;
+    const TEMPO_ESPERA = 1000;
 
-        // Fechar tudo ao clicar fora
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
-            if (menu) menu.classList.add('hidden');
-            if (seta) seta.classList.remove('rotate-180');
-        });
+    function iniciarTimer() {
+        clearTimeout(timerBusca);
+        timerBusca = setTimeout(() => {
+            formFiltro.submit();
+        }, TEMPO_ESPERA);
+    }
+
+    function pausarTimer() {
+        clearTimeout(timerBusca);
+    }
+
+    selectEstado.addEventListener('change', () => {
+        atualizarFiltros();
+        iniciarTimer();
     });
+
+    selectPartido.addEventListener('change', () => {
+        atualizarFiltros();
+        iniciarTimer();
+    });
+
+    selectEstado.addEventListener('focus', pausarTimer);
+    selectPartido.addEventListener('focus', pausarTimer);
+
+    selectEstado.addEventListener('blur', iniciarTimer);
+    selectPartido.addEventListener('blur', iniciarTimer);
+});
 </script>
+
 <script>
-  // Lê o parâmetro ?tab= da URL
+       // Lógica para mostrar o gráfico correto com base no parâmetro da URL
   const params = new URLSearchParams(window.location.search);
   const tab = params.get('tab');
-
-  // Esconde todos os gráficos
   document.querySelectorAll('.grafico-box').forEach(box => {
     box.classList.add('hidden');
   });
 
-  // Mostra o gráfico correspondente ao tab, ou projetos por padrão
   const alvo = document.getElementById('box-' + tab) || document.getElementById('box-projetos');
   if (alvo) alvo.classList.remove('hidden');
-
-  // Atualiza o estilo do botão de navegação ativo (se houver tabs/nav na página)
   document.querySelectorAll('[data-tab]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
   });

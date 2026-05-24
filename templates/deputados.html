@@ -31,7 +31,7 @@
       <div class="relative w-full md:w-[20%]">
 
 
-        <select name="estado" id="estado" onchange="this.form.submit()"
+        <select id="select-estado" name="estado"
           class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
           <option value="">Selecionar Estado</option>
@@ -59,7 +59,7 @@
 
       <div class="relative w-full md:w-[20%]">
 
-        <select name="partido" id="estado" onchange="this.form.submit()"
+       <select id="select-partido" name="partido"
           class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
           <option value="">Selecionar partido</option>
@@ -98,76 +98,142 @@
 
 {% block extra_js %}
 <script>
-  const parametros = new URLSearchParams(window.location.search);
+  // --- LÓGICA DO CRONÔMETRO INTELIGENTE DE FILTROS ---
+  document.addEventListener('DOMContentLoaded', () => {
+      const formFiltro = document.getElementById('form-filtro');
+     const selectEstado = document.getElementById('select-estado');
+     const selectPartido = document.getElementById('select-partido');
+     const estadosOriginais = Array.from(selectEstado.options).map(opt => ({ value: opt.value, text: opt.text }));
+const partidosOriginais = Array.from(selectPartido.options).map(opt => ({ value: opt.value, text: opt.text }));
 
-  const pesquisa = parametros.get('pesquisa');
+function atualizarFiltros() {
+    fetch(`/api/filtros-dinamicos?estado=${selectEstado.value}&partido=${selectPartido.value}`)
+        .then(res => res.json())
+        .then(data => {
 
-  if (!pesquisa) {
-    document.addEventListener('DOMContentLoaded', () => {
-      let paginaAtual = 1;
-      let carregando = false;
-      let fimDados = false;
-
-      const lista = document.getElementById('lista-deputados');
-      const sentinela = document.getElementById('sentinela');
-      const loader = document.getElementById('loader');
-
-      // Função que cria o HTML do card (ajuste as classes conforme seu design)
-      function criarCard(deputado) {
-        return `
-              <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
-                  <div class="p-6">
-                    <img src="${deputado.imagem_deputado}"
-                    class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-                    <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
-                    <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
-                  </div>
-                </div>
-              </a>
-          `;
-      }
-
-      async function carregarMaisDeputados() {
-        if (carregando || fimDados) return;
-
-        carregando = true;
-        loader.classList.remove('hidden');
-        paginaAtual++;
-
-        // Pega os filtros atuais da URL para manter a busca consistente
-        const params = new URLSearchParams(window.location.search);
-        params.set('page', paginaAtual);
-
-        try {
-          const response = await fetch(`/dados/deputados?${params.toString()}`);
-          const novosDeputados = await response.json();
-
-          if (novosDeputados.length === 0) {
-            fimDados = true;
-          } else {
-            novosDeputados.forEach(dep => {
-              lista.insertAdjacentHTML('beforeend', criarCard(dep));
+            const estadoAtual = selectEstado.value;
+            selectEstado.innerHTML = '';
+            estadosOriginais.forEach(opt => {
+                if (opt.value === "" || data.estados.includes(opt.value)) {
+                    selectEstado.innerHTML += `<option value="${opt.value}" ${opt.value === estadoAtual ? 'selected' : ''}>${opt.text}</option>`;
+                }
             });
-          }
-        } catch (error) {
-          console.error("Erro ao carregar mais deputados:", error);
-        } finally {
-          carregando = false;
-          loader.classList.add('hidden');
-        }
+
+            const partidoAtual = selectPartido.value;
+            selectPartido.innerHTML = '';
+            partidosOriginais.forEach(opt => {
+                if (opt.value === "" || data.partidos.includes(opt.value.toUpperCase())) {
+                    selectPartido.innerHTML += `<option value="${opt.value}" ${opt.value === partidoAtual ? 'selected' : ''}>${opt.text}</option>`;
+                }
+            });
+
+        });
+}
+      
+      let timerBusca;
+      const TEMPO_ESPERA = 1000; // 1 segundos de pausa
+
+      function iniciarTimer() {
+          clearTimeout(timerBusca);
+          timerBusca = setTimeout(() => {
+              formFiltro.submit();
+          }, TEMPO_ESPERA);
       }
 
-      // INTERSECTION OBSERVER: O vigia do fim da página
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          carregarMaisDeputados();
-        }
-      }, { threshold: 0.5 });
+      function pausarTimer() {
+          clearTimeout(timerBusca);
+      }
 
-      observer.observe(sentinela);
-    });
-  }
+      // Dispara os 4 segundos ao mudar a opção
+      selectEstado.addEventListener('change', () => {
+    atualizarFiltros();
+    iniciarTimer();
+});
+    selectPartido.addEventListener('change', () => {
+    atualizarFiltros();
+    iniciarTimer();
+});
+
+      // Pausa o contador quando o usuário clica para abrir o menu
+      selectEstado.addEventListener('focus', pausarTimer);
+      selectPartido.addEventListener('focus', pausarTimer);
+
+      // Reinicia a contagem se o usuário fechar ou clicar fora do menu
+      selectEstado.addEventListener('blur', iniciarTimer);
+      selectPartido.addEventListener('blur', iniciarTimer);
+  });
+
+ const parametros = new URLSearchParams(window.location.search);
+const pesquisa = parametros.get('pesquisa');
+
+if (!pesquisa) {
+  document.addEventListener('DOMContentLoaded', () => {
+
+    let paginaAtual = 1;
+    let carregando = false;
+    let fimDados = false;
+
+    const lista = document.getElementById('lista-deputados');
+    const sentinela = document.getElementById('sentinela');
+    const loader = document.getElementById('loader');
+
+    // 🔒 segurança extra
+    if (!lista || !sentinela || !loader) return;
+
+    function criarCard(deputado) {
+      return `
+        <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+            <div class="p-6">
+              <img src="${deputado.imagem_deputado}"
+              class="w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+              <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral}</p>
+              <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    async function carregarMaisDeputados() {
+      if (carregando || fimDados) return;
+
+      carregando = true;
+      loader.classList.remove('hidden');
+      paginaAtual++;
+
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', paginaAtual);
+
+      try {
+        const response = await fetch(`/dados/deputados?${params.toString()}`);
+        const novosDeputados = await response.json();
+
+        if (!novosDeputados || novosDeputados.length === 0) {
+          fimDados = true;
+        } else {
+          novosDeputados.forEach(dep => {
+            lista.insertAdjacentHTML('beforeend', criarCard(dep));
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar mais deputados:", error);
+      } finally {
+        carregando = false;
+        loader.classList.add('hidden');
+      }
+    }
+
+    // observar  final da página
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        carregarMaisDeputados();
+      }
+    }, { threshold: 0.5 });
+
+    observer.observe(sentinela);
+  });
+}
 </script>
 {% endblock %}
 
