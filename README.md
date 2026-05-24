@@ -1,25 +1,20 @@
-# Radar Cidadão 🕵️ <a id="topo"></a>
+<img src="docs/img/banner.png" alt="Banner do Radar Cidadão" width="100%" >
 
 <p align="center">
-      <img src="docs/img/logo-lumina.png" alt="Logo do Grupo Lumina" width="200">
-      <h2 align="center">Lumina </h2>
-</p>
-
-<p align="center">
-  <a href="#desafio">Desafio</a> | 
-  <a href="#backlog">Backlog</a> | 
-  <a href="#dor">DoR</a> | 
-  <a href="#dod">DoD</a> | 
-  <a href="#sprint">Cronograma</a> | 
-  <a href="#tecnologias">Tecnologias</a> | 
-  <a href="#execucao">Como Executar</a> | 
-  <a href="#equipe">Equipe</a> | 
-  <a href="#professores">Professores</a>
+  <a href="#desafio"><img src="https://img.shields.io/badge/Desafio-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Desafio"></a>
+  <a href="#backlog"><img src="https://img.shields.io/badge/Backlog-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Backlog"></a>
+  <a href="#dor"><img src="https://img.shields.io/badge/DoR-F1BF00?style=for-the-badge&labelColor=0B228B" alt="DoR"></a>
+  <a href="#dod"><img src="https://img.shields.io/badge/DoD-F1BF00?style=for-the-badge&labelColor=0B228B" alt="DoD"></a>
+  <a href="#sprint"><img src="https://img.shields.io/badge/Cronograma-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Cronograma"></a>
+  <a href="#tecnologias"><img src="https://img.shields.io/badge/Tecnologias-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Tecnologias"></a>
+  <a href="#execucao"><img src="https://img.shields.io/badge/Como_Executar-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Como Executar"></a>
+  <a href="#equipe"><img src="https://img.shields.io/badge/Equipe-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Equipe"></a>
+  <a href="#professores"><img src="https://img.shields.io/badge/Professores-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Professores"></a>
 </p>
 
 <br>
 
-> **Status do Projeto:** Sprint 2 concluída ✔️
+> **Status do Projeto:** Sprint 3 concluída ✔️
 
 ---
 
@@ -53,24 +48,7 @@ Atualmente, eleitores e educadores não possuem ferramentas simples e neutras pa
 
 ## 🗺️ Roadmap
 
-<p align="center">
-  <pre>
-       SPRINT 1                          SPRINT 2                          SPRINT 3
-  [Foco: Fundação]                  [Foco: Exploração]               [Foco: Refinamento]
-          |                                 |                                 |
-   16/03 a 05/04                     13/04 a 03/05                     11/05 a 31/05
-          |                                 |                                 |
-  ● Landing Page Inicial            ● Perfil do Deputado              ● UX Responsivo (Mobile)
-  ● Gráficos de Validação           ● Fotos & Identificação           ● Tabelas Roláveis
-  ● Análise no Colab                ● Filtros por Estado/Nome         ● Tratamento de Erros (404)
-  ● Pergunta Investigativa          ● Dashboard de Gastos             ● Legendas Educativas
-  ● Estrutura Flask                 ● Nuvem de Palavras (Discursos)   ● Fontes e Referências
-          |                                 |                                 |
-       ENTREGA:                          ENTREGA:                          ENTREGA:
-   Dados Tratados &                  Banco MariaDB &                   Sistema Final &
-   Esboço de Interface               Busca Avançada                    Manuais Técnicos
-  </pre>
-</p>
+<img src="docs/img/roadmap.png" alt="Roadmap do Radar Cidadão" width="100%">
 
 ---
 
@@ -170,20 +148,22 @@ Para atender aos requisitos técnicos (RN.P) do desafio Radar Cidadão, utilizam
 
 ```text
 API1_DSM_Lumina/
-├── data/
-│   └── deputados/          # Base central de dados do projeto
-├── docs/
-│   └── img/               # Imagens utilizadas na documentação do GitHub
-├── notebooks/             # Notebooks do Google Colab
-├── services/              # Lógica de consumo da API e processamento de dados
-├── static/
-│   └── img/               # Ativos estáticos (CSS, JS, Imagens do site)
-├── templates/             # Templates HTML para o Flask 
-├── views/                 # Definição das rotas e lógica de interface
-├── .gitignore             # Arquivos e pastas ignorados pelo controle de versão
-├── README.md              # Documentação principal do projeto
-├── app.py                 # Arquivo principal para execução da aplicação Flask
-└── requirements.txt       # Lista de dependências do Python
+├── docs/                      # Documentação do projeto
+│   ├── img
+│   └── sprints
+├── notebooks/                 # Notebooks do Google Colab / Análise de dados
+├── src/                       # Código-fonte da aplicação Flask
+│   ├── static                 # Ativos estáticos do frontend
+│   ├── templates              # Páginas e templates HTML
+│   ├── views/                 # Controladores, rotas e lógica de interface
+│   │   └── routes.py
+│   └── app.py                 # Arquivo principal para execução da aplicação Flask
+├── .dockerignore              # Arquivos ignorados pelo Docker
+├── .gitignore                 # Arquivos e pastas ignorados pelo Git
+├── Dockerfile                 # Configuração para criação do container Docker
+├── README.md                  # Documentação principal do repositório
+├── docker-compose.yml         # Orquestração dos containers
+└── requirements.txt           # Lista de dependências do Python
 ```
 
 <br>
@@ -229,7 +209,7 @@ python -m venv venv
 ## 👥 Equipe <a id="equipe"></a>
 | Foto | Função | Nome | GitHub | Linkedin |
 | :--: | :----: | :--: | :----: | :----: |
-| <img src="https://github.com/Dai4ne.png" width="50"> | Product Owner | Daiane Karine da Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dai4ne) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEUUSERNAME/) |
+| <img src="https://github.com/Dai4ne.png" width="50"> | Product Owner | Daiane Karine da Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dai4ne) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/daianekarine/) |
 | <img src="https://github.com/kersilva.png" width="50"> | Scrum Master | Kelwin Felipe Rocha Silva | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kersilva) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kersilva) |
 | <img src="https://github.com/C1dneve.png" width="50"> | Dev Team | Cid Daniel Neves D' Oliveira | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/C1dneve) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://br.linkedin.com/in/cid-doliveira) |
 | <img src="https://github.com/introspective616.png" width="50"> | Dev Team | Guilherme de Siqueira Marques | [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/introspective616) | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/guilherme-de-siqueira-marques-34819834a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
