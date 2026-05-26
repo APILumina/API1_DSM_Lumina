@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% block title %}Ranking{% endblock %}
+
+{% block extra_style %}
+<style type="text/tailwindcss">
+    .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+    /* Responsividade melhorada para dispositivos pequenos */
+    @media (max-width: 640px) {
+        .shadow-card {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+    }
+
+        /*Filtro de partido e estado */
+        .btn-custom-select {
+            @apply bg-white border border-gray-200 rounded-full py-2 px-6 flex items-center justify-between min-w-[220px] cursor-pointer hover:bg-gray-50 transition-all text-dark-blue font-medium shadow-sm;
+        }
+
+        /* Estilo da lista suspensa */
+        .dropdown-select {
+            @apply absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-y-auto;
+            max-height: 250px;
+        }
+
+        .dropdown-select li {
+            @apply px-6 py-2 hover:bg-gray-100 cursor-pointer text-dark-blue transition-colors;
+        }
+
+        /*Barra de rolagem do dropdown de partido e estado*/
+        .dropdown-select::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dropdown-select::-webkit-scrollbar-track {
+            @apply bg-gray-50 rounded-r-2xl; /* Fundo da calha da barra */
+        }
+
+        .dropdown-select::-webkit-scrollbar-thumb {
+            @apply bg-gray-300 rounded-full border-2 border-solid border-gray-50;
+        }
+
+        .dropdown-select::-webkit-scrollbar-thumb:hover {
+            @apply bg-gray-400; 
+        }
+
+    /* Melhorias de responsividade para tablets e desktops */
+    @media (min-width: 768px) {
+        .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    /* Otimização de scroll horizontal para mobile */
+    @media (max-width: 640px) {
+        table {
+            font-size: 0.875rem;
+        }
+        
+        th, td {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<!--Conteúdo principal-->
+<main class="flex-grow">
+
+    <!--Section dos filtros e título da página-->
+    <div class="bg-white px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-6 sm:mb-9">
+
+        <section class="mb-4 sm:mb-6 w-full max-w-[100rem] mx-auto px-3 sm:px-5">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-dark-blue tracking-tight">Ranking dos deputados</h1>
+        </section>
+
+        <!--FiltroS de estados e partidos-->
+        <section class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-[100rem] mx-auto px-3 sm:px-5">
+
+            <div class="relative w-full sm:w-1/2 md:w-[20%]">
+
+                <form action="/graficos" method="get" id="form-filtro">
+                    <select name="estado" id="estado" onchange="this.form.submit()"
+                        class="w-full bg-white text-[#0D1967] py-2 sm:py-2.5 px-3 sm:px-4 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+
+                        <option value="">Selecionar Estado</option>
+
+                        <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
+
+                        <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
+
+                        <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
+
+                        <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
+
+                        <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
+
+                        <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
+
+                        <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
+
+                        <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
+
+                        <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
+
+                        <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
+
+                        <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
+
+                        <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
+
+                        <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
+
+                        <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
+
+                        <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
+
+                        <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
+
+                        <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
+
+                        <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
+
+                        <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
+
+                        <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
+
+                        <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
+
+                        <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
+
+                        <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
+
+                        <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
+
+                        <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
+
+                        <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
+
+                        <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
+
+                    </select>
+
+
+
+                    <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
+
+                        ▼
+
+                    </span>
+
+            </div>
+
+
+
+            <div class="relative w-full sm:w-1/2 md:w-[20%]">
+
+                <select name="partido" id="estado" onchange="this.form.submit()"
+                    class="w-full bg-white text-[#0D1967] py-2 sm:py-2.5 px-3 sm:px-4 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+
+                    <option value="">Selecionar partido</option>
+
+                    <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
+
+                    <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
+
+                    <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
+
+                    <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
+
+                    <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
+
+                    <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
+
+                    <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
+
+                    <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
+
+                    <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
+
+                    <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
+
+                    <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
+
+                    <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
+
+                    <option value="UNIAO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
+
+                    <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
+
+                    <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
+
+                    <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
+
+                    <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
+                </select>
+                <span
+                    class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+            </div>
+        </section>
+    </div>
+    </form>
+
+
+    <!--Gráficos (imagens representativas)-->
+    <!--Gráfico 1: Projetos-->
+    <div class="w-full max-w-[100rem] mx-auto px-3 sm:px-5">
+        <section class="bg-white py-4 sm:py-6 md:py-8 rounded-2xl size-full shadow-card">
+
+    <div class="w-full overflow-x-auto rounded-xl">
+        <table class="w-full text-left border-collapse table-auto text-sm sm:text-base">
+            <thead>
+                <tr class="text-slate-400 text-xs sm:text-sm font-semibold border-b border-gray-100">
+                    <th class="pb-3 sm:pb-4 font-medium text-center px-2 sm:px-3 whitespace-nowrap">Posição</th>
+                    <th class="pb-3 sm:pb-4 font-medium pl-2 sm:pl-4 whitespace-nowrap">Nome</th>
+                    <th class="pb-3 sm:pb-4 font-medium text-center px-2 sm:px-3 whitespace-nowrap">Estado</th>
+                    <th class="pb-3 sm:pb-4 font-medium text-center px-2 sm:px-3 whitespace-nowrap">Partido</th>
+                    <th class="pb-3 sm:pb-4 font-medium text-center px-2 sm:px-3 whitespace-nowrap">IGD</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-slate-700">
+                {% for item in range(50) %}
+                {% if loop.index == 1 %}
+                    <tr class="bg-[#ecdc65]/30 transition-colors hover:shadow-sm">
+                {% elif loop.index == 2 %}
+                    <tr class="bg-[#A3B3C2]/30 transition-colors hover:shadow-sm">
+                {% elif loop.index == 3 %}
+                    <tr class="bg-[#C28C53]/30 transition-colors hover:shadow-sm">
+                {% else %}
+                    <tr class="hover:bg-slate-50/50 transition-colors hover:shadow-sm">
+                {% endif %}
+                    
+                    <td class="py-3 sm:py-4 px-2 sm:px-3">
+                        <div class="flex justify-center items-center">
+                            {% if loop.index == 1 %}
+                                <span class="size-5 lg:size-6 flex items-center justify-center rounded-full bg-[#ecdc65] text-white text-xs font-bold shadow-sm">1</span>
+                            {% elif loop.index == 2 %}
+                                <span class="size-5 lg:size-6 flex items-center justify-center rounded-full bg-[#A3B3C2] text-white text-xs font-bold shadow-sm">2</span>
+                            {% elif loop.index == 3 %}
+                                <span class="size-5 lg:size-6 flex items-center justify-center rounded-full bg-[#C28C53] text-white text-xs font-bold shadow-sm">3</span>
+                            {% else %}
+                                <span class="text-slate-400 text-xs sm:text-sm font-medium">{{ loop.index }}</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    
+                    <td class="py-3 sm:py-4 pl-2 sm:pl-4 max-w-xs sm:max-w-md">
+                        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                            <img src="/static/img/joao-silva.jpeg" alt="Foto de {{ item.nome }}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover bg-slate-100 flex-shrink-0">
+                            <div class="flex flex-col min-w-0 flex-1">
+                                <span class="font-bold text-slate-800 text-xs sm:text-sm md:text-base truncate" title="Carlos Azevedo">Carlos Azevedo<!-- {{ item.nome_eleitoral }} --></span>
+                                <span class="font-normal text-slate-500 text-xs sm:text-sm truncate" title="Carlos Azevedo da Conceição de Aparecida">Carlos Azevedo da Conceição de Aparecida<!-- {{ item.nome_civil }} --></span>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-3 sm:py-4 text-center font-medium text-slate-600 text-xs sm:text-sm px-2 sm:px-3">
+                        SP <!-- {{ item.estado }} -->
+                    </td>
+                    
+                    <td class="py-3 sm:py-4 px-2 sm:px-3">
+                        <div class="flex justify-center items-center">
+                            <img src="/static/img/partidos/pt.png" alt="Logo {{ item.partido }}" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-contain p-1 bg-gray-100 border border-gray-100">
+                        </div>
+                    </td>
+                    
+                    <td class="py-3 sm:py-4 text-center font-medium text-slate-600 text-xs sm:text-sm px-2 sm:px-3">
+                        10<!-- {{ item.igd }} -->
+                    </td>
+                    
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-gray-400 text-center py-8 sm:py-10 text-xs sm:text-sm">
+                        Nenhum registro encontrado no ranking.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+    </div>
+</main>
+
+{% block extra_js %}
+<!--JS do drowndown do filtro-->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('btn-deputados');
+        const menu = document.getElementById('menu-deputados');
+        const seta = document.getElementById('seta');
+
+
+        //Código do filtro de estado e partido
+        const setupSelect = (btnId, menuId) => {
+            const b = document.getElementById(btnId);
+            const m = document.getElementById(menuId);
+            if (!b || !m) return;
+
+            b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Fecha outros menus antes de abrir este
+                document.querySelectorAll('.dropdown-select').forEach(el => {
+                    if (el !== m) el.classList.add('hidden');
+                });
+                m.classList.toggle('hidden');
+            });
+
+            //Atualiza o texto do botão ao clicar em uma opção
+            m.querySelectorAll('li').forEach(item => {
+                item.addEventListener('click', () => {
+                    b.querySelector('.btn-text').innerText = item.innerText;
+                    m.classList.add('hidden');
+                });
+            });
+        };
+
+        setupSelect('btn-estado', 'menu-estado');
+        setupSelect('btn-partido', 'menu-partido');
+
+        // Fechar tudo ao clicar fora
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
+            if (menu) menu.classList.add('hidden');
+            if (seta) seta.classList.remove('rotate-180');
+        });
+    });
+</script>
+{% endblock %}
+
+{% endblock %}

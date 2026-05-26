@@ -840,3 +840,77 @@ def filtros_dinamicos():
 @route_bp.route('/sobre')
 def sobre():
     return render_template('sobre.html', hide_pesquisa=True)
+@route_bp.route('/autocomplete')
+def autocomplete():
+    q = request.args.get('pesquisa', '').strip()
+
+    if len(q) < 2:
+        return jsonify([])
+
+    termo = f"%{remover_acentos(q).lower()}%"
+
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT d.cd_deputado AS id,
+               d.nome_eleitoral,
+               d.nome AS nome_civil,
+               d.imagem_deputado AS foto_url
+        FROM deputado d
+        WHERE LOWER(d.nome_eleitoral) LIKE %s
+           OR LOWER(d.nome) LIKE %s
+        ORDER BY d.nome_eleitoral
+        LIMIT 8
+    """, (termo, termo))
+
+    resultados = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(resultados)
+
+@route_bp.route('/ranking')
+def ranking():
+    estado = request.args.get('estado', '')
+    partido = request.args.get('partido', '')
+
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT 
+            des.score_final,
+            d.cd_deputado AS id,
+            d.nome_eleitoral,      
+            d.nome AS nome_civil,
+            d.imagem_deputado AS foto_url,
+            d.sg_uf AS estado,
+            d.sg_partido AS partido
+        FROM deputado d
+        JOIN desempenho des ON des.fk_deputado = d.cd_deputado
+        WHERE 1=1
+    """
+    params = []
+
+    if estado:
+        query += " AND d.sg_uf = %s"
+        params.append(estado)
+    if partido:
+        query += " AND d.sg_partido = %s"
+        params.append(partido)
+
+    query += " ORDER BY des.score_final DESC"
+
+    cursor.execute(query, params)
+    ranking = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('ranking.html', ranking=ranking, estado=estado, partido=partido)
+
+@route_bp.route('/rankingf')
+def rankingf():
+    return render_template('rankingfront.html')
