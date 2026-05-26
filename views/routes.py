@@ -594,22 +594,22 @@ def infodeputados(id):
     # Query 12: Temas dos projetos aprovados - eliminar N+1
     query12 = """
         SELECT 
-            tp.tipo,
+            tp.nome,
             COUNT(p.cd_proposicoes) as qtd_deputado,
             COUNT(p.cd_proposicoes) / COUNT(DISTINCT pd.fk_deputado) as media_tema
         FROM proposicao_deputados pd
         JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-        JOIN tema_proposicoes pt ON p.cd_proposicoes = pt.id_proposicao
-        JOIN top_temas tp ON pt.id_tema = tp.cd_tp_temas
+        JOIN proposicao_tema pt ON p.cd_proposicoes = pt.id_proposicao
+        JOIN tema_proposicoes tp ON pt.id_tema = tp.cd_tema
         WHERE p.status = 'Transformado em Norma Jurídica'
-        GROUP BY tp.tipo
+        GROUP BY tp.nome
         ORDER BY (
             SELECT COUNT(p2.cd_proposicoes)
             FROM proposicao_deputados pd2
             JOIN proposicoes p2 ON pd2.fk_proposicao = p2.cd_proposicoes
-            JOIN tema_proposicoes pt2 ON p2.cd_proposicoes = pt2.id_proposicao
-            JOIN top_temas tp2 ON pt2.id_tema = tp2.cd_tp_temas
-            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.tipo = tp.tipo
+            JOIN proposicao_tema pt2 ON p2.cd_proposicoes = pt2.id_proposicao
+            JOIN tema_proposicoes tp2 ON pt2.id_tema = tp2.cd_tema
+            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.nome = tp.nome
         ) DESC
         LIMIT 5
     """
@@ -630,7 +630,7 @@ def infodeputados(id):
     valores_med_tema = []
     
     for tema in temas_com_media:
-        labels_tema.append(tema['tipo'])
+        labels_tema.append(tema['nome'])
         valores_dep_tema.append(tema['qtd_deputado'])
         valores_med_tema.append(round(tema['media_tema'], 1))
     
@@ -881,36 +881,37 @@ def ranking():
 
     query = """
         SELECT 
-            des.score_final,
+            des.score_final * 100 AS score_final,
             d.cd_deputado AS id,
             d.nome_eleitoral,      
             d.nome AS nome_civil,
             d.imagem_deputado AS foto_url,
-            d.sg_uf AS estado,
-            d.sg_partido AS partido
+            e.uf AS estado,
+            p.abreviacao AS partido
         FROM deputado d
         JOIN desempenho des ON des.fk_deputado = d.cd_deputado
+        JOIN estado e ON d.fk_estado = e.cd_estado
+        JOIN partido p ON d.fk_partido = p.cd_partido
         WHERE 1=1
     """
     params = []
 
     if estado:
-        query += " AND d.sg_uf = %s"
+        query += " AND e.uf = %s"
         params.append(estado)
     if partido:
-        query += " AND d.sg_partido = %s"
+        query += " AND p.abreviacao = %s"
         params.append(partido)
 
     query += " ORDER BY des.score_final DESC"
 
     cursor.execute(query, params)
-    ranking = cursor.fetchall()
+    ranking_data = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template('ranking.html', ranking=ranking, estado=estado, partido=partido)
-
+    return render_template('ranking.html', ranking=ranking_data, estado=estado, partido=partido)
 @route_bp.route('/rankingf')
 def rankingf():
     return render_template('rankingfront.html')
