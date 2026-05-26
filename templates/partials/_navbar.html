@@ -164,3 +164,80 @@
                 </div>
             </header>
             
+        <div class="fixed size-full z-100 bg-white hidden lg:hidden" id="menu-pesquisa-mobile">
+            <form action="" class="size-full flex flex-col">
+                <div class="flex items-center gap-3 px-4 py-3">
+                    <div class="relative w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor"
+                            class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                        <input type="text" placeholder="Pesquisar por deputado" class="bg-gray-200 w-full text-sm lg:text-base text-black p-3 pl-[2.5rem] rounded-full outline-none">
+                    </div>
+                    <button type="button" class="px-4 py-3 rounded-full flex items-center justify-center cursor-pointer text-sm lg:text-base">
+                        Cancelar
+                    </button>
+                </div>
+                <div class="flex-grow overflow-y-auto px-4">
+                    <ul class="list-none p-0 m-0 w-full space-y-3
+        [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors
+
+        [&>li>a>img]:w-11 [&>li>a>img]:h-11 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover
+
+        [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0
+
+        [&>li>a>div>span]:text-sm [&>li>a>div>span]:lg:text-base
+
+        [&>li>a>div>span:first-child]:font-semibold [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate
+
+        [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:truncate">
+        {% set quantidade_deputados = 50 %} <!-- AQUI TAVA TESTANDO COM 10, PRA VER SE O SCROLL APARECEIA -->
+        {% for i in range(quantidade_deputados) %}
+        <li>
+            <a href="#"> <!-- URL PARA A PÁGINA INDIVIDUAL DO DEPUTADO, NÃO É PRA PESQUISAR CASO CLIQUE DIRETO, JÁ É PRA IR DIRETO PRO DEPUTADO (ex: /deputado/123456) -->
+                <img src="/static/img/joao-silva.jpeg" alt="Foto do deputado"/> <!-- IMAGEM DO DEPUTADO -->
+                <div>
+                    <span><!--<span class="font-bold">-->Antonio<!--</span>--> Carlos Rodrigues</span> <!-- NOME ELEITORAL NO AUTOCOMPLETE -- TA VENDO O SPAN COM "font-bold" NO INCIO DESSA LINHA, ENTÃO SERIA DAORA CASO O CARA ESCREVESSE "Antonio", O QUE DESSE "MATCH" COM O QUE ELE ESCREVEU FICASSE EM NEGRITO -->
+                    <span>João Silva Pinto Pereira Prego</span> <!-- NOME CIVIL NO AUTOCOMPLETE -->
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+
+        {% if quantidade_deputados == 0 %} <!-- CASO NÃO TENHA NENHUM DEPUTADO PRA MOSTRAR, APARECE ESSA MENSAGEM AQUI -->
+        <li class="text-center text-gray-500 text-left py-3">Nenhum deputado encontrado</li>
+        {% endif %}
+    </ul>
+                </div>
+            </form>
+        </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnMenu = document.getElementById('btn-menu');
+        const menuPesquisaMobile = document.getElementById('menu-pesquisa-mobile');
+        const btnCancelar = menuPesquisaMobile.querySelector('button');
+
+        // Abrir menu ao clicar na lupa
+        btnMenu?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menuPesquisaMobile.classList.remove('hidden');
+            menuPesquisaMobile.querySelector('input')?.focus();
+        });
+
+        // Fechar menu ao clicar em Cancelar
+        btnCancelar?.addEventListener('click', function(e) {
+            e.preventDefault();
+            menuPesquisaMobile.classList.add('hidden');
+        });
+
+        // Fechar menu ao clicar fora (na área vazia)
+        menuPesquisaMobile.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    });
+</script>   

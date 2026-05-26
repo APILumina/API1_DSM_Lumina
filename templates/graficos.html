@@ -54,7 +54,7 @@
         </section>
 
         <!--FiltroS de estados e partidos-->
-        <section class="flex gap-4 w-full max-w-[100rem] mx-auto px-5">
+        <section class="flex flex-col sm:flex-row gap-4 w-full max-w-[100rem] mx-auto px-5">
 
             <div class="relative w-full md:w-[20%]">
 
@@ -78,7 +78,7 @@
                         ▼
 
                     </span>
-
+                </form>
             </div>
 
 
@@ -100,15 +100,14 @@
             </div>
         </section>
     </div>
-    </form>
 
 
     <!--Gráficos (imagens representativas)-->
     
-    <div class="w-full max-w-[100rem] mx-auto px-5">
-    <section class="bg-white p-8 rounded-2xl shadow-card mb-8">
+    <div class="w-full max-w-[100rem] mx-auto px-3 md:px-5">
+    <section class="bg-white p-4 md:p-8 rounded-2xl shadow-card mb-8">
         
-        <div class="flex gap-4 mb-8 border-b border-gray-100 pb-4">
+        <div class="flex gap-4 mb-8 border-b border-gray-100 pb-4 overflow-x-auto scrollbar-none whitespace-nowrap">
             <button onclick="mostrarGrafico('projetos', this)" class="btn-tab px-4 py-2 font-bold text-dark-blue border-b-2 border-blue-600 transition-all">Projetos</button>
             <button onclick="mostrarGrafico('presenca', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Presença</button>
             <button onclick="mostrarGrafico('gastos', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Gastos</button>
@@ -119,7 +118,9 @@
             <div id="box-projetos" class="grafico-box">
                 <h2 class="text-xl font-bold text-dark-blue mb-6">Projetos aprovados <span class="font-normal text-lg">por partido</span></h2>
                 {% if grafico_projetos %}
-                <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
+                <div class="w-full overflow-x-auto pb-2">
+                    <img src="data:image/png;base64,{{ grafico_projetos }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
+                </div>
                 {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhuma proposição aprovada encontrada.</p>
                 {% endif %}
@@ -128,16 +129,20 @@
             <div id="box-presenca" class="grafico-box hidden">
                 <h2 class="text-xl font-bold text-dark-blue mb-6">Presença <span class="font-normal text-lg">por partido</span></h2>
                 {% if grafico_presenca %}
-                <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
+                <div class="w-full overflow-x-auto pb-2">
+                    <img src="data:image/png;base64,{{ grafico_presenca }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
+                </div>
                 {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhuma presença encontrada.</p>
                 {% endif %}
             </div>
             <!--Gráfico 3: Gastos-->
-            <div id="box-gastos" class="grafico-box hidden">
+           <div id="box-gastos" class="grafico-box hidden">
                 <h2 class="text-xl font-bold text-dark-blue mb-6">Gastos <span class="font-normal text-lg">por partido</span></h2>
                 {% if grafico_gastos %}
-                <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
+                <div class="w-full overflow-x-auto pb-2">
+                    <img src="data:image/png;base64,{{ grafico_gastos }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
+                </div>
                 {% else %}
                 <p class="text-gray-400 text-center py-10">Nenhum gasto encontrado.</p>
                 {% endif %}

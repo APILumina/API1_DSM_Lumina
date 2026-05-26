@@ -168,7 +168,7 @@ def home():
     
     cursor.close()
     conn.close()
-    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True,todos_deputados=todos_deputados)
+    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True,todos_deputados=todos_deputados, nb=1)
 
 
 @route_bp.route("/graficos")
@@ -361,7 +361,8 @@ def graficos():
         grafico_projetos=grafico_projetos,
         grafico_presenca=grafico_presenca,
         grafico_gastos=grafico_gastos,
-        todos_deputados=todos_deputados
+        todos_deputados=todos_deputados,
+        nb=3
     )
 
 
@@ -415,7 +416,7 @@ def deputados():
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos,todos_deputados=todos_deputados, sticky_navbar=True)
+    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos,todos_deputados=todos_deputados, sticky_navbar=True, nb=2)
 
 
 @route_bp.route("/dados/deputados")
@@ -594,22 +595,22 @@ def infodeputados(id):
     # Query 12: Temas dos projetos aprovados - eliminar N+1
     query12 = """
         SELECT 
-            tp.nome,
+            tp.tipo,
             COUNT(p.cd_proposicoes) as qtd_deputado,
             COUNT(p.cd_proposicoes) / COUNT(DISTINCT pd.fk_deputado) as media_tema
         FROM proposicao_deputados pd
         JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
-        JOIN proposicao_tema pt ON p.cd_proposicoes = pt.id_proposicao
-        JOIN tema_proposicoes tp ON pt.id_tema = tp.cd_tema
+        JOIN tema_proposicoes pt ON p.cd_proposicoes = pt.id_proposicao
+        JOIN top_temas tp ON pt.id_tema = tp.cd_tp_temas
         WHERE p.status = 'Transformado em Norma Jurídica'
-        GROUP BY tp.nome
+        GROUP BY tp.tipo
         ORDER BY (
             SELECT COUNT(p2.cd_proposicoes)
             FROM proposicao_deputados pd2
             JOIN proposicoes p2 ON pd2.fk_proposicao = p2.cd_proposicoes
-            JOIN proposicao_tema pt2 ON p2.cd_proposicoes = pt2.id_proposicao
-            JOIN tema_proposicoes tp2 ON pt2.id_tema = tp2.cd_tema
-            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.nome = tp.nome
+            JOIN tema_proposicoes pt2 ON p2.cd_proposicoes = pt2.id_proposicao
+            JOIN top_temas tp2 ON pt2.id_tema = tp2.cd_tp_temas
+            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.tipo = tp.tipo
         ) DESC
         LIMIT 5
     """
@@ -630,7 +631,7 @@ def infodeputados(id):
     valores_med_tema = []
     
     for tema in temas_com_media:
-        labels_tema.append(tema['nome'])
+        labels_tema.append(tema['tipo'])
         valores_dep_tema.append(tema['qtd_deputado'])
         valores_med_tema.append(round(tema['media_tema'], 1))
     
@@ -664,7 +665,7 @@ def infodeputados(id):
         discurso['hora'] = dt.strftime('%H:%M')
 
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, nb=2)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 
@@ -712,7 +713,7 @@ def buscar():
     cursor.close()
     conexao.close()
     
-    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True, nb=2)
 
 
 @route_bp.route('/procurar')
@@ -757,32 +758,7 @@ def procurar():
     cursor.close()
     conexao.close()
 
-    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, pesquisa=pesquisa, sticky_navbar=True)
-
-    conn = conectar()
-
-    query = """
-        SELECT p.abreviacao AS partido, SUM(d.gasto_total) AS total_gasto
-        FROM despesas d
-        JOIN estado e ON d.fk_estado = e.cd_estado
-        JOIN partido p ON d.fk_partido = p.cd_partido
-        WHERE e.uf = %s
-        GROUP BY p.abreviacao
-        ORDER BY total_gasto DESC
-    """
-
-    try:
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(query, (uf.upper(),))
-        rows = cursor.fetchall()
-        df = pd.DataFrame(rows)
-        cursor.close()
-    finally:
-        conn.close()
-
-    grafico_url = gerar_grafico(df, 'partido', 'total_gasto', f'Ranking de Gastos por Partido - {uf.upper()}')
-
-    return render_template('estados_detalhes.html', uf=uf.upper(), grafico_url=grafico_url)
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, pesquisa=pesquisa, sticky_navbar=True, nb=2)
 
 #start
 @route_bp.route("/api/filtros-dinamicos")
