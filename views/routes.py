@@ -13,7 +13,7 @@ route_bp = Blueprint("route", __name__)
 
 partidos = [
     {'abreviacao': 'AVANTE', 'nome': 'Avante'},
-    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'},
+    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'}, #FALTA IMAGEM
     {'abreviacao': 'MDB', 'nome': 'Movimento Democrático Brasileiro'},
     {'abreviacao': 'MISSÃO', 'nome': 'Partido Missão'},
     {'abreviacao': 'NOVO', 'nome': 'Partido Novo'},
@@ -815,7 +815,8 @@ def filtros_dinamicos():
 #PÁGINA "SOBRE"
 @route_bp.route('/sobre')
 def sobre():
-    return render_template('sobre.html', hide_pesquisa=True)
+    return render_template('sobre.html', hide_pesquisa=True, nb=1)
+
 @route_bp.route('/autocomplete')
 def autocomplete():
     q = request.args.get('pesquisa', '').strip()
@@ -837,7 +838,7 @@ def autocomplete():
         WHERE LOWER(d.nome_eleitoral) LIKE %s
            OR LOWER(d.nome) LIKE %s
         ORDER BY d.nome_eleitoral
-        LIMIT 8
+        LIMIT 6
     """, (termo, termo))
 
     resultados = cursor.fetchall()
@@ -857,7 +858,7 @@ def ranking():
 
     query = """
         SELECT 
-            des.score_final * 100 AS score_final,
+            des.score_final * 10 AS score_final,
             d.cd_deputado AS id,
             d.nome_eleitoral,      
             d.nome AS nome_civil,

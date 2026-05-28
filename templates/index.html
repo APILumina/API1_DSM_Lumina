@@ -76,6 +76,7 @@
         {% set show_icon = false %}
         {% set input_class = "px-6 py-4 w-full rounded-none md:rounded-l-full bg-white text-gray-500 border-none shadow-sm focus:shadow-none" %}
         {% set input_placeholder = "Buscar por deputado" %}
+        {% set autocomplete_id = 'home' %}
         {% include 'partials/_autocomplete.html' %}
       </div>
       
@@ -120,64 +121,46 @@
 </div>
 <!--Saiba mais sobre-->
 <div class="w-full max-w-[100rem] mx-auto px-5">
-  <h1 class="text-radar text-2xl md:text-3xl font-bold font-poppins my-10 md:my-15">
+  <h2 class="text-radar text-2xl md:text-3xl font-bold font-poppins my-10 md:my-15">
     Saiba Mais Sobre...
-  </h1>
+  </h2>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-15
-  [&>button]:text-left [&>button]:w-full [&>button]:h-full [&>button]:bg-gray-50 [&>button]:border [&>button]:border-gray-200 [&>button]:shadow-md [&>button]:hover:scale-105 [&>button]:duration-300 [&>button]:rounded-2xl">
+  
+  [&>button]:text-left
+
+  [&>button>a>div]:bg-gray-50 [&>button>a>div]:border [&>button>a>div]:border-gray-200 [&>button>a>div]:shadow-md [&>button>a>div]:w-full [&>button>a>div]:h-full [&>button>a>div]:hover:scale-105 [&>button>a>div]:duration-300 [&>button>a>div]:rounded-2xl [&>button>a>div]:text-black
+  
+  [&>button>a>div>img]:w-full [&>button>a>div>img]:object-cover [&>button>a>div>img]:rounded-t-2xl
+
+  [&>button>a>div>h3]:pl-5 [&>button>a>div>h3]:pt-3 [&>button>a>div>h3]:font-bold [&>button>a>div>h3]:text-xl
+
+  [&>button>a>div>p]:pl-5 [&>button>a>div>p]:pt-1 [&>button>a>div>p]:pb-4 [&>button>a>div>p]:font-semibold [&>button>a>div>p]:text-base">
     <!--Botões que levam aos gráficos-->
-    <button>
-      <a href="{{ url_for('route.graficos') }}#gastos">
-        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
-          <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl"/>
-          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
-          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-            Descubra se os gastos do seu deputado são úteis.
-          </h1>
-        </div>
-      </a>
-    </button>
-    
-    <button>
-      <a href="{{ url_for('route.graficos') }}#projetos">
-        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
-          <img src="../static/img/projetos.png" class="w-full object-cover rounded-t-2xl" />
-          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
-          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-            Descubra sobre os projetos seu deputado.
-          </h1>
-        </div>
-      </a>
-    </button>
-    
-    <button>
-      <a href="{{ url_for('route.graficos') }}#presenca">
-        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
-          <img src="../static/img/presenca.png" class="w-full object-cover rounded-t-2xl" />
-          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
-          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-            Descubra se o seu deputado está faltando muito.
-          </h1>
-        </div>
-      </a>
-    </button>
-    
-    <button>
-      <a href="{{ url_for('route.graficos') }}#ranking">
-        <div class="bg-gray-50 border border-gray-200 shadow-md w-full h-full hover:scale-105 duration-300 rounded-2xl">
-          <img src="../static/img/ranking.png" class="w-full object-cover rounded-t-2xl" />
-          <h1 class="text-black pl-5 pt-3 font-bold text-xl">Ranking</h1>
-          <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
-            Descubra a colocação de desempenho do seu deputado.
-          </h1>
-        </div>
-      </a>
-    </button>
+    {% set botoes = [
+      {'href': 'gastos', 'img': 'gastos', 'titulo': 'Gastos', 'descricao': 'Descubra se os gastos do seu deputado são úteis.'},
+      {'href': 'projetos', 'img': 'projetos', 'titulo': 'Projetos', 'descricao': 'Descubra sobre os projetos seu deputado.'},
+      {'href': 'presenca', 'img': 'presenca', 'titulo': 'Presença', 'descricao': 'Descubra se o seu deputado está faltando muito.'},
+      {'href': 'ranking', 'img': 'ranking', 'titulo': 'Ranking', 'descricao': 'Descubra a colocação de desempenho do seu deputado.'}
+      ] %}
+    {% for botao in botoes %}
+      <button>
+        <a href="{{ url_for('route.graficos') }}#{{ botao['href'] }}">
+          <div>
+            <img src="{{ url_for('static', filename='img/' + botao['img'] + '.png') }}"/>
+            <h3>{{ botao['titulo'] }}</h3>
+            <p>
+              {{ botao['descricao'] }}
+            </p>
+          </div>
+        </a>
+      </button>
+    {% endfor %}
   </div>
 </div>
 </main>
 <!--Footer-->
 {% include 'partials/_footer.html' %}
+<script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 </body>
 
 </html>

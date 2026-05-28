@@ -7,403 +7,406 @@
 <main>
     <!--Container  principal-->
     <div class="w-full mx-auto max-w-[100rem] my-10 md:my-20 px-4 md:px-6">
-
+        
         <!-- Breadcrumb (Deputados > Nome do deputado) ⬇️ -->
         <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse text-dark-blue flex-wrap">
                 <li class="inline-flex items-center">
                     <a href="/deputados"
-                        class="inline-flex items-center text-base md:text-lg font-medium text-body text-current/75 hover:text-fg-brand">
-                        Deputados </a>
+                    class="inline-flex items-center text-base md:text-lg font-medium text-body text-current/75 hover:text-fg-brand">
+                    Deputados </a>
                 </li>
                 <li aria-current="page">
                     <div class="flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m9 5 7 7-7 7" />
-                        </svg>
-                        <span class="inline-flex items-center text-base md:text-lg font-bold text-body-subtle truncate max-w-[180px] sm:max-w-xs">{{
-                            dep['nome_eleitoral']}}</span>
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m9 5 7 7-7 7" />
+                    </svg>
+                    <span class="inline-flex items-center text-base md:text-lg font-bold text-body-subtle truncate max-w-[180px] sm:max-w-xs">{{
+                        dep['nome_eleitoral']}}</span>
                     </div>
                 </li>
             </ol>
         </nav>
-
+        
         <!--Container principal com duas colunas ⬇️ -->
         <div class="flex flex-col lg:flex-row gap-8 w-full items-start">
-
+            
             <!-- Coluna esquerda do card fixo-->
             <div
-                class="bg-white w-full lg:w-1/4 p-5 shadow-md rounded-lg text-dark-blue relative overflow-hidden lg:sticky lg:top-6 self-start pb-24 lg:pb-28">
-                <!-- Foto ⬇️ -->
-                <div
-                    class="aspect-square w-full max-w-[280px] lg:max-w-none mx-auto rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7">
-                    <img src="{{ dep['imagem_deputado'] }}" class="h-full object-cover" alt="Foto do deputado" />
+            class="bg-white w-full lg:w-1/4 p-5 shadow-md rounded-lg text-dark-blue relative overflow-hidden lg:sticky lg:top-6 self-start pb-24 lg:pb-28">
+            <!-- Foto ⬇️ -->
+            <div
+            class="lg:aspect-square w-full lg:max-w-[280px] lg:max-w-none mx-auto rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7">
+            <img src="{{ dep['imagem_deputado'] }}" class="h-full object-cover" alt="Foto do deputado" />
+        </div>
+        
+        <!-- Nome eleitoral do deputado ⬇️ -->
+        <div class="flex justify-center lg:justify-between items-center">
+            <h2 class="text-2xl lg:text-3xl xl:text-4xl mt-4 mb-7 text-center lg:text-left">
+                <span class="font-bold">{{ nome[0] }}</span> {{ " ".join(nome[1:])}}
+            </h2>
+        </div>
+        
+        <!-- Partido, Estado e Email ⬇️ -->
+        <div class="text-base xl:text-xl mb-6 space-y-2">
+            <p>Partido: <span class="font-bold">{{ dep['partido'] }}</span></p>
+            <p>Estado: <span class="font-bold">{{ dep['estado'] }}</span></p>
+            <p class="flex flex-row sm:gap-1 min-w-0">Email: <a href="mailto:{{ dep['email'] }}"
+                class="truncate hover:whitespace-normal hover:break-all bg-white transition-all text-radar font-medium sm:font-normal">{{
+                    dep['email'] }}</a></p>
                 </div>
-
-                <!-- Nome eleitoral do deputado ⬇️ -->
-                <h2 class="text-2xl md:text-4xl mt-4 mb-7 text-center lg:text-left">
-                    <span class="font-bold">{{ nome[0] }}</span> {{ " ".join(nome[1:])}}
-                </h2>
-
-                <!-- Partido, Estado e Email ⬇️ -->
-                <div class="text-lg md:text-xl mb-6 lg:mb-30 space-y-2">
-                    <p>Partido: <span class="font-bold">{{ dep['partido'] }}</span></p>
-                    <p>Estado: <span class="font-bold">{{ dep['estado'] }}</span></p>
-                    <p class="flex flex-col sm:flex-row sm:gap-1 min-w-0">Email: <a href="mailto:{{ dep['email'] }}"
-                            class="truncate hover:whitespace-normal hover:break-all bg-white transition-all text-radar font-medium sm:font-normal">{{
-                            dep['email'] }}</a></p>
-                </div>
-
+                
                 <!-- Botão de acessar site da câmara ⬇️ -->
                 <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
                     <a href="https://www.camara.leg.br/deputados/{{ dep['cd_deputado'] }}" target="_blank"
-                        class="bg-radar hover:bg-radar/90 text-center text-white text-lg md:text-xl font-semibold tracking-wide w-full py-3 md:py-4 rounded-xl transition-colors">Acessar
-                        site da Câmara</a>
+                    class="bg-radar hover:bg-radar/90 text-left text-white text-base xl:text-xl font-semibold tracking-wide w-full py-3 md:py-4 px-2 md:px-3 rounded-xl transition-colors flex items-center justify-center gap-2">Acessar
+                    site da Câmara<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <!--Coluna direita -->
+        <div class="w-full lg:w-3/4 flex flex-col gap-8">
+            
+            <!-- Área das informações ⬇️ -->
+            <div class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
+                
+                <!-- Nome e partido ⬇️ -->
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-2xl md:text-4xl font-bold capitalize">
+                        {{ dep['nome'] | lower }}
+                    </h2>
+                    <p class="text-lg md:text-xl mb-3 md:text-left">Partido: {{ dep['partido'] }}</p>
+                    <div class="h-px w-full bg-gray-300"></div>
+                </div>
+                
+                <!-- Principais informações ⬇️ -->
+                <div class="flex flex-col md:flex-row w-full items-stretch gap-6 md:gap-0">
+                    
+                    <!--Situação, presença e despesas ⬇️ -->
+                    <div class="w-full md:w-1/2 h-full flex flex-col justify-between text-xl lg:text-2xl md:pr-5 gap-y-4 md:gap-y-0">
+                        
+                        <!--IGD-->
+                        <div class="flex flex-col mb-2">
+                            <div class="flex items-center mb-1.7">
+                                <span class="font-bold">IGD</span>
+                                
+                                <!--Tooltip -->
+                                <span class="relative inline-block group cursor-help">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 ms-2 me-1 text-radar/50 group-hover:hidden">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                                    </svg>
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 ms-2 me-1 text-radar/50 hidden group-hover:block">
+                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+                                    </svg>
+                                    
+                                    <span class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity bg-radar/50 text-white text-center text-xs font-semibold rounded-lg p-1 w-48 left-[105%] top-1/2 -translate-y-1/2 z-10">
+                                        Índice Geral de Desempenho
+                                    </span>
+                                </span>
+                            </div>
+                            
+                            <span class="font-bold text-3xl md:text-4xl text-radar">7.6</span>
+                            
+                            <div class="mt-0">
+                                <a href="{{ url_for('route.sobre') }}#desempenho" class="text-black/80 font-medium text-base lg:text-sm hover:text-radar underline lg:no-underline" target="_blank">Saiba mais sobre</a>
+                            </div>
+                        </div>
+                        
+                        <div class="h-px w-full bg-gray-300 md:my-3"></div>
+                        
+                        <!--Presença-->
+                        <div class="flex flex-col">
+                            <span class="font-bold mb-2">Presença total</span>
+                            <div class="relative bg-radar/20 rounded-full w-full">
+                                <div class="bg-radar h-3 rounded-full" style="width: {{ presenca['taxa_assiduidade'] }}%"></div>
+                            </div>
+                            <div class="mt-1 text-lg md:text-xl">
+                                <span class="font-bold text-radar">{{ presenca['presencas_nominais'] }}</span> <span
+                                class="font-semibold">de presença</span>
+                                <span class="font-bold text-radar">({{ presenca['taxa_assiduidade'] | real
+                                }}%)</span>
+                                {% set diff_presenca = (presenca['presencas_nominais'] * 100 /
+                                media_presenca['presenca'] - 100) %}
+                                {% set presenca_maior = presenca['presencas_nominais'] > media_presenca['presenca']
+                                %}
+                                
+                                <div class="text-base md:text-lg font-semibold flex items-center gap-1 mt-1">
+                                    <span
+                                    class="{{ 'text-green-700' if presenca_maior else 'text-red-500' }} flex items-center">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                    class="size-4 transition-transform {{ '' if presenca_maior else 'rotate-180' }}">
+                                    <path fill-rule="evenodd"
+                                    d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
+                                    clip-rule="evenodd" />
+                                </svg>
+                                
+                                {{ diff_presenca | abs | porcentagem }}%
+                            </span>
+                            
+                            {{ 'maior' if presenca_maior else 'menor' }} que a média da Câmara
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="h-px w-full bg-gray-300 md:my-3"></div>
+                
+                <!--Despesas-->
+                <div class="flex flex-col">
+                    <span class="font-bold">Despesas Totais</span>
+                    <span class="font-bold text-3xl md:text-4xl text-radar">R${{ gasto['total'] | real }}</span>
+                    
+                    {% set diff_porcentagem = (gasto['total'] * 100 / media_gasto['gasto'] - 100) %}
+                    {% set gasto_maior = gasto['total'] > media_gasto['gasto'] %}
+                    
+                    <span class="font-semibold text-base md:text-lg flex items-center gap-1 mt-1">
+                        <span
+                        class="{{ 'text-green-700' if not gasto_maior else 'text-red-500' }} flex items-center">
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                        class="size-4 transition-transform {{ '' if gasto_maior else 'rotate-180' }}">
+                        <path fill-rule="evenodd"
+                        d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    
+                    {{ diff_porcentagem | abs | porcentagem }}%
+                </span>
+                
+                {{ 'maior' if gasto_maior else 'menor' }} que a média da Câmara
+            </span>
+            <button onclick="document.getElementById('modal').showModal()"
+            class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
+            mais
+        </button>
+    </div>
+    
+    <!--Modal das despesas-->
+    <dialog id="modal"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-1/2 max-h-[80vh]">
+    <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
+        
+        <h2 class="text-xl md:text-2xl font-medium mb-2">Despesas detalhadas</h2>
+        
+        <div class="flex flex-row w-full text-black/70 font-semibold text-base md:text-lg border-b pb-2">
+            <div class="flex-1">Tipo</div>
+            <div class="flex-none pl-4">Gasto</div>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto pr-2 font-medium text-black/80">
+            {% for despesa in despesas %}
+            <div class="flex flex-row w-full border-b border-black/15 py-3 text-base md:text-xl items-center">
+                <div class="flex-1 capitalize text-black/80 text-sm md:text-lg break-words">
+                    {{despesa['tipo'] | lower}}
+                </div>
+                <div class="flex-none whitespace-nowrap ml-4 text-base md:text-xl font-bold text-radar">
+                    R$ {{despesa['gasto_total'] | real}}
                 </div>
             </div>
-
-            <!--Coluna direita -->
-            <div class="w-full lg:w-3/4 flex flex-col gap-8">
-
-                <!-- Área das informações ⬇️ -->
-                <div class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
-
-                    <!-- Nome e partido ⬇️ -->
-                    <div class="flex flex-col gap-2">
-                        <h2 class="text-2xl md:text-4xl font-bold capitalize">
-                            {{ dep['nome'] | lower }}
-                        </h2>
-                        <p class="text-lg md:text-xl mb-3 md:text-left">Partido: {{ dep['partido'] }}</p>
-                        <div class="h-px w-full bg-gray-300"></div>
-                    </div>
-
-                    <!-- Principais informações ⬇️ -->
-                    <div class="flex flex-col md:flex-row w-full items-stretch gap-6 md:gap-0">
-
-                        <!--Situação, presença e despesas ⬇️ -->
-                        <div class="w-1/2 h-full flex flex-col justify-between text-2xl pr-5">
-
-                            <!--IGD-->
-                            <div class="flex flex-col mb-2">
-                                <div class="flex flex-col">
-
-                                    <div class="flex items-center -mb-2">
-                                        <span class="font-bold">IGD</span>
-
-                                        <!--Tooltip -->
-                                        <span class="relative inline-block group cursor-help font-bold">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 ms-2 me-1 text-radar"> <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /> </svg>
-                                            
-                                            <span class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity bg-radar/90 text-white text-center text-xs font-semibold rounded-lg p-2 w-48 left-1/2 -translate-x-1/2 bottom-full mb-2 lg:left-[105%] lg:top-1/2 lg:-translate-y-1/2 lg:bottom-auto lg:mb-0 z-20 shadow-md">
-                                                Índice Geral de Desempenho
-                                            </span>
-                                        </span>
-                                        
-                                    </div>
-
-                                    
-                                    <!--Exibição da nota-->
-                                    <div class="font-medium">
-                                        <span class="font-bold text-3xl md:text-4xl text-radar">7.6</span>
-                                    </div>
-
-                                    <div class="mt-1">
-                                        <a href="{{ url_for('route.sobre') }}#desempenho" class="text-black/80 font-medium text-sm hover:text-radar underline lg:no-underline" target="_blank">Saiba mais sobre</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="h-px w-full bg-gray-300 md:my-3"></div>
-
-                            <!--Presença-->
-                            <div class="flex flex-col">
-                                <span class="font-bold mb-2">Presença total</span>
-                                <div class="relative bg-radar/20 rounded-full w-full">
-                                    <div class="bg-radar h-3 rounded-full" style="width: {{ presenca['taxa_assiduidade'] }}%"></div>
-                                </div>
-                                <div class="mt-1 text-lg md:text-xl">
-                                    <span class="font-bold text-radar">{{ presenca['presencas_nominais'] }}</span> <span
-                                        class="font-semibold">de presença</span>
-                                    <span class="font-bold text-radar">({{ presenca['taxa_assiduidade'] | real
-                                        }}%)</span>
-                                    {% set diff_presenca = (presenca['presencas_nominais'] * 100 /
-                                    media_presenca['presenca'] - 100) %}
-                                    {% set presenca_maior = presenca['presencas_nominais'] > media_presenca['presenca']
-                                    %}
-
-                                    <div class="text-base md:text-lg font-semibold flex items-center gap-1 mt-1">
-                                        <span
-                                            class="{{ 'text-green-700' if presenca_maior else 'text-red-500' }} flex items-center">
-
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                                                class="size-4 transition-transform {{ '' if presenca_maior else 'rotate-180' }}">
-                                                <path fill-rule="evenodd"
-                                                    d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-
-                                            {{ diff_presenca | abs | porcentagem }}%
-                                        </span>
-
-                                        {{ 'maior' if presenca_maior else 'menor' }} que a média da Câmara
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="h-px w-full bg-gray-300 md:my-3"></div>
-
-                            <!--Despesas-->
-                            <div class="flex flex-col">
-                                <span class="font-bold">Despesas Totais</span>
-                                <span class="font-bold text-3xl md:text-4xl text-radar">R${{ gasto['total'] | real }}</span>
-
-                                {% set diff_porcentagem = (gasto['total'] * 100 / media_gasto['gasto'] - 100) %}
-                                {% set gasto_maior = gasto['total'] > media_gasto['gasto'] %}
-
-                                <span class="font-semibold text-base md:text-lg flex items-center gap-1 mt-1">
-                                    <span
-                                        class="{{ 'text-green-700' if not gasto_maior else 'text-red-500' }} flex items-center">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                                            class="size-4 transition-transform {{ '' if gasto_maior else 'rotate-180' }}">
-                                            <path fill-rule="evenodd"
-                                                d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-
-                                        {{ diff_porcentagem | abs | porcentagem }}%
-                                    </span>
-
-                                    {{ 'maior' if gasto_maior else 'menor' }} que a média da Câmara
-                                </span>
-                                <button onclick="document.getElementById('modal').showModal()"
-                                    class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
-                                    mais
-                                </button>
-                            </div>
-
-                            <!--Modal das despesas-->
-                            <dialog id="modal"
-                                class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-1/2 max-h-[80vh]">
-                                <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
-
-                                    <h2 class="text-xl md:text-2xl font-medium mb-2">Despesas detalhadas</h2>
-
-                                    <div class="flex flex-row w-full text-black/70 font-semibold text-base md:text-lg border-b pb-2">
-                                        <div class="flex-1">Tipo</div>
-                                        <div class="flex-none pl-4">Gasto</div>
-                                    </div>
-
-                                    <div class="flex-1 overflow-y-auto pr-2 font-medium text-black/80">
-                                        {% for despesa in despesas %}
-                                        <div class="flex flex-row w-full border-b border-black/15 py-3 text-base md:text-xl items-center">
-                                            <div class="flex-1 capitalize text-black/80 text-sm md:text-lg break-words">
-                                                {{despesa['tipo'] | lower}}
-                                            </div>
-                                            <div class="flex-none whitespace-nowrap ml-4 text-base md:text-xl font-bold text-radar">
-                                                R$ {{despesa['gasto_total'] | real}}
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-
-                                    <div class="flex justify-end pt-2">
-                                        <button onclick="document.getElementById('modal').close()"
-                                            class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
-                                            Fechar
-                                        </button>
-                                    </div>
-                                </div>
-                            </dialog>
-                        </div>
-
-                        <div class="hidden md:block w-px bg-gray-300 self-stretch"></div>
-
-                        <!-- Discurso e proposição-->
-                        <div class="w-full md:w-1/2 flex flex-col text-xl md:text-2xl md:pl-5 gap-5">
-
-                            <!--Discurso-->
-                            <div class="flex flex-col">
-                                <span class="font-bold">Palavras-chave de seu discurso</span>
-
-                                <button onclick="document.getElementById('modal-discurso').showModal()"
-                                    class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
-                                    mais</button>
-
-
-                                <!--Modal do discurso-->
-                                <dialog id="modal-discurso"
-                                    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-2/3 lg:w-1/2 max-h-[80vh] overflow-visible">
-
-                                    <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
-
-                                        <h2 class="text-xl md:text-2xl font-medium mb-2">Discursos de {{ dep['nome_eleitoral']}}</h2>
-
-                                        <div class="flex-1 overflow-y-auto pr-2 space-y-3 font-medium text-black/80">
-                                            {% for discurso in discursos %}
-                                            <div class="group flex flex-col w-full text-base md:text-xl shadow-md rounded-xl transition-all overflow-hidden border border-gray-100 bg-white"
-                                                onclick="toggleDiscurso(this)">
-
-                                                <!-- Cabeçalho clicável -->
-                                                <div class="flex flex-row items-center w-full p-4 hover:bg-gray-50 gap-4 cursor-pointer transition-all">
-                                                    <div class="flex flex-col gap-2 flex-1 overflow-hidden">
-                                                        <div class="text-xs text-white bg-radar py-1 px-2 rounded-full capitalize w-fit">
-                                                            <span class="font-bold">Tipo:</span> {{ discurso['tipo'] | lower }}
-                                                        </div>
-                                                        <h3 class="truncate font-semibold text-base text-dark-blue">{{ discurso['texto'] }}</h3>
-                                                        <div class="flex flex-col sm:flex-row sm:justify-between text-black/50 text-xs gap-1 sm:gap-0">
-                                                            <div class="truncate sm:mr-4">{{ discurso['titulo'] }}</div>
-                                                            <div class="whitespace-nowrap font-medium text-radar">{{ discurso['data'] }} às {{ discurso['hora'] }}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-none text-black/30 group-hover:text-radar transition-colors chevron-icon">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                                            class="transition-transform duration-300">
-                                                            <path d="m9 18 6-6-6-6" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Discurso transcrito que fica oculto -->
-                                                <div class="conteudo-discurso hidden bg-gray-50 px-4 py-4 text-sm md:text-base text-black/70 border-t border-gray-200">
-                                                    <div class="text-xs bg-radar/30 p-2 rounded-full w-fit cursor-pointer transition-all hover:bg-radar hover:text-white mb-2"
-                                                        data-keywords="{{ discurso['keywords'] }}"
-                                                        onclick="abrirKeywords(event, this)">
-                                                        <span class="font-bold">📋 Ver Palavras-chave</span>
-                                                    </div>
-                                                    <p class="pt-2 leading-relaxed break-words">{{ discurso['texto'] }}</p>
-                                                </div>
-
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div class="flex justify-end pt-2">
-                                            <button onclick="document.getElementById('modal-discurso').close(); fecharKeywords()"
-                                                class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
-                                                Fechar
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card de keywords posicionado à direita -->
-                                    <div id="card-keywords"
-                                        class="hidden absolute md:absolute fixed top-10 md:top-0 left-4 md:left-[calc(100%+12px)] right-4 md:right-auto bg-white rounded-lg shadow-2xl border border-gray-200 p-5 w-auto md:w-64 max-h-[70vh] md:max-h-[80vh] overflow-y-auto flex-col gap-3 z-50">
-                                        <div class="flex justify-between items-center border-b pb-2">
-                                            <h3 class="font-bold text-dark-blue text-base">Palavras-chave</h3>
-                                            <button onclick="fecharKeywords()"
-                                                class="text-black/40 hover:text-black transition cursor-pointer text-2xl leading-none">&times;</button>
-                                        </div>
-                                        <div id="keywords-lista" class="flex flex-wrap gap-2 text-xs md:text-sm"></div>
-                                    </div>
-
-                                </dialog>
-
-                            </div>
-
-                            <div class="h-px w-full bg-gray-300"></div>
-
-                            <!--Proposições aprovadas -->
-                            <div class="flex flex-col max-h-[300px] overflow-y-auto pr-2 scrollbar-thin">
-                                <h3 class="font-bold mb-2">Proposições aprovadas</h3>
-                                <div class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin">
-
-                                    {% if aprovadas %}
-                                        {% for prop in aprovadas %}
-                                            {% if prop['nome'] %}
-                                            <div class="flex items-start gap-2">
-                                                <h4 class="font-medium text-base md:text-lg text-dark-blue mb-1 break-words"> <span class="font-bold text-radar">-</span> {{ prop['nome'] }}</h4>
-                                            </div>
-                                            {% endif %}
-                                        {% endfor %}
-
-                                    {% else %}
-                                        <p class="text-black/60 text-sm md:text-base mt-1">Este deputado não tem projeto aprovado.</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!--Seção de proposições totais -->
-                <section class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg flex flex-col max-h-[600px]">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-4 gap-2 sm:gap-0">
-                        <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize">Proposições</h1>
-                        <p class="text-base md:text-lg font-semibold text-black/70">Total: <span class="font-bold text-radar">{{
-                                total_proposicao['total_proposicao'] }}</span> proposições</p>
-                    </div>
-
-                    <div class="h-px w-full bg-gray-300 mb-4"></div>
-
-                    <div class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin">
-                        {% for prop in proposicoes %}
-                        {% if prop['keywords'] or prop['nome'] and prop['nome'] != 'aaaaa' %}
-                        <div class="flex items-center gap-4 border-b border-gray-50 pb-3 last:border-none">
-                            <div class="relative bg-sec/20 w-fit p-2 rounded-lg flex-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                    class="size-5 md:size-6 text-sec">
-                                    <path fill-rule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <h4 class="font-medium text-base md:text-xl text-dark-blue capitalize break-words">{{ prop['nome'] or 'Não informado'
-                                }}</h4>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-
-                <!--Desempenho - gráficos-->
-                <div
-                    class="bg-white w-full mx-auto max-w-[100rem] flex flex-col mt-2 mb-10 md:mb-20 py-5 px-4 md:px-7 rounded-lg shadow-md">
-
-                    <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize">Desempenho parlamentar</h1>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-                        <div
-                            class="bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
-                            {% if grafico_proposicoes %}
-                            <img src="data:image/png;base64,{{ grafico_proposicoes }}" alt="Gráfico de Proposições"
-                                class="max-h-full max-w-full object-contain">
-                            {% else %}
-                            <p class="text-gray-400 text-sm">Sem dados para proposições</p>
-                            {% endif %}
-                        </div>
-
-                        <div
-                            class="bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
-                            {% if grafico_aprovados %}
-                            <img src="data:image/png;base64,{{ grafico_aprovados }}" alt="Gráfico de Projetos Aprovados"
-                                class="max-h-full max-w-full object-contain">
-                            {% else %}
-                            <p class="text-gray-400 text-sm">Sem dados para aprovados</p>
-                            {% endif %}
-                        </div>
-
-                        <div
-                            class="lg:col-span-2 bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
-                            {% if grafico_temas %}
-                            <img src="data:image/png;base64,{{ grafico_temas }}" alt="Gráfico de Projetos por Tema"
-                                class="max-h-full max-w-full object-contain">
-                            {% else %}
-                            <p class="text-gray-400 text-sm">Sem dados por tema</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div><!-- fim coluna direita-->
-        </div><!--fim container principal -->
+            {% endfor %}
+        </div>
+        
+        <div class="flex justify-end pt-2">
+            <button onclick="document.getElementById('modal').close()"
+            class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
+            Fechar
+        </button>
     </div>
+</div>
+</dialog>
+</div>
+
+<div class="hidden md:block w-px bg-gray-300 self-stretch"></div>
+
+<!-- Discurso e proposição-->
+<div class="w-full md:w-1/2 flex flex-col text-xl md:text-2xl md:pl-5 gap-5 mt-6 md:mt-0">
+    
+    <!--Discurso-->
+    <div class="flex flex-col">
+        <span class="font-bold">Palavras-chave de seu discurso</span>
+        
+        <button onclick="document.getElementById('modal-discurso').showModal()"
+        class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
+        mais</button>
+        
+        
+        <!--Modal do discurso-->
+        <dialog id="modal-discurso"
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-2/3 lg:w-1/2 max-h-[80vh] overflow-visible">
+        
+        <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
+            
+            <h2 class="text-xl md:text-2xl font-medium mb-2">Discursos de {{ dep['nome_eleitoral']}}</h2>
+            
+            <div class="flex-1 overflow-y-auto pr-2 space-y-3 font-medium text-black/80">
+                {% for discurso in discursos %}
+                <div class="group flex flex-col w-full text-base md:text-xl shadow-md rounded-xl transition-all overflow-hidden border border-gray-100 bg-white"
+                onclick="toggleDiscurso(this)">
+                
+                <!-- Cabeçalho clicável -->
+                <div class="flex flex-row items-center w-full p-4 hover:bg-gray-50 gap-4 cursor-pointer transition-all">
+                    <div class="flex flex-col gap-2 flex-1 overflow-hidden">
+                        <div class="text-xs text-white bg-radar py-1 px-2 rounded-full capitalize w-fit">
+                            <span class="font-bold">Tipo:</span> {{ discurso['tipo'] | lower }}
+                        </div>
+                        <h3 class="truncate font-semibold text-base text-dark-blue">{{ discurso['texto'] }}</h3>
+                        <div class="flex flex-col sm:flex-row sm:justify-between text-black/50 text-xs gap-1 sm:gap-0">
+                            <div class="truncate sm:mr-4">{{ discurso['titulo'] }}</div>
+                            <div class="whitespace-nowrap font-medium text-radar">{{ discurso['data'] }} às {{ discurso['hora'] }}</div>
+                        </div>
+                    </div>
+                    <div class="flex-none text-black/30 group-hover:text-radar transition-colors chevron-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="transition-transform duration-300">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Discurso transcrito que fica oculto -->
+            <div class="conteudo-discurso hidden bg-gray-50 px-4 py-4 text-sm md:text-base text-black/70 border-t border-gray-200">
+                <div class="text-xs bg-radar/30 p-2 rounded-full w-fit cursor-pointer transition-all hover:bg-radar hover:text-white mb-2"
+                data-keywords="{{ discurso['keywords'] }}"
+                onclick="abrirKeywords(event, this)">
+                <span class="font-bold">📋 Ver Palavras-chave</span>
+            </div>
+            <p class="pt-2 leading-relaxed break-words">{{ discurso['texto'] }}</p>
+        </div>
+        
+    </div>
+    {% endfor %}
+</div>
+
+<div class="flex justify-end pt-2">
+    <button onclick="document.getElementById('modal-discurso').close(); fecharKeywords()"
+    class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
+    Fechar
+</button>
+</div>
+</div>
+
+<!-- Card de keywords posicionado à direita -->
+<div id="card-keywords"
+class="hidden absolute md:absolute fixed top-10 md:top-0 left-4 md:left-[calc(100%+12px)] right-4 md:right-auto bg-white rounded-lg shadow-2xl border border-gray-200 p-5 w-auto md:w-64 max-h-[70vh] md:max-h-[80vh] overflow-y-auto flex-col gap-3 z-50">
+<div class="flex justify-between items-center border-b pb-2">
+    <h3 class="font-bold text-dark-blue text-base">Palavras-chave</h3>
+    <button onclick="fecharKeywords()"
+    class="text-black/40 hover:text-black transition cursor-pointer text-2xl leading-none">&times;</button>
+</div>
+<div id="keywords-lista" class="flex flex-wrap gap-2 text-xs md:text-sm"></div>
+</div>
+
+</dialog>
+
+</div>
+
+<div class="h-px w-full bg-gray-300"></div>
+
+<!--Proposições aprovadas -->
+<div class="flex flex-col max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
+    <h3 class="font-bold mb-2">Proposições aprovadas</h3>
+    <div class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
+        
+        {% if aprovadas %}
+        {% for prop in aprovadas %}
+        {% if prop['nome'] %}
+        <div class="flex items-start gap-2">
+            <h4 class="font-medium text-base md:text-lg text-dark-blue mb-1 break-words"> <span class="font-bold text-radar">-</span> {{ prop['nome'] }}</h4>
+        </div>
+        {% endif %}
+        {% endfor %}
+        
+        {% else %}
+        <p class="text-black/60 text-sm md:text-base mt-1">Este deputado não tem projeto aprovado.</p>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!--Seção de proposições totais -->
+<section class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg flex flex-col max-h-[600px]">
+    <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-4 gap-2 sm:gap-0">
+        <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize">Proposições</h1>
+        <p class="text-base md:text-lg font-semibold text-black/70">Total: <span class="font-bold text-radar">{{
+            total_proposicao['total_proposicao'] }}</span> proposições</p>
+        </div>
+        
+        <div class="h-px w-full bg-gray-300 mb-4"></div>
+        
+        <div class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
+            {% for prop in proposicoes %}
+            {% if prop['keywords'] or prop['nome'] and prop['nome'] != 'aaaaa' %}
+            <div class="flex items-center gap-4 border-b border-gray-50 pb-3 last:border-none">
+                <div class="relative bg-sec/20 w-fit p-2 rounded-lg flex-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="size-5 md:size-6 text-sec">
+                    <path fill-rule="evenodd"
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                    clip-rule="evenodd" />
+                </svg>
+            </div>
+            <h4 class="font-medium text-base md:text-xl text-dark-blue capitalize break-words">{{ prop['nome'] or 'Não informado'
+            }}</h4>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<!--Desempenho - gráficos-->
+<div
+class="bg-white w-full mx-auto max-w-[100rem] flex flex-col mt-2 mb-10 md:mb-20 py-5 px-4 md:px-7 rounded-lg shadow-md">
+
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize">Desempenho parlamentar</h1>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+    <div
+    class="bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
+    {% if grafico_proposicoes %}
+    <img src="data:image/png;base64,{{ grafico_proposicoes }}" alt="Gráfico de Proposições"
+    class="max-h-full max-w-full object-contain">
+    {% else %}
+    <p class="text-gray-400 text-sm">Sem dados para proposições</p>
+    {% endif %}
+</div>
+
+<div
+class="bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
+{% if grafico_aprovados %}
+<img src="data:image/png;base64,{{ grafico_aprovados }}" alt="Gráfico de Projetos Aprovados"
+class="max-h-full max-w-full object-contain">
+{% else %}
+<p class="text-gray-400 text-sm">Sem dados para aprovados</p>
+{% endif %}
+</div>
+
+<div
+class="lg:col-span-2 bg-gray-50 p-3 md:p-4 rounded-lg shadow-sm border border-gray-100 flex justify-center items-center h-[280px] sm:h-[350px] md:h-[400px]">
+{% if grafico_temas %}
+<img src="data:image/png;base64,{{ grafico_temas }}" alt="Gráfico de Projetos por Tema"
+class="max-h-full max-w-full object-contain">
+{% else %}
+<p class="text-gray-400 text-sm">Sem dados por tema</p>
+{% endif %}
+</div>
+</div>
+</div>
+</div><!-- fim coluna direita-->
+</div><!--fim container principal -->
+</div>
 </main>
 
 <!--Accordion do discurso-->
@@ -411,31 +414,31 @@
     function toggleDiscurso(card) {
         const conteudo = card.querySelector('.conteudo-discurso');
         const chevron = card.querySelector('.chevron-icon svg');
-
+        
         const estaAberto = !conteudo.classList.contains('hidden');
-
+        
         //Fecha os outros
         document.querySelectorAll('.conteudo-discurso').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.chevron-icon svg').forEach(el => el.style.transform = '');
-
+        
         // Abre o clicado (se estava fechado)
         if (!estaAberto) {
             conteudo.classList.remove('hidden');
             chevron.style.transform = 'rotate(90deg)';
         }
     }
-
+    
     function abrirKeywords(event, btn) {
         event.stopPropagation();
-
+        
         document.getElementById('keywords-lista').innerHTML = (btn.dataset.keywords || '')
-            .split(',').map(p => p.trim()).filter(Boolean)
-            .map(p => `<span class="bg-radar/20 capitalize text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">${p}</span>`)
-            .join('') || '<span class="text-black/40 text-xs">Nenhuma palavra-chave.</span>';
-
+        .split(',').map(p => p.trim()).filter(Boolean)
+        .map(p => `<span class="bg-radar/20 capitalize text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">${p}</span>`)
+        .join('') || '<span class="text-black/40 text-xs">Nenhuma palavra-chave.</span>';
+        
         document.getElementById('card-keywords').classList.replace('hidden', 'flex');
     }
-
+    
     function fecharKeywords() {
         document.getElementById('card-keywords').classList.replace('flex', 'hidden');
     }

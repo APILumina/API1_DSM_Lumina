@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Passion+One&display=swap" rel="stylesheet">
+    {% block extra_links %}{% endblock %}
 
     <style type="text/tailwindcss">
         @theme {
@@ -25,6 +24,7 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
+    {% set autocomplete_id = 'navbar' %}
     {% include 'partials/_navbar.html' %}
     {% include 'partials/_navbar-bottom.html' %}
 
@@ -66,27 +66,8 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const btn = document.getElementById("btn-deputados");
-            const menu = document.getElementById("menu-deputados");
-            const seta = document.getElementById("seta");
-
-            if (btn && menu) {
-                seta.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    menu.classList.toggle("hidden");
-                    seta.classList.toggle("rotate-180");
-                });
-
-                document.addEventListener("click", (e) => {
-                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                        menu.classList.add("hidden");
-                        seta.classList.remove("rotate-180");
-                    }
-                });
-            }
-        });
     </script>
+    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

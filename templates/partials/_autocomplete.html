@@ -1,69 +1,33 @@
-<!--
-show_icon: qnd true mostra o ícone de pesquisa
-input_class: classes do input
-input_placeholder: placeholder do input
--->
-
 {% if show_icon %}
-<label for="pesquisa" class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
+<label for="pesquisa-{{ autocomplete_id }}" class="cursor-text absolute top-1/2 left-6 -translate-x-1/2 -translate-y-1/2">
     <div class="bg-sec size-9 rounded-full"></div>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
-    stroke="currentColor"
-    class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
-    <path stroke-linecap="round" stroke-linejoin="round"
-    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-</svg>
+        stroke="currentColor"
+        class="size-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-radar">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
 </label>
 {% endif %}
 
-<input id="pesquisa" autocomplete="off" name="pesquisa" class="{{ input_class }} peer outline-none" type="text"
-placeholder="{{ input_placeholder }}">
+<!-- wrapper é o ponto de referência do JS — NÃO REMOVE -->
+<div class="js-autocomplete-wrapper contents">
+    <input
+        id="pesquisa-{{ autocomplete_id }}"
+        autocomplete="off"
+        name="pesquisa"
+        class="{{ input_class }} peer outline-none js-autocomplete-input"
+        type="text"
+        placeholder="{{ input_placeholder }}">
 
-<!-- AUTOCOMPLETE COMEÇA AQUI -->
- <!-- CID CONFIO EM VOCÊ, TENTA OTIMIZAR ISSO AO MÁXIMO PLMDS 🙏🙏 -->
-<div class="absolute top-1/2 bg-white w-full h-1/2 hidden peer-focus:block -z-1"></div>
-<div class="absolute top-full bg-white w-full h-fit text-black rounded-b-3xl hidden peer-focus:flex flex-col overflow-hidden border-t border-gray-200 shadow-xl max-h-100 overflow-y-auto scrollbar-thin scrollbar-thumb-radar">
-    <ul class="list-none p-0 pb-3 m-0 w-full divide-y divide-gray-100
-        [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:px-3 [&>li>a]:py-3 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors
-
-        [&>li>a>img]:w-11 [&>li>a>img]:h-11 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover
-
-        [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0
-
-        [&>li>a>div>span:first-child]:font-semibold [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate [&>li>a>div>span:first-child]:text-sm [&>li>a>div>span:first-child]:lg:text-base
-
-        [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:text-xs [&>li>a>div>span:last-child]:lg:text-sm [&>li>a>div>span:last-child]:truncate">
-        {% set quantidade_deputados = 10 %} <!-- AQUI TAVA TESTANDO COM 10, PRA VER SE O SCROLL APARECEIA -->
-        {% for i in range(quantidade_deputados) %}
-        <li>
-            <a href="#"> <!-- URL PARA A PÁGINA INDIVIDUAL DO DEPUTADO, NÃO É PRA PESQUISAR CASO CLIQUE DIRETO, JÁ É PRA IR DIRETO PRO DEPUTADO (ex: /deputado/123456) -->
-                <img src="/static/img/joao-silva.jpeg" alt="Foto do deputado"/> <!-- IMAGEM DO DEPUTADO -->
-                <div>
-                    <span><!--<span class="font-bold">-->Antonio<!--</span>--> Carlos Rodrigues</span> <!-- NOME ELEITORAL NO AUTOCOMPLETE -- TA VENDO O SPAN COM "font-bold" NO INCIO DESSA LINHA, ENTÃO SERIA DAORA CASO O CARA ESCREVESSE "Antonio", O QUE DESSE "MATCH" COM O QUE ELE ESCREVEU FICASSE EM NEGRITO -->
-                    <span>João Silva Pinto Pereira Prego</span> <!-- NOME CIVIL NO AUTOCOMPLETE -->
-                </div>
-            </a>
-        </li>
-        {% endfor %}
-
-        {% if quantidade_deputados == 0 %} <!-- CASO NÃO TENHA NENHUM DEPUTADO PRA MOSTRAR, APARECE ESSA MENSAGEM AQUI -->
-        <li class="text-center text-gray-500 text-left py-3 px-6">Nenhum deputado encontrado</li>
-        {% endif %}
-    </ul>
+    <div class="absolute top-1/2 bg-white w-full h-1/2 hidden js-autocomplete-overlay -z-1"></div>
+    <div class="absolute top-full bg-white w-full h-fit text-black rounded-b-3xl hidden js-autocomplete-dropdown flex-col overflow-hidden border-t border-gray-200 shadow-xl max-h-100 overflow-y-auto scrollbar-thin scrollbar-thumb-radar">
+        <ul class="js-autocomplete-list list-none p-0 pb-3 m-0 w-full divide-y divide-gray-100
+            [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:px-3 [&>li>a]:py-3 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors
+            [&>li>a>img]:w-11 [&>li>a>img]:h-11 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover
+            [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0
+            [&>li>a>div>span:first-child]:font-light [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate [&>li>a>div>span:first-child]:text-sm [&>li>a>div>span:first-child]:lg:text-base
+            [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:text-xs [&>li>a>div>span:last-child]:lg:text-sm [&>li>a>div>span:last-child]:truncate [&>li>a>div>span:last-child]:capitalize">
+        </ul>
+    </div>
 </div>
-<!-- AUTOCOMPLETE TERMINA AQUI -->
-
-
-<!-- 
-PARTE DO VINICIN
-
-<datalist id="dep_pesquisa">
-                        {% for dep in todos_deputados %}
-
-                            <option value="{{ dep.nome }}">
-                                {{ dep.imagem_deputado }}
-                                <img src="{{ dep.imagem_deputado }}" alt="">
-                            </option>
-
-                        {% endfor %}
-                    </datalist> -->
