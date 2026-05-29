@@ -11,7 +11,29 @@ from datetime import datetime
 
 route_bp = Blueprint("route", __name__)
 
-partidos = ["PT","PL","PSDB","PP","PRD","PDT","PSB","PSD","PSOL","REPUBLICANOS","AVANTE","MDB","UNIAO","PV","PCdoB","REDE","NOVO"]
+partidos = [
+    {'abreviacao': 'AVANTE', 'nome': 'Avante'},
+    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'},
+    {'abreviacao': 'MDB', 'nome': 'Movimento Democrático Brasileiro'},
+    {'abreviacao': 'MISSÃO', 'nome': 'Partido Missão'},
+    {'abreviacao': 'NOVO', 'nome': 'Partido Novo'},
+    {'abreviacao': 'PCdoB', 'nome': 'Partido Comunista do Brasil'},
+    {'abreviacao': 'PDT', 'nome': 'Partido Democrático Trabalhista'},
+    {'abreviacao': 'PL', 'nome': 'Partido Liberal'},
+    {'abreviacao': 'PODE', 'nome': 'Podemos'},
+    {'abreviacao': 'PP', 'nome': 'Progressistas'},
+    {'abreviacao': 'PRD', 'nome': 'Partido da Mobilização Nacional'},
+    {'abreviacao': 'PSB', 'nome': 'Partido Socialista Brasileiro'},
+    {'abreviacao': 'PSD', 'nome': 'Partido Social Democrático'},
+    {'abreviacao': 'PSDB', 'nome': 'Partido da Social Democracia Brasileira'},
+    {'abreviacao': 'PSOL', 'nome': 'Partido Socialismo e Liberdade'},
+    {'abreviacao': 'PT', 'nome': 'Partido dos Trabalhadores'},
+    {'abreviacao': 'PV', 'nome': 'Partido Verde'},
+    {'abreviacao': 'REDE', 'nome': 'Rede Sustentabilidade'},
+    {'abreviacao': 'REPUBLICANOS', 'nome': 'Republicanos'},
+    {'abreviacao': 'SOLIDARIEDADE', 'nome': 'Solidariedade'},
+    {'abreviacao': 'UNIÃO', 'nome': 'União Brasil'}
+]
 
 estados = [
     {'uf': 'AC', 'nome': 'Acre'},
@@ -42,6 +64,9 @@ estados = [
     {'uf': 'SE', 'nome': 'Sergipe'},
     {'uf': 'TO', 'nome': 'Tocantins'}
 ]
+
+def obter_partidos_abreviados():
+    return sorted([p['abreviacao'] for p in partidos])
 
 
 def gerar_grafico_deputado(valor_deputado, valor_media, titulo):
@@ -130,7 +155,7 @@ def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
 
 @route_bp.route("/")
 def home():
-    return render_template("index.html", partidos=sorted(partidos), hide_pesquisa=True, sticky_navbar=True)
+    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True)
 
 
 @route_bp.route("/graficos")
@@ -309,8 +334,9 @@ def graficos():
 
     return render_template("graficos.html",
         estado=estado,
+        estados=estados,
         partido=partido,
-        partidos=sorted(partidos),
+        partidos=partidos,
         grafico_projetos=grafico_projetos,
         grafico_presenca=grafico_presenca,
         grafico_gastos=grafico_gastos,
@@ -359,7 +385,7 @@ def deputados():
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estado=estado, partido=partido, partidos=sorted(partidos), sticky_navbar=True)
+    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
 
 
 @route_bp.route("/dados/deputados")
@@ -648,7 +674,7 @@ def buscar():
     cursor.close()
     conexao.close()
     
-    return render_template('deputados.html', deputados=resultados, estado=estado, partido=partido)
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True)
 
 
 @route_bp.route('/procurar')
@@ -693,8 +719,7 @@ def procurar():
     cursor.close()
     conexao.close()
 
-    return render_template('deputados.html', deputados=resultados, estado=estado,
-                           partido=partido, pesquisa=pesquisa, partidos=sorted(partidos))
+    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, pesquisa=pesquisa, sticky_navbar=True)
 
 
 @route_bp.route('/estados')
@@ -728,3 +753,54 @@ def estado_detalhe(uf):
     grafico_url = gerar_grafico(df, 'partido', 'total_gasto', f'Ranking de Gastos por Partido - {uf.upper()}')
 
     return render_template('estados_detalhes.html', uf=uf.upper(), grafico_url=grafico_url)
+
+#start
+@route_bp.route("/api/filtros-dinamicos")
+def filtros_dinamicos():
+    conn = conectar()
+    estado_selecionado = request.args.get('estado', '')
+    partido_selecionado = request.args.get('partido', '')
+
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    # 2. Query de Estados (Passando por deputado para chegar no partido)
+    query_estados = """
+        SELECT DISTINCT e.uf 
+        FROM estado e 
+        JOIN deputado d ON e.cd_estado = d.fk_estado
+        JOIN partido p ON d.fk_partido = p.cd_partido
+    """
+    params_estados = []
+    # Se o usuário escolheu um partido na tela, filtramos os estados que têm deputados desse partido
+    if partido_selecionado:
+        query_estados += " WHERE p.abreviacao = %s"
+        params_estados.append(partido_selecionado)
+        
+    cursor.execute(query_estados, params_estados)
+    estados_disponiveis = [row['uf'] for row in cursor.fetchall()]
+
+    # 3. Query de Partidos (Passando por deputado para chegar no estado)
+    query_partidos = """
+        SELECT DISTINCT p.abreviacao 
+        FROM partido p 
+        JOIN deputado d ON p.cd_partido = d.fk_partido
+        JOIN estado e ON d.fk_estado = e.cd_estado
+    """
+    params_partidos = []
+    # Se o usuário escolheu um estado na tela, filtramos os partidos que têm deputados nesse estado
+    if estado_selecionado:
+        query_partidos += " WHERE e.uf = %s"
+        params_partidos.append(estado_selecionado)
+
+    cursor.execute(query_partidos, params_partidos)
+    partidos_disponiveis = [row['abreviacao'] for row in cursor.fetchall()]
+
+    cursor.close()
+    conn.close()
+
+    # 4. Retorna a resposta para o JavaScript
+    return jsonify({
+        'estados': estados_disponiveis,
+        'partidos': partidos_disponiveis
+    })

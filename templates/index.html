@@ -70,72 +70,109 @@
 
     <!--Barra de pesquisa-->
     <div class="bg-gray-200 py-6">
-      <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
+      <form action="{{ url_for('route.procurar') }}" method="GET"
+        class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
         <input type="text" autocomplete="off" name="pesquisa" placeholder="Buscar por deputado"
           class="flex-1 px-6 py-4 rounded-none md:rounded-l-full bg-white text-gray-500 outline-none border-none shadow-sm" />
+ <!--adjusting the dropdown filter-->
+     <div class="relative flex-1">
+      <!-- add id="select-estado"  -->
+      <select id="select-estado" name="estado"
+        class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+        <option value="">Selecionar Estado</option>
+        {% for est in estados %}
+        <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
+        {% endfor %}
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
+      </div>
+    </div>
 
-        <div class="relative flex-1">
-          <select name="estado"
-            class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-            <option value="">Selecionar Estado</option>
-            <option value="AC">Acre (AC)</option>
-            <option value="AL">Alagoas (AL)</option>
-            <option value="AP">Amapá (AP)</option>
-            <option value="AM">Amazonas (AM)</option>
-            <option value="BA">Bahia (BA)</option>
-            <option value="CE">Ceará (CE)</option>
-            <option value="DF">Distrito Federal (DF)</option>
-            <option value="ES">Espírito Santo (ES)</option>
-            <option value="GO">Goiás (GO)</option>
-            <option value="MA">Maranhão (MA)</option>
-            <option value="MT">Mato Grosso (MT)</option>
-            <option value="MS">Mato Grosso do Sul (MS)</option>
-            <option value="MG">Minas Gerais (MG)</option>
-            <option value="PA">Pará (PA)</option>
-            <option value="PB">Paraíba (PB)</option>
-            <option value="PR">Paraná (PR)</option>
-            <option value="PE">Pernambuco (PE)</option>
-            <option value="PI">Piauí (PI)</option>
-            <option value="RJ">Rio de Janeiro (RJ)</option>
-            <option value="RN">Rio Grande do Norte (RN)</option>
-            <option value="RS">Rio Grande do Sul (RS)</option>
-            <option value="RO">Rondônia (RO)</option>
-            <option value="RR">Roraima (RR)</option>
-            <option value="SC">Santa Catarina (SC)</option>
-            <option value="SP">São Paulo (SP)</option>
-            <option value="SE">Sergipe (SE)</option>
-            <option value="TO">Tocantins (TO)</option>
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
+    <div class="relative flex-1">
+      <!--  Add id="select-partido"  -->
+      <select id="select-partido" name="partido"
+        class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+        <option value="">Partido</option>
+        {% for part in partidos %}
+        <option value="{{ part['abreviacao'] }}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
+        {% endfor %}
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
+      </div>
+    </div>
 
-        <div class="relative flex-1">
-          <select name="partido"
-            class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-            <option value="">Partido</option>
-            {% for p in partidos %}
-            <option value="{{ p }}">{{ p }}</option>
-            {% endfor %}
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
+    <button
+      class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
+      <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </button>
+  </form>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const selectEstado = document.getElementById("select-estado");
+    const selectPartido = document.getElementById("select-partido");
 
-        <button
-          class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
-          <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </button>
-      </form>
+    if (!selectEstado || !selectPartido) return;
+
+    
+    const estadosOriginais = Array.from(selectEstado.options).map(opt => ({ value: opt.value, text: opt.text }));
+    const partidosOriginais = Array.from(selectPartido.options).map(opt => ({ value: opt.value, text: opt.text }));
+
+    function atualizarFiltrosCruzados() {
+        const estadoVal = selectEstado.value;
+        const partidoVal = selectPartido.value;
+
+        fetch(`/api/filtros-dinamicos?estado=${estadoVal}&partido=${partidoVal}`)
+            .then(response => response.json())
+            .then(data => {
+                
+                // --- RECONSTRUIR ESTADOS ---
+                const estadoAtual = selectEstado.value;
+                selectEstado.innerHTML = ''; 
+                
+                estadosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.estados.includes(opt.value)) {
+                        const selecionado = opt.value === estadoAtual ? 'selected' : '';
+                        selectEstado.innerHTML += `<option value="${opt.value}" ${selecionado}>${opt.text}</option>`;
+                    }
+                });
+
+                // --- RECONSTRUIR PARTIDOS ---
+                const partidoAtual = selectPartido.value;
+                selectPartido.innerHTML = '';
+                
+                partidosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.partidos.includes(opt.value)) {
+                        const selecionado = opt.value === partidoAtual ? 'selected' : '';
+                        selectPartido.innerHTML += `<option value="${opt.value}" ${selecionado}>${opt.text}</option>`;
+                    }
+                });
+            })
+            .catch(err => console.error("Erro na requisição dos filtros:", err));
+    }
+
+    const formulario = selectEstado.closest('form');
+    if (formulario) {
+        formulario.addEventListener("change", function(evento) {
+            if (evento.target.id === "select-estado" || evento.target.id === "select-partido") {
+                atualizarFiltrosCruzados();
+            }
+        });
+    }
+});
+</script>
+<!-- end -->
+
+         
     </div>
     <!--Saiba mais sobre-->
     <div class="w-full max-w-[100rem] mx-auto px-5">
@@ -145,9 +182,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-15">
         <!--Botões que levam aos gráficos-->
         <button class="text-left w-full">
-          <a href="{{ url_for('route.graficos') }}#gastos">
+          <a href="{{ url_for('route.graficos') }}?tab=gastos">
             <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
-              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl"/>
+              <img src="../static/img/gastos.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Gastos</h1>
               <h1 class="text-black pl-5 pt-1 pb-4 font-semibold text-base">
                 Descubra se os gastos do seu deputado são úteis.
@@ -157,7 +194,7 @@
         </button>
 
         <button class="text-left">
-          <a href="{{ url_for('route.graficos') }}#projetos">
+          <a href="{{ url_for('route.graficos') }}?tab=projetos">
             <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
               <img src="../static/img/projetos.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Projetos</h1>
@@ -169,7 +206,7 @@
         </button>
 
         <button class="text-left">
-          <a href="{{ url_for('route.graficos') }}#presenca">
+          <a href="{{ url_for('route.graficos') }}?tab=presenca">
             <div class="bg-[#E5E5E5] shadow-lg w-full h-full hover:scale-105 duration-300 rounded-2xl">
               <img src="../static/img/presenca.png" class="w-full object-cover rounded-t-2xl" />
               <h1 class="text-black pl-5 pt-3 font-bold text-xl">Presença</h1>
@@ -188,6 +225,7 @@
       Todos os direitos preservados a Lumina
     </h1>
   </footer>
+ 
 </body>
 
 </html>
