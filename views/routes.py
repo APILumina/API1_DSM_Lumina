@@ -119,31 +119,28 @@ def gerar_grafico(df, col_x, col_y, titulo):
 
 def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
     """Gera gráfico de barras horizontais comparando deputado vs média da câmara por tema."""
+    if not labels:
+        return None
+    
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    if not labels:
-        ax.text(0.5, 0.5, 'Nenhum projeto aprovado associado a um tema.', 
-                ha='center', va='center', fontsize=12, color='#081638')
-        ax.axis('off')
-    else:
-        y = range(len(labels))
-        height = 0.35
-        y_dep = [pos - height/2 for pos in y]
-        y_med = [pos + height/2 for pos in y]
-        
-        # Barras horizontais - texto legível naturalmente
-        ax.barh(y_dep, valores_deputado, height, label='Este Deputado', color='#1A249D')
-        ax.barh(y_med, valores_media, height, label='Média da Câmara', color='#efc33c')
-        
-        ax.set_title(titulo, pad=15, fontsize=12, fontweight='bold', color='#081638')
-        ax.set_yticks(list(y))
-        ax.set_yticklabels(labels, fontsize=10)
-        ax.legend()
-        
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_color('#cccccc')
-        ax.spines['bottom'].set_color('#cccccc')
+    y = range(len(labels))
+    height = 0.35
+    y_dep = [pos - height/2 for pos in y]
+    y_med = [pos + height/2 for pos in y]
+    
+    ax.barh(y_dep, valores_deputado, height, label='Este Deputado', color='#1A249D')
+    ax.barh(y_med, valores_media, height, label='Média da Câmara', color='#efc33c')
+    
+    ax.set_title(titulo, pad=15, fontsize=12, fontweight='bold', color='#081638')
+    ax.set_yticks(list(y))
+    ax.set_yticklabels(labels, fontsize=10)
+    ax.legend()
+    
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color('#cccccc')
+    ax.spines['bottom'].set_color('#cccccc')
     
     plt.tight_layout()
     buf = io.BytesIO()
@@ -151,7 +148,6 @@ def gerar_grafico_temas(labels, valores_deputado, valores_media, titulo):
     plt.close(fig)
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf-8')
-
 
 @route_bp.route("/")
 def home():
@@ -373,18 +369,35 @@ def deputados():
 
     estado  = request.args.get('estado', '')
     partido = request.args.get('partido', '')
+    tema    = request.args.get('tema', '')
 
     filtros = []
     params  = []
+    
+    joins = ""
 
     if estado:
         filtros.append("e.uf = %s")
-        params.append(estado)
+        params.append(estado)   
+
     if partido:
         filtros.append("p.abreviacao = %s")
         params.append(partido)
+        
+    if tema:
+        joins += """
+        JOIN deputado_tema dt
+            ON dt.fk_deputado = d.cd_deputado
+
+        JOIN top_temas t
+            ON t.cd_tp_temas = dt.fk_tema
+        """
+        
+        filtros.append("t.cd_tp_temas = %s")
+        params.append(tema)
 
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
+
 
     query = f"""
     SELECT 
@@ -397,6 +410,7 @@ def deputados():
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
+    {joins}
     {where}
     ORDER BY d.nome_eleitoral
     LIMIT 24 OFFSET 0
@@ -404,20 +418,38 @@ def deputados():
 
     cursor.execute(query, params)
     dados = cursor.fetchall()
-    
+
     cursor.execute("""
-    SELECT nome,imagem_deputado
+    SELECT nome, imagem_deputado
     FROM deputado
     ORDER BY nome
     """)
 
     todos_deputados = cursor.fetchall()
 
+    cursor.execute("""
+        SELECT tipo, cd_tp_temas
+        FROM top_temas
+    """)
+
+    temas = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
-    return render_template("deputados.html", deputados=dados, estados=estados, estado=estado, partido=partido, partidos=partidos,todos_deputados=todos_deputados, sticky_navbar=True, nb=2)
-
+    return render_template(
+        "deputados.html",
+        deputados=dados,
+        estados=estados,
+        estado=estado,
+        partido=partido,
+        tema=tema,
+        partidos=partidos,
+        todos_deputados=todos_deputados,
+        temas=temas,
+        sticky_navbar=True,
+        nb=2
+    )
 
 @route_bp.route("/dados/deputados")
 def dados_deputados():
@@ -530,15 +562,15 @@ def infodeputados(id):
     
     # Query 8: Proposições aprovadas
     query8 = """
-        SELECT p.nome
+        SELECT p.nome, p.status
         FROM proposicoes p
         INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
-        WHERE pd.fk_deputado = %s AND p.status = 'Transformado em Norma Jurídica'
+        WHERE pd.fk_deputado = %s AND (p.status = 'Transformado em Norma Jurídica' or p.status = 'Mapeamento Histórico / Concluída com sucesso' or p.status = 'Mapeamento Histórico / Aprovada' or p.status = 'Transformado em Norma Jurídica' or p.status = 'Transformado em nova proposição')
     """
     
     # Query 9: Média de presença e gasto
     query9 = """
-        SELECT ROUND(AVG(t.presencas_nominais), 2) AS presenca
+        SELECT ROUND(AVG(t.taxa_assiduidade), 2) AS presenca
         FROM taxa_presenca t
     """
 
@@ -592,11 +624,11 @@ def infodeputados(id):
              WHERE p.status = 'Transformado em Norma Jurídica') as media_aprovados_camara
     """
     
-    # Query 12: Temas dos projetos aprovados - eliminar N+1
+    # Query 12: Temas dos projetos aprovados do deputado específico
     query12 = """
         SELECT 
             tp.tipo,
-            COUNT(p.cd_proposicoes) as qtd_deputado,
+            SUM(CASE WHEN pd.fk_deputado = %s THEN 1 ELSE 0 END) as qtd_deputado,
             COUNT(p.cd_proposicoes) / COUNT(DISTINCT pd.fk_deputado) as media_tema
         FROM proposicao_deputados pd
         JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
@@ -604,26 +636,90 @@ def infodeputados(id):
         JOIN top_temas tp ON pt.id_tema = tp.cd_tp_temas
         WHERE p.status = 'Transformado em Norma Jurídica'
         GROUP BY tp.tipo
-        ORDER BY (
-            SELECT COUNT(p2.cd_proposicoes)
-            FROM proposicao_deputados pd2
-            JOIN proposicoes p2 ON pd2.fk_proposicao = p2.cd_proposicoes
-            JOIN tema_proposicoes pt2 ON p2.cd_proposicoes = pt2.id_proposicao
-            JOIN top_temas tp2 ON pt2.id_tema = tp2.cd_tp_temas
-            WHERE pd2.fk_deputado = %s AND p2.status = 'Transformado em Norma Jurídica' AND tp2.tipo = tp.tipo
-        ) DESC
+        HAVING SUM(CASE WHEN pd.fk_deputado = %s THEN 1 ELSE 0 END) > 0
+        ORDER BY qtd_deputado DESC
         LIMIT 5
+    """
+    query13 = """
+        SELECT tp.nome 
+        FROM deputado_tema d
+        INNER JOIN tema_peso tp ON tp.cd_tema = d.fk_tema
+        WHERE fk_deputado = %s
+        ORDER BY d.qtd_proposicoes DESC
+    """
+    #query14 = """
+    #     {
+    #     "Gestão pública e política": [
+    #         "Administração pública",
+    #         "Processo legislativo e atuação parlamentar",
+    #         "Finanças públicas e orçamento",
+    #         "Política, partidos e eleições"
+    #     ],
+    #     "Direitos, justiça e cidadania": [
+    #         "Direito constitucional",
+    #         "Direito civil e processual civil",
+    #         "Direito penal e processual penal",
+    #         "Direito e justiça",
+    #         "Direitos humanos e minorias",
+    #         "Direito e defesa do consumidor"
+    #     ],
+    #     "Economia e desenvolvimento": [
+    #         "Economia",
+    #         "Indústria, comércio e serviços",
+    #         "Relações internacionais e comércio exterior",
+    #         "Turismo",
+    #         "Trabalho e emprego",
+    #         "Previdência e assistência social"
+    #     ],
+    #     "Infraestrutura e tecnologia": [
+    #         "Cidades e desenvolvimento urbano",
+    #         "Viação, transporte e mobilidade",
+    #         "Energia, recursos hídricos e minerais",
+    #         "Comunicações"
+    #     ],
+    #     "Natureza e produção": [
+    #         "Meio ambiente e desenvolvimento sustentável",
+    #         "Agricultura, pecuária, pesca e extrativismo",
+    #         "Estrutura fundiária"
+    #     ],
+    #     "Ciências": [
+    #         "Ciências sociais e humanas",
+    #         "Ciências exatas e da terra",
+    #         "Ciência, tecnologia e inovação"
+    #     ],
+    #     "Saúde e educação": [
+    #         "Saúde",
+    #         "Educação"
+    #     ],
+    #     "Cultura, lazer e segurança": [
+    #         "Arte, cultura e religião",
+    #         "Esporte e lazer",
+    #         "Defesa e segurança",
+    #         "Homenagens e datas comemorativas"
+    #     ]
+    # }
+    #"""
+    
+    query15 = """
+        SELECT
+        d.score_final as nota
+        FROM desempenho d
+        WHERE fk_deputado = %s
+    
     """
     
     cursor.execute(query11, (id, id))
     stats = cursor.fetchone()
+    
+    cursor.execute(query15, (id,))
+    score_final = cursor.fetchone()
     
     total_deputado = stats['total_deputado'] or 0
     media_camara = stats['media_camara'] or 0
     aprovados_deputado = stats['aprovados_deputado'] or 0
     media_aprovados_camara = stats['media_aprovados_camara'] or 0
     
-    cursor.execute(query12, (id,))
+    cursor.execute(query12, (id, id))
     temas_com_media = cursor.fetchall()
     
     labels_tema = []
@@ -634,6 +730,9 @@ def infodeputados(id):
         labels_tema.append(tema['tipo'])
         valores_dep_tema.append(tema['qtd_deputado'])
         valores_med_tema.append(round(tema['media_tema'], 1))
+
+    cursor.execute(query13, (id,))
+    temas_discursos = cursor.fetchall()
     
     # --- GERAÇÃO DOS GRÁFICOS ---
     grafico_proposicoes_img = gerar_grafico_deputado(
@@ -663,9 +762,9 @@ def infodeputados(id):
         dt = datetime.fromisoformat(discurso['data_inicio'])
         discurso['data'] = dt.strftime('%d/%m/%Y')
         discurso['hora'] = dt.strftime('%H:%M')
-
+    
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, nb=2)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, temas_discursos=temas_discursos, score_final=score_final, nb=2)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 
@@ -817,6 +916,7 @@ def filtros_dinamicos():
 def sobre():
     return render_template('sobre.html', hide_pesquisa=True, nb=1)
 
+#AUTOCOMPLETE
 @route_bp.route('/autocomplete')
 def autocomplete():
     q = request.args.get('pesquisa', '').strip()
@@ -848,6 +948,7 @@ def autocomplete():
 
     return jsonify(resultados)
 
+#PÁGINA RANKING
 @route_bp.route('/ranking')
 def ranking():
     estado = request.args.get('estado', '')
@@ -858,6 +959,7 @@ def ranking():
 
     query = """
         SELECT 
+            des.ranking,
             des.score_final * 10 AS score_final,
             d.cd_deputado AS id,
             d.nome_eleitoral,      

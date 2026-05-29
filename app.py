@@ -27,11 +27,18 @@ def remover_acentos(texto):
         if unicodedata.category(c) != 'Mn'
     ).lower()
 
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        # Define o cache para 1 ano (31536000 segundos)
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+    return response
+
 app.jinja_env.filters['real'] = formato_moeda
 app.jinja_env.filters['porcentagem'] = formato_porcentagem
 app.jinja_env.filters['sem_acentos'] = remover_acentos
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 

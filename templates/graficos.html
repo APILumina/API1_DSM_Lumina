@@ -28,7 +28,7 @@
         }
 
         .dropdown-select::-webkit-scrollbar-track {
-            @apply bg-gray-50 rounded-r-2xl; /* Fundo da calha da barra */
+            @apply bg-gray-50 rounded-r-2xl;
         }
 
         .dropdown-select::-webkit-scrollbar-thumb {
@@ -36,9 +36,8 @@
         }
 
         .dropdown-select::-webkit-scrollbar-thumb:hover {
-            @apply bg-gray-400; 
+            @apply bg-gray-400;
         }
-
     </style>
 {% endblock %}
 
@@ -49,190 +48,247 @@
     <!--Section dos filtros e título da página-->
     <div class="bg-white px-8 py-6 mb-9">
 
-        <section class="mb-6  w-full max-w-[100rem] mx-auto px-5">
-            <h1 class="text-3xl font-bold text-dark-blue tracking-tight">GRÁFICOS POR PARTIDO</h1>
+        <section class="mb-6 w-full max-w-[100rem] mx-auto px-5">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-dark-blue tracking-tight">Gráficos por partido</h1>
         </section>
 
-        <!--FiltroS de estados e partidos-->
-        <section class="flex flex-col sm:flex-row gap-4 w-full max-w-[100rem] mx-auto px-5">
+        <!--Filtros de estados e partidos-->
+        <form action="/graficos" method="get" id="form-filtro">
+        <section class="flex gap-4 w-full max-w-[100rem] mx-auto px-5">
 
             <div class="relative w-full md:w-[20%]">
-
-                <form action="/graficos" method="get" id="form-filtro">
-                    <select name="estado" id="estado" onchange="this.form.submit()"
-                        class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+                
+                  <select id="select-estado" name="estado"
+                        class="w-full bg-white text-[#0D1967] py-2 px-3 pr-10 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
                         <option value="">Selecionar Estado</option>
 
                         {% for est in estados %}
-                        <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{
-                            est['uf'] }})</option>
+                        <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{ est['uf'] }})</option>
                         {% endfor %}
 
                     </select>
 
+                    <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
 
-
-                    <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-
-                        ▼
-
-                    </span>
-                </form>
             </div>
-
-
 
             <div class="relative w-full md:w-[20%]">
 
-                <select name="partido" id="estado" onchange="this.form.submit()"
-                    class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+               <select id="select-partido" name="partido"
+                    class="w-full bg-white text-[#0D1967] py-2 px-3 pr-10 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
 
                     <option value="">Selecionar partido</option>
 
                     {% for part in partidos %}
-                    <option value="{{ part['abreviacao'] }}" {{ 'selected' if partido==part['abreviacao'] }}>{{ part['nome'] }} ({{
-                        part['abreviacao'] }})</option>
+                    <option value="{{ part['abreviacao'] }}" {{ 'selected' if partido==part['abreviacao'] }}>{{ part['nome'] }} ({{ part['abreviacao'] }})</option>
                     {% endfor %}
                 </select>
-                <span
-                    class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+                <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+            </div>
+        </section>
+    </div>
+    </form>
+
+    <!--Gráficos-->
+    <div class="w-full max-w-[100rem] mx-auto px-5">
+        <section class="bg-white p-8 rounded-2xl shadow-card mb-8">
+
+            <!-- Tabs + botão info -->
+            <div class="flex gap-4 mb-8 border-b border-gray-100 pb-4 items-center">
+                <button onclick="mostrarGrafico('projetos', this)" class="btn-tab px-4 py-2 font-bold text-dark-blue border-b-2 border-blue-600 transition-all">Projetos</button>
+                <button onclick="mostrarGrafico('presenca', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Presença</button>
+                <button onclick="mostrarGrafico('gastos', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Gastos</button>
+
+                <!-- Botão de info -->
+                <button onclick="abrirModal()" class="ml-2 size-6 rounded-full bg-radar text-white text-xs font-bold flex items-center justify-center hover:opacity-80 transition cursor-pointer" title="O que é este gráfico?">
+                    i
+                </button>
+            </div>
+
+            <div id="container-graficos">
+                <!--Gráfico 1: Projetos-->
+                <div id="box-projetos" class="grafico-box">
+                    <h2 class="text-xl font-bold text-dark-blue mb-6">Projetos aprovados <span class="font-normal text-lg">por partido</span></h2>
+                    {% if grafico_projetos %}
+                    <img src="data:image/png;base64,{{ grafico_projetos }}" class="w-full h-auto">
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10">Nenhuma proposição aprovada encontrada.</p>
+                    {% endif %}
+                </div>
+                <!--Gráfico 2: Presença-->
+                <div id="box-presenca" class="grafico-box hidden">
+                    <h2 class="text-xl font-bold text-dark-blue mb-6">Presença <span class="font-normal text-lg">por partido</span></h2>
+                    {% if grafico_presenca %}
+                    <img src="data:image/png;base64,{{ grafico_presenca }}" class="w-full h-auto">
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10">Nenhuma presença encontrada.</p>
+                    {% endif %}
+                </div>
+                <!--Gráfico 3: Gastos-->
+                <div id="box-gastos" class="grafico-box hidden">
+                    <h2 class="text-xl font-bold text-dark-blue mb-6">Gastos <span class="font-normal text-lg">por partido</span></h2>
+                    {% if grafico_gastos %}
+                    <img src="data:image/png;base64,{{ grafico_gastos }}" class="w-full h-auto">
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10">Nenhum gasto encontrado.</p>
+                    {% endif %}
+                </div>
             </div>
         </section>
     </div>
 
-
-    <!--Gráficos (imagens representativas)-->
-    
-    <div class="w-full max-w-[100rem] mx-auto px-3 md:px-5">
-    <section class="bg-white p-4 md:p-8 rounded-2xl shadow-card mb-8">
-        
-        <div class="flex gap-4 mb-8 border-b border-gray-100 pb-4 overflow-x-auto scrollbar-none whitespace-nowrap">
-            <button onclick="mostrarGrafico('projetos', this)" class="btn-tab px-4 py-2 font-bold text-dark-blue border-b-2 border-blue-600 transition-all">Projetos</button>
-            <button onclick="mostrarGrafico('presenca', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Presença</button>
-            <button onclick="mostrarGrafico('gastos', this)" class="btn-tab px-4 py-2 font-bold text-gray-400 hover:text-dark-blue transition-all">Gastos</button>
+    <!-- Modal de informação -->
+    <div id="modal-info" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full mx-4 relative">
+            <button onclick="fecharModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
+            <div id="modal-conteudo"></div>
         </div>
+    </div>
 
-        <div id="container-graficos">
-            <!--Gráfico 1: Projetos-->
-            <div id="box-projetos" class="grafico-box">
-                <h2 class="text-xl font-bold text-dark-blue mb-6">Projetos aprovados <span class="font-normal text-lg">por partido</span></h2>
-                {% if grafico_projetos %}
-                <div class="w-full overflow-x-auto pb-2">
-                    <img src="data:image/png;base64,{{ grafico_projetos }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
-                </div>
-                {% else %}
-                <p class="text-gray-400 text-center py-10">Nenhuma proposição aprovada encontrada.</p>
-                {% endif %}
-            </div>
-            <!--Gráfico 2: Presença-->
-            <div id="box-presenca" class="grafico-box hidden">
-                <h2 class="text-xl font-bold text-dark-blue mb-6">Presença <span class="font-normal text-lg">por partido</span></h2>
-                {% if grafico_presenca %}
-                <div class="w-full overflow-x-auto pb-2">
-                    <img src="data:image/png;base64,{{ grafico_presenca }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
-                </div>
-                {% else %}
-                <p class="text-gray-400 text-center py-10">Nenhuma presença encontrada.</p>
-                {% endif %}
-            </div>
-            <!--Gráfico 3: Gastos-->
-           <div id="box-gastos" class="grafico-box hidden">
-                <h2 class="text-xl font-bold text-dark-blue mb-6">Gastos <span class="font-normal text-lg">por partido</span></h2>
-                {% if grafico_gastos %}
-                <div class="w-full overflow-x-auto pb-2">
-                    <img src="data:image/png;base64,{{ grafico_gastos }}" class="min-w-[600px] md:min-w-0 w-full h-auto object-contain">
-                </div>
-                {% else %}
-                <p class="text-gray-400 text-center py-10">Nenhum gasto encontrado.</p>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-</div>
+</main>
 
 <script>
+const infoGraficos = {
+    projetos: {
+        titulo: 'Projetos Aprovados',
+        texto: 'Mostra a quantidade de projetos de lei que foram aprovados e transformados em norma jurídica. Permite comparar o desempenho legislativo entre partidos ou estados, dependendo dos filtros selecionados.'
+    },
+    presenca: {
+        titulo: 'Presença',
+        texto: 'Exibe a taxa média de assiduidade dos deputados nas sessões da Câmara. Uma presença alta indica maior participação nas votações e atividades parlamentares.'
+    },
+    gastos: {
+        titulo: 'Gastos',
+        texto: 'Representa o total de despesas parlamentares (cota parlamentar) utilizadas pelos deputados. Inclui gastos com transporte, alimentação, hospedagem e outros itens previstos pela cota.'
+    }
+};
+
+let graficoAtivo = 'projetos';
+
 function mostrarGrafico(id, btnElement) {
-    
+    graficoAtivo = id;
     document.querySelectorAll('.grafico-box').forEach(box => box.classList.add('hidden'));
-    
-    
     document.getElementById('box-' + id).classList.remove('hidden');
-    
-    
     document.querySelectorAll('.btn-tab').forEach(btn => {
         btn.classList.remove('border-b-2', 'border-blue-600', 'text-dark-blue');
         btn.classList.add('text-gray-400');
     });
-    
-    
     btnElement.classList.remove('text-gray-400');
     btnElement.classList.add('border-b-2', 'border-blue-600', 'text-dark-blue');
 }
+
+function abrirModal() {
+    const info = infoGraficos[graficoAtivo];
+    document.getElementById('modal-conteudo').innerHTML = `
+        <h2 class="text-xl font-bold text-dark-blue mb-3">${info.titulo}</h2>
+        <p class="text-gray-600 leading-relaxed">${info.texto}</p>
+    `;
+    const modal = document.getElementById('modal-info');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function fecharModal() {
+    const modal = document.getElementById('modal-info');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+document.getElementById('modal-info').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-info')) fecharModal();
+});
 </script>
 
 {% block extra_js %}
-<!--JS do drowndown do filtro-->
+<!--JS do dropdown do filtro-->
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('btn-deputados');
-        const menu = document.getElementById('menu-deputados');
-        const seta = document.getElementById('seta');
+document.addEventListener('DOMContentLoaded', () => {
+    const formFiltro = document.getElementById('form-filtro');
+    const selectEstado = document.getElementById('select-estado');
+    const selectPartido = document.getElementById('select-partido');
 
+    const estadosOriginais = Array.from(selectEstado.options).map(opt => ({
+        value: opt.value,
+        text: opt.text
+    }));
 
-        //Código do filtro de estado e partido
-        const setupSelect = (btnId, menuId) => {
-            const b = document.getElementById(btnId);
-            const m = document.getElementById(menuId);
-            if (!b || !m) return;
+    const partidosOriginais = Array.from(selectPartido.options).map(opt => ({
+        value: opt.value,
+        text: opt.text
+    }));
 
-            b.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Fecha outros menus antes de abrir este
-                document.querySelectorAll('.dropdown-select').forEach(el => {
-                    if (el !== m) el.classList.add('hidden');
+    function atualizarFiltros() {
+        fetch(`/api/filtros-dinamicos?estado=${selectEstado.value}&partido=${selectPartido.value}`)
+            .then(res => res.json())
+            .then(data => {
+                const estadoAtual = selectEstado.value;
+                selectEstado.innerHTML = '';
+                estadosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.estados.includes(opt.value)) {
+                        selectEstado.innerHTML += `
+                            <option value="${opt.value}" ${opt.value === estadoAtual ? 'selected' : ''}>
+                                ${opt.text}
+                            </option>`;
+                    }
                 });
-                m.classList.toggle('hidden');
-            });
 
-            //Atualiza o texto do botão ao clicar em uma opção
-            m.querySelectorAll('li').forEach(item => {
-                item.addEventListener('click', () => {
-                    b.querySelector('.btn-text').innerText = item.innerText;
-                    m.classList.add('hidden');
+                const partidoAtual = selectPartido.value;
+                selectPartido.innerHTML = '';
+                partidosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.partidos.includes(opt.value.toUpperCase())) {
+                        selectPartido.innerHTML += `
+                            <option value="${opt.value}" ${opt.value === partidoAtual ? 'selected' : ''}>
+                                ${opt.text}
+                            </option>`;
+                    }
                 });
             });
-        };
+    }
 
-        setupSelect('btn-estado', 'menu-estado');
-        setupSelect('btn-partido', 'menu-partido');
+    let timerBusca;
+    const TEMPO_ESPERA = 1000;
 
-        // Fechar tudo ao clicar fora
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown-select').forEach(m => m.classList.add('hidden'));
-            if (menu) menu.classList.add('hidden');
-            if (seta) seta.classList.remove('rotate-180');
-        });
+    function iniciarTimer() {
+        clearTimeout(timerBusca);
+        timerBusca = setTimeout(() => {
+            formFiltro.submit();
+        }, TEMPO_ESPERA);
+    }
+
+    function pausarTimer() {
+        clearTimeout(timerBusca);
+    }
+
+    selectEstado.addEventListener('change', () => {
+        atualizarFiltros();
+        iniciarTimer();
     });
+
+    selectPartido.addEventListener('change', () => {
+        atualizarFiltros();
+        iniciarTimer();
+    });
+
+    selectEstado.addEventListener('focus', pausarTimer);
+    selectPartido.addEventListener('focus', pausarTimer);
+
+    selectEstado.addEventListener('blur', iniciarTimer);
+    selectPartido.addEventListener('blur', iniciarTimer);
+});
 </script>
+
 <script>
-  // Lê o parâmetro ?tab= da URL
-  const params = new URLSearchParams(window.location.search);
-  const tab = params.get('tab');
-
-  // Esconde todos os gráficos
-  document.querySelectorAll('.grafico-box').forEach(box => {
-    box.classList.add('hidden');
-  });
-
-  // Mostra o gráfico correspondente ao tab, ou projetos por padrão
-  const alvo = document.getElementById('box-' + tab) || document.getElementById('box-projetos');
-  if (alvo) alvo.classList.remove('hidden');
-
-  // Atualiza o estilo do botão de navegação ativo (se houver tabs/nav na página)
-  document.querySelectorAll('[data-tab]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === tab);
-  });
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    document.querySelectorAll('.grafico-box').forEach(box => {
+        box.classList.add('hidden');
+    });
+    const alvo = document.getElementById('box-' + tab) || document.getElementById('box-projetos');
+    if (alvo) alvo.classList.remove('hidden');
+    document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
 </script>
 {% endblock %}
 

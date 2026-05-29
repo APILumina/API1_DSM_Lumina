@@ -18,17 +18,28 @@
             --color-verde: #34C560;
         }
         .shadow-card { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+        #barra-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: #efc33c;
+        z-index: 9999;
+        transition: width 0.3s ease;
+        }
     </style>
 
     {% block extra_style %}{% endblock %}
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
+    <div id="barra-loading"></div>
     {% set autocomplete_id = 'navbar' %}
     {% include 'partials/_navbar.html' %}
     {% include 'partials/_navbar-bottom.html' %}
 
-    <main class="flex-grow">
+   <main class="flex-grow pb-24 lg:pb-0 pt-20 lg:pt-0">
         {% block content %}{% endblock %}
     </main>
 
@@ -65,9 +76,29 @@
         </div>
     </footer>
 
-    <script>
-    </script>
+
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+
+    <script>
+    
+    const barra = document.getElementById('barra-loading');
+
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && link.href && !link.href.startsWith('#') && link.target !== '_blank') {
+            barra.style.width = '70%';
+            barra.style.opacity = '1';
+        }
+    });
+
+    window.addEventListener('load', () => {
+        barra.style.width = '100%';
+        setTimeout(() => {
+            barra.style.opacity = '0';
+            setTimeout(() => barra.style.width = '0%', 300);
+        }, 200);
+    });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

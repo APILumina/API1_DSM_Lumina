@@ -22,6 +22,16 @@
 
     <div class="absolute top-1/2 bg-white w-full h-1/2 hidden js-autocomplete-overlay -z-1"></div>
     <div class="absolute top-full bg-white w-full h-fit text-black rounded-b-3xl hidden js-autocomplete-dropdown flex-col overflow-hidden border-t border-gray-200 shadow-xl max-h-100 overflow-y-auto scrollbar-thin scrollbar-thumb-radar">
+    
+    
+        <div class="js-autocomplete-loading items-center justify-center gap-2 py-5 text-gray-400" style="display:none">
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 3 2.373 3 5.373 3 5.373 0 7.646 0 12h4z"></path>
+            </svg>
+            <span class="text-sm">Buscando...</span>
+        </div>
+
         <ul class="js-autocomplete-list list-none p-0 pb-3 m-0 w-full divide-y divide-gray-100
             [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:px-3 [&>li>a]:py-3 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors
             [&>li>a>img]:w-11 [&>li>a>img]:h-11 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover

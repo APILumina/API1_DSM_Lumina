@@ -3,70 +3,61 @@
 
 {% block extra_style %}
 <style>
-  /* animação seta menu */
   .menu-anim {
     transition: all 0.3s ease;
   }
 </style>
 {% endblock %}
-
+  
 
 {% block content %}
 
-<!-- TÍTULO E FILTROS -->
+<!-- TÍTULO  -->
+<div class="bg-white px-5 pt-8 pb-4 max-w-[100rem] mx-auto">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-dark-blue tracking-tight">
+    Deputados federais por estado
+  </h1>
+</div>
+
+<!-- FILTROS -->
 <form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro" class="bg-white">
-  <div class="p-5 max-w-[100rem] mx-auto">
-    <h2 class="text-[#0D1967] text-[2.2rem] mb-2" style="font-family: 'Passion One'">
-      Deputados Federais por Estado
-    </h2>
-    <!-- FILTRO --> 
+  <div class="px-5 pb-5 pt-4 max-w-[100rem] mx-auto">
 
-    <div class="flex gap-[2%]">
-
-
+    <div class="flex gap-y-3 gap-x-[2%] flex-wrap sm:flex-nowrap">
 
       <!-- ESTADO -->
-
-
-      <div class="relative w-full md:w-[20%]">
-
-
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
         <select name="estado" id="estado" onchange="this.form.submit()"
           class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-
           <option value="">Selecionar Estado</option>
-
           {% for est in estados %}
-          <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{
-            est['uf'] }})</option>
+          <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{ est['uf'] }})</option>
           {% endfor %}
-
         </select>
-
-
-
-        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-
-          ▼
-
-        </span>
-
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
       </div>
 
-
-
       <!-- PARTIDOS -->
-
-      <div class="relative w-full md:w-[20%]">
-
-        <select name="partido" id="estado" onchange="this.form.submit()"
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
+        <select name="partido" id="partido" onchange="this.form.submit()"
           class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-
-          <option value="">Selecionar partido</option>
-
+          <option value="">Selecionar Partido</option>
           {% for part in partidos %}
-          <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{
-            part['abreviacao'] }})</option>
+          <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{ part['abreviacao'] }})</option>
+          {% endfor %}
+        </select>
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+      </div>
+
+      <!-- TEMAS -->
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
+        <select name="tema" id="tema" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+          <option value="">Selecionar Tema</option>
+          {% for tema_item in temas %}
+            <option value="{{ tema_item['cd_tp_temas'] }}" {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
+              {{ tema_item['tipo'] }}
+            </option>
           {% endfor %}
         </select>
         <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
@@ -75,13 +66,14 @@
     </div>
   </div>
 </form>
-  {% if not deputados %}
-  <div id="erro-nao-encontrado" class="flex flex-col items-center justify-center p-10 text-center max-w-[100rem] mx-auto">
-    <div class="text-red-500 text-5xl mb-4">⚠️</div>
-    <h3 class="text-[#0D1967] text-2xl font-bold mb-2">Erro: Deputado inexistente / não encontrado</h3>
-    <p class="text-gray-500">Tente ajustar os filtros ou digitar outro nome na busca.</p>
-  </div>
-  {% endif %}
+
+{% if not deputados %}
+<div id="erro-nao-encontrado" class="flex flex-col items-center justify-center p-10 text-center max-w-[100rem] mx-auto">
+  <div class="text-red-500 text-5xl mb-4">⚠️</div>
+  <h3 class="text-[#0D1967] text-2xl font-bold mb-2">Erro: Deputado inexistente / não encontrado</h3>
+  <p class="text-gray-500">Tente ajustar os filtros ou digitar outro nome na busca.</p>
+</div>
+{% endif %}
 
 <div id="lista-deputados"
   class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
@@ -91,7 +83,7 @@
       <div class="p-6">
         <img src="{{ deputado['imagem_deputado'] }}"
           class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-        <p class="text-[#0D1967] font-passion-one">{{ deputado['nome_eleitoral'] }} </p>
+        <p class="text-[#0D1967] font-passion-one">{{ deputado['nome_eleitoral'] }}</p>
         <p class="text-[#0D1967] font-passion-one">{{ deputado['partido'] }}</p>
       </div>
     </div>
@@ -106,7 +98,6 @@
 {% block extra_js %}
 <script>
   const parametros = new URLSearchParams(window.location.search);
-
   const pesquisa = parametros.get('pesquisa');
 
   if (!pesquisa) {
@@ -119,20 +110,19 @@
       const sentinela = document.getElementById('sentinela');
       const loader = document.getElementById('loader');
 
-      // Função que cria o HTML do card (ajuste as classes conforme seu design)
       function criarCard(deputado) {
         return `
-              <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
-                  <div class="p-6">
-                    <img src="${deputado.imagem_deputado}"
-                    class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-                    <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral} </p>
-                    <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
-                  </div>
-                </div>
-              </a>
-          `;
+          <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+              <div class="p-6">
+                <img src="${deputado.imagem_deputado}"
+                class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+                <p class="text-[#0D1967] font-passion-one">${deputado.nome_eleitoral}</p>
+                <p class="text-[#0D1967] font-passion-one">${deputado.partido}</p>
+              </div>
+            </div>
+          </a>
+        `;
       }
 
       async function carregarMaisDeputados() {
@@ -142,7 +132,6 @@
         loader.classList.remove('hidden');
         paginaAtual++;
 
-        // Pega os filtros atuais da URL para manter a busca consistente
         const params = new URLSearchParams(window.location.search);
         params.set('page', paginaAtual);
 
@@ -165,7 +154,6 @@
         }
       }
 
-      // INTERSECTION OBSERVER: O vigia do fim da página
       const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           carregarMaisDeputados();

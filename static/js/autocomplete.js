@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dropdown = container.querySelector('.js-autocomplete-dropdown');
     const overlay = container.querySelector('.js-autocomplete-overlay');
     const list = container.querySelector('.js-autocomplete-list');
-
+    const loading = container.querySelector('.js-autocomplete-loading');
     let debounceTimer;
 
     function abrirDropdown() {
@@ -27,7 +27,18 @@ document.addEventListener("DOMContentLoaded", () => {
       overlay?.classList.add('hidden');
     }
 
+    function mostrarLoading() {
+      list.innerHTML = '';
+      loading.style.display = 'flex';
+      abrirDropdown();
+    }
+
+    function esconderLoading() {
+      loading.style.display = 'none';
+    }
+
     function renderizarResultados(deputados, query) {
+      esconderLoading();
       if (deputados.length === 0) {
         list.innerHTML = `
           <li class="text-center text-gray-500 py-3 px-6">
@@ -51,11 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function buscar(query) {
+      mostrarLoading();
       try {
         const res = await fetch(`/autocomplete?pesquisa=${encodeURIComponent(query)}`);
         const dados = await res.json();
         renderizarResultados(dados, query);
       } catch (err) {
+        esconderLoading();
         console.error('Erro no autocomplete:', err);
       }
     }
@@ -66,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (query.length < 2) {
         fecharDropdown();
         list.innerHTML = '';
+        esconderLoading();
         return;
       }
       debounceTimer = setTimeout(() => buscar(query), 300);
@@ -118,12 +132,21 @@ document.addEventListener("DOMContentLoaded", () => {
         listaMobile.innerHTML = '';
         return;
       }
+      listaMobile.innerHTML = `
+        <li class="flex items-center justify-center gap-2 py-5 text-gray-400">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 3 2.373 3 5.373 3 5.373 0 7.646 0 12h4z"></path>
+          </svg>
+          <span class="text-sm">Buscando...</span>
+        </li>`;
       debounceTimer = setTimeout(async () => {
         try {
           const res = await fetch(`/autocomplete?pesquisa=${encodeURIComponent(query)}`);
           const dados = await res.json();
           renderizarMobile(dados, query);
         } catch (err) {
+          listaMobile.innerHTML = '';
           console.error('Erro no autocomplete mobile:', err);
         }
       }, 300);
