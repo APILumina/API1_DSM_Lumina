@@ -159,8 +159,9 @@
       loader.classList.remove('hidden');
       paginaAtual++;
 
-      const params = new URLSearchParams(window.location.search);
-      params.set('page', paginaAtual);
+        // Preserva todos os parâmetros da URL
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', paginaAtual);
 
       try {
         const response = await fetch(`/dados/deputados?${params.toString()}`);
