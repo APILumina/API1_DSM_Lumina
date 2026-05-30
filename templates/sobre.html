@@ -62,14 +62,16 @@
             <div class="max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5">
                 <h3 class="text-xl sm:text-2xl font-bold mb-2">Cálculo do Índice Geral de Desempenho (IGD)</h3>
                 <div class="p-3 rounded-2xl border-solid border-gray-300 border-1 w-fit max-w-full mx-auto my-5 overflow-x-auto">
-                    $$Score_{Final} = (0.2 \cdot Presença) + (0.2 \cdot Economia) + (0.6 \cdot Produção_{Legislativa})$$
+                     $$Score_{Final} = (0.3 \cdot Presença) + (0.7 \cdot Produção_{Legislativa}) + Bônus$$
                 </div>
 
                 <p class="text-base sm:text-lg text-justify font-medium">Onde:</p>
                 <ul class="text-base sm:text-lg text-justify font-medium list-disc list-inside space-y-1">
-                    <li>Produção Legislativa/Proposições  (representa 60% da nota final): O foco principal é o que o deputado entrega (Projetos/Proposições).</li>
-                    <li>Presença  (representa 20% da nota final): O compromisso básico de estar nas sessões.</li>
-                    <li>Economia (representa 20% da nota final): O respeito ao dinheiro público. Quanto mais ele economiza, maior será a nota.</li>
+                    <li>Produção Legislativa/Proposições  (representa 70% da nota final): O foco principal é o que o deputado entrega (Projetos/Proposições).</li>
+                    <li>Presença  (representa 30% da nota final): O compromisso básico de estar nas sessões.</li>
+                    <li>Bônus de Economia (representa até 1.0 ponto de bônus na nota final): O respeito ao dinheiro público. Quanto mais ele economiza, maior será a nota.</li>
+                    <li>Bônus de Cargos em Comissão (representa até 1.0 ponto de bônus na nota final).</li>
+                    <li>Bônus de Projeto aprovado (representa até 0.5 ponto de bônus na nota final).</li>
                 </ul>
             </div>
 
@@ -100,7 +102,7 @@
                 </div>
 
                 <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mt-6">
-                    Logo, projetos que tratam de direitos fundamentais (como Saúde e Segurança) recebem peso máximo (1.0). Temas que não constam nos artigos 5º e 6º, mas constam na Constituição recebem peso 0.5, pois estão sujeitos aos artigos 5º e 6º, assim entendemos que há uma hierarquia e que seu peso e impacto na vida do cidadão é menor. Por fim, atos simbólicos e meramente administrativos que nem sequer são citados na Constituição recebem nota menor de 0.10.
+                    Logo, projetos que tratam de direitos fundamentais (como Saúde e Segurança) recebem peso máximo (1.0). Temas que não constam nos artigos 5º e 6º, mas constam na Constituição recebem peso 0.5, pois estão sujeitos aos artigos 5º e 6º, assim entendemos que há uma hierarquia e que seu peso e impacto na vida do cidadão é menor. Por fim, atos simbólicos e meramente administrativos que nem sequer são citados na Constituição recebem nota 0.
                 </p>                 
             </div>      
 
@@ -128,7 +130,7 @@
                                     <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">34 (Adm. Pública), 35 (Cultura), 37 (Comunicações), 40 (Economia), 41 (Cidades), 42 (Cível), 43 (Penal), 48 (Meio Ambiente), 51 (Fundiária), 53 (Processo Leg.), 54 (Energia), 55 (Relações Internacionais), 60 (Turismo), 62 (Ciência e Tec.), 66 (Indústria), 68 (Constitucional), 70 (Finanças), 74 (Política), 76 (Justiça), 85 (Exatas), 86 (Humanas).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Não Citados (0.1)</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Não Citados (0)</td>
                                     <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Atos Simbólicos, ritos honoríficos e datas comemorativas sem previsão de alteração em direitos ou deveres.</td>
                                     <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">72 (Homenagens e Datas Comemorativas).</td>
                                 </tr>
@@ -241,6 +243,77 @@
                     </div>
 
                 </div>
+                <div class="max-w-6xl mx-auto w-full px-5">
+                    <h3 class="text-2xl font-bold mb-2">Presença Parlamentar</h3>
+                    <p class="text-lg text-justify font-medium mb-4">Usamos os dados de votações para calcular a presença dos deputados. Consideramos presença a obrigação e compromisso básico do deputado, dando a ela a importância de 30% da nota final do deputado.
+                    </p>
+                </div>
+
+                <!--Pesos para cargo-->
+                <div class="max-w-6xl mx-auto w-full px-5">
+                    <h3 class="text-2xl font-bold mb-2">Bônus para cargos em Comissão</h3>
+                    <p class="text-lg text-justify font-medium mb-4">Bonificamos os deputados que ocupam posição em Comissões, pois essa é uma forma de extrema importância para representar o povo em determinadas questões. 
+                    </p>
+                    <p class="text-lg text-justify font-medium">Dividimos em 5 cargos, baseadas na sua ordem de responsabilidade e liderança. 
+                    </p>
+                
+                </div>
+
+                <div class="max-w-6xl mx-auto w-full my-4 px-5">
+    
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
+                        <table class="w-full text-left border-collapse bg-white text-base">
+                            <thead class="bg-[#1A249D] text-white">
+                                <tr>
+                                    <th class="px-6 py-4 font-bold tracking-wider">Cargo Ocupado no Órgão/Comissão</th>
+                                    <th class="px-6 py-4 font-bold tracking-wider">Nota (Peso)</th>
+                                    <th class="px-6 py-4 font-bold tracking-wider">O que significa na prática</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 font-medium text-gray-700">
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Presidente</td>
+                                    <td class="px-6 py-4 text-justify">1.00</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">Liderança Máxima: Responsável por dirigir os trabalhos da comissão, definir a pauta de votações e coordenar os debates do colegiado.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Relator</td>
+                                    <td class="px-6 py-4 text-justify">0.85</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">Articulação Técnica: Parlamentar encarregado de examinar o projeto e redigir o parecer final que recomenda sua aprovação ou rejeição.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">1º Vice-Presidente</td>
+                                    <td class="px-6 py-4 text-justify">0.75</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">Substituição Direta: Primeiro na linha de sucessão para assumir o comando dos trabalhos e a condução da pauta na ausência do Presidente.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">2º / 3º Vice-Presidente</td>
+                                    <td class="px-6 py-4 text-justify">0.50</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">Suporte à Mesa: Auxiliam na mesa diretora da comissão e substituem a presidência em ausências concomitantes dos membros anteriores.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Titular / Suplente</td>
+                                    <td class="px-6 py-4 text-justify">0.25</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">Membros Integrantes: Compõem o corpo da comissão participando das discussões, com o titular detendo o direito a voto imediato nas deliberações.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="max-w-6xl mx-auto w-full px-5">
+                    <h3 class="text-2xl font-bold mb-2">Bônus para economia</h3>
+                    <p class="text-lg text-justify font-medium mb-4"> Consideramos o respeito ao dinheiro público de extrema importância. Por isso, bonificamos os deputados que economizam a cota parlamentar, de forma proporcional. Ou seja, quanto mais ele economiza, maior é o bonus - limitado a 1.0 ponto.
+                    </p>
+                </div>
+
+                <div class="max-w-6xl mx-auto w-full px-5">
+                    <h3 class="text-2xl font-bold mb-2">Bônus para projeto aprovado</h3>
+                    <p class="text-lg text-justify font-medium mb-4"> Caso o deputado possua projetos aprovados, ele recebe + 0.5 pontos de bônus.
+                    </p>
+                </div>
+
         </section>
 
 
