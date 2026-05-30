@@ -7,31 +7,6 @@
   <title>Radar Cidadão</title>
   <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("btn-deputados");
-      const menu = document.getElementById("menu-deputados");
-      const seta = document.getElementById("seta");
-
-      if (btn && menu) {
-        seta.addEventListener("click", (e) => {
-          e.stopPropagation();
-          console.log("Botão clicado!");
-          menu.classList.toggle("hidden");
-          seta.classList.toggle("rotate-180");
-        });
-
-        document.addEventListener("click", (e) => {
-          if (!menu.contains(e.target) && !btn.contains(e.target)) {
-            menu.classList.add("hidden");
-            seta.classList.remove("rotate-180");
-          }
-        });
-      } else {
-        console.error("Erro: Elementos não encontrados. Verifique os IDs.");
-      }
-    });
-  </script>
 
   <style type="text/tailwindcss">
     @theme {
@@ -75,7 +50,6 @@
         </div>
         
         <div class="relative flex-1">
-          <!-- ✅ id adicionado -->
           <select id="select-estado" name="estado"
           class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
             <option value="">Selecionar Estado</option>
@@ -91,7 +65,6 @@
         </div>
         
         <div class="relative flex-1">
-          <!-- ✅ id adicionado -->
           <select id="select-partido" name="partido"
           class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
             <option value="">Partido</option>
@@ -135,8 +108,6 @@
                 .then(data => {
                     const estadoAtual = selectEstado.value;
                     selectEstado.innerHTML = '';
-                    console.log("data.partidos:", data.partidos);
-                    console.log("opt.values:", partidosOriginais.map(o => o.value));
                     
                     estadosOriginais.forEach(opt => {
                         if (opt.value === "" || data.estados.includes(opt.value)) {
@@ -205,76 +176,81 @@
       </div>
     </div>
 
-
+    <!--Botões Temas-->
     <div class="w-full max-w-[100rem] mx-auto px-5">
       <h2 class="text-dark-blue my-10 md:mt-15 md:mb-6 text-2xl md:text-3xl font-bold">
         Veja sobre os temas:
       </h2>
       
-   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-15
-       [&_a]:w-full [&_a]:flex
-       [&_button]:flex [&_button]:items-center [&_button]:text-left [&_button]:gap-4 [&_button]:p-4 
-       [&_button]:bg-gray-50 [&_button]:border [&_button]:border-gray-200 
-       [&_button]:shadow-md [&_button]:rounded-2xl [&_button]:w-full [&_button]:h-full
-       [&_button]:cursor-pointer [&_button]:hover:scale-105 [&_button]:duration-300
-       [&_img]:w-9 [&_img]:h-9 [&_img]:object-contain [&_img]:shrink-0
-       [&_span]:text-base sm:[&_span]:text-lg [&_span]:font-medium [&_span]:leading-snug">
-      
-       <a href="{{ url_for('route.deputados', tema='Saude_e_educacao') }}">
-      <button>
-        <img src="../static/img/icones/saude e educação.png" alt="saude">
-        <span>Saúde e Educação</span>
-      </button>
-    </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Economia_e_desenvolvimento') }}">
-          <button>
-            <img src="../static/img/icones/economia.png" alt="economia">
-            <span>Economia e Desenvolvimento</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Ciencias') }}">
-          <button>
-            <img src="../static/img/icones/ciencia.png" alt="ciencia">
-            <span>Ciências</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Infraestrutura_e_tecnologia') }}">
-          <button>
-            <img src="../static/img/icones/tecnologia.png" alt="tecnologia">
-            <span>Infraestrutura e Tecnologia</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', '?tab=' tema='Natureza_e_produção') }}">
-          <button>
-            <img src="../static/img/icones/natureza.png" alt="natureza">
-            <span>Natureza e Produção</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Direitos, justiça_e_cidadania') }}">
-          <button>
-            <img src="../static/img/icones/direitos e justiça.png" alt="direitos">
-            <span>Direitos, Justiça e Cidadania</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Gestao publica_e_politica') }}">
-          <button>
-            <img src="../static/img/icones/gestão publica.png" alt="gestão">
-            <span>Gestão pública e Política</span>
-          </button>
-        </a>
-        
-        <a href="{{ url_for('route.deputados', tema='Cultura_lazer_e_seguranca') }}">
-          <button>
-            <img src="../static/img/icones/cultura.png" alt="cultura">
-            <span>Cultura, Lazer e Segurança</span>
-          </button>
-        </a>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-15
+         [&_button]:flex [&_button]:items-center [&_button]:text-left [&_button]:gap-4 [&_button]:p-4 
+         [&_button]:bg-gray-50 [&_button]:border [&_button]:border-gray-200 
+         [&_button]:shadow-md [&_button]:rounded-2xl [&_button]:w-full [&_button]:h-full
+         [&_button]:cursor-pointer [&_button]:hover:scale-105 [&_button]:duration-300
+         [&_button]:transition-colors
+         [&_img]:w-9 [&_img]:h-9 [&_img]:object-contain [&_img]:shrink-0
+         [&_span]:text-base [&_span]:font-medium [&_span]:leading-snug">
+
+        <!-- Cada botão abre um modal com os sub-temas daquela categoria -->
+
+        <button onclick="abrirModal('Saúde e educação', 'Saúde e Educação')">
+          <img src="{{ url_for('static', filename='img/icones/saude e educação.png') }}" alt="saude">
+          <span>Saúde e Educação</span>
+        </button>
+
+        <button onclick="abrirModal('Economia e desenvolvimento', 'Economia e Desenvolvimento')">
+          <img src="{{ url_for('static', filename='img/icones/economia.png') }}" alt="economia">
+          <span>Economia e Desenvolvimento</span>
+        </button>
+
+        <button onclick="abrirModal('Ciências', 'Ciências')">
+          <img src="{{ url_for('static', filename='img/icones/ciencia.png') }}" alt="ciencia">
+          <span>Ciências</span>
+        </button>
+
+        <button onclick="abrirModal('Infraestrutura e tecnologia', 'Infraestrutura e Tecnologia')">
+          <img src="{{ url_for('static', filename='img/icones/tecnologia.png') }}" alt="tecnologia">
+          <span>Infraestrutura e Tecnologia</span>
+        </button>
+
+        <button onclick="abrirModal('Natureza e produção', 'Natureza e Produção')">
+          <img src="{{ url_for('static', filename='img/icones/natureza.png') }}" alt="natureza">
+          <span>Natureza e Produção</span>
+        </button>
+
+        <button onclick="abrirModal('Direitos, justiça e cidadania', 'Direitos, Justiça e Cidadania')">
+          <img src="{{ url_for('static', filename='img/icones/direitos e justiça.png') }}" alt="direitos">
+          <span>Direitos, Justiça e Cidadania</span>
+        </button>
+
+        <button onclick="abrirModal('Gestão pública e política', 'Gestão Pública e Política')">
+          <img src="{{ url_for('static', filename='img/icones/gestão publica.png') }}" alt="gestão">
+          <span>Gestão Pública e Política</span>
+        </button>
+
+        <button onclick="abrirModal('Cultura, lazer e segurança', 'Cultura, Lazer e Segurança')">
+          <img src="{{ url_for('static', filename='img/icones/cultura.png') }}" alt="cultura">
+          <span>Cultura, Lazer e Segurança</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ===== MODAL DE SUB-TEMAS ===== -->
+    <div id="modal-temas" class="fixed inset-0 z-50 hidden items-center justify-center">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black/50" onclick="fecharModal()"></div>
+      <!-- Caixa do modal -->
+      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 z-10">
+        <!-- Cabeçalho -->
+        <div class="flex items-center justify-between mb-2">
+          <h2 id="modal-titulo" class="text-xl font-bold text-[#081638]"></h2>
+          <button onclick="fecharModal()"
+            class="text-gray-400 hover:text-gray-700 text-3xl leading-none cursor-pointer transition-colors">&times;</button>
+        </div>
+        <p class="text-sm text-gray-500 mb-4">Escolha um tema específico para filtrar os deputados:</p>
+        <!-- Lista de sub-temas gerada pelo JS -->
+        <ul id="modal-lista" class="space-y-2 max-h-72 overflow-y-auto pr-1"></ul>
       </div>
     </div>
 
@@ -282,6 +258,105 @@
 
   {% include 'partials/_footer.html' %}
   <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+
+  <script>
+    // Dicionário de temas 
+    
+    const TEMAS = {
+      "Gestão pública e política": [
+        ["Administração pública", 34],
+        ["Processo legislativo e atuação parlamentar", 52],
+        ["Finanças públicas e orçamento", 70],
+        ["Política, partidos e eleições", 74]
+      ],
+      "Direitos, justiça e cidadania": [
+        ["Direito constitucional", 68],
+        ["Direito civil e processual civil", 42],
+        ["Direito penal e processual penal", 43],
+        ["Direito e justiça", 76],
+        ["Direitos humanos e minorias", 44],
+        ["Direito e defesa do consumidor", 67]
+      ],
+      "Economia e desenvolvimento": [
+        ["Economia", 40],
+        ["Indústria, comércio e serviços", 66],
+        ["Relações internacionais e comércio exterior", 55],
+        ["Turismo", 60],
+        ["Trabalho e emprego", 58],
+        ["Previdência e assistência social", 51]
+      ],
+      "Infraestrutura e tecnologia": [
+        ["Cidades e desenvolvimento urbano", 41],
+        ["Viação, transporte e mobilidade", 61],
+        ["Energia, recursos hídricos e minerais", 54],
+        ["Comunicações", 37]
+      ],
+      "Natureza e produção": [
+        ["Meio ambiente e desenvolvimento sustentável", 48],
+        ["Agricultura, pecuária, pesca e extrativismo", 64],
+        ["Estrutura fundiária", 49]
+      ],
+      "Ciências": [
+        ["Ciências sociais e humanas", 86],
+        ["Ciências exatas e da terra", 85],
+        ["Ciência, tecnologia e inovação", 62]
+      ],
+      "Saúde e educação": [
+        ["Saúde", 56],
+        ["Educação", 46]
+      ],
+      "Cultura, lazer e segurança": [
+        ["Arte, cultura e religião", 35],
+        ["Esporte e lazer", 39],
+        ["Defesa e segurança", 57],
+        ["Homenagens e datas comemorativas", 72]
+      ]
+    };
+
+    // Abre o modal para a categoria 
+    function abrirModal(chaveCategoria, tituloExibicao) {
+      const subtemas = TEMAS[chaveCategoria];
+      if (!subtemas) return;
+
+      document.getElementById("modal-titulo").textContent = tituloExibicao;
+
+      const lista = document.getElementById("modal-lista");
+      lista.innerHTML = "";
+
+      subtemas.forEach(([nome, codigo]) => {
+        const li = document.createElement("li");
+        // Passa o código numérico do sub-tema — a rota deputados
+        const url = "/deputados?tema=" + codigo;
+        li.innerHTML = `
+          <a href="${url}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200
+                   hover:bg-[#1a249d] hover:text-white hover:border-[#1a249d] transition-colors duration-200 group">
+            <span class="w-2 h-2 rounded-full bg-[#efc33c] shrink-0 group-hover:bg-white transition-colors"></span>
+            <span class="text-sm font-medium">${nome}</span>
+          </a>
+        `;
+        lista.appendChild(li);
+      });
+
+      const modal = document.getElementById("modal-temas");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    // Fecha o modal
+    function fecharModal() {
+      const modal = document.getElementById("modal-temas");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    // Fechar com tecla Esc
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") fecharModal();
+    });
+  </script>
 </body>
 
 </html>

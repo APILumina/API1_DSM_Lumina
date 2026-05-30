@@ -12,7 +12,7 @@
 
 {% block content %}
 
-<!-- TÍTULO  -->
+<!-- TÍTULO -->
 <div class="bg-white">
   <h1 class="px-5 pt-8 pb-4 max-w-[100rem] mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
     Deputados federais por estado
@@ -22,6 +22,29 @@
 <!-- FILTROS -->
 <form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro" class="bg-white">
   <div class="px-5 pb-5 pt-4 max-w-[100rem] mx-auto">
+
+    <!-- Badge do tema ativo — aparece somente quando há tema selecionado -->
+    {% if tema %}
+    <div class="flex items-center gap-2 mb-4">
+      <span class="inline-flex items-center gap-2 bg-[#1a249d] text-white text-sm font-semibold px-4 py-1.5 rounded-full">
+        <!-- Nome do sub-tema ativo buscado da lista de temas -->
+        <span>
+          Tema:
+          {% for t in temas %}
+            {% if t['cd_tp_temas']|string == tema|string %}
+              {{ t['tipo'] }}
+            {% endif %}
+          {% endfor %}
+        </span>
+        <!-- Botão para remover o filtro de tema (mantém estado e partido se ativos) -->
+        <a href="{{ url_for('route.deputados', estado=estado, partido=partido) }}"
+           class="ml-1 hover:text-yellow-300 font-bold leading-none"
+           title="Remover filtro de tema">
+          &times;
+        </a>
+      </span>
+    </div>
+    {% endif %}
 
     <div class="flex gap-y-3 gap-x-[2%] flex-wrap sm:flex-nowrap">
 
@@ -49,13 +72,14 @@
         <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
       </div>
 
-      <!-- TEMAS -->
+      <!-- TEMAS (select com os 32 sub-temas do banco) -->
       <div class="relative w-full sm:w-[32%] md:w-[20%]">
         <select name="tema" id="tema" onchange="this.form.submit()"
           class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
           <option value="">Selecionar Tema</option>
           {% for tema_item in temas %}
-            <option value="{{ tema_item['cd_tp_temas'] }}" {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
+            <option value="{{ tema_item['cd_tp_temas'] }}"
+              {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
               {{ tema_item['tipo'] }}
             </option>
           {% endfor %}
@@ -132,6 +156,7 @@
         loader.classList.remove('hidden');
         paginaAtual++;
 
+        // Preserva todos os parâmetros da URL
         const params = new URLSearchParams(window.location.search);
         params.set('page', paginaAtual);
 
