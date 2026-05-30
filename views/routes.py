@@ -125,9 +125,116 @@ Temas = [
     }
 ]
 
+situacoes_projetos = {
+    "Aprovado": {
+        "codigos": [98, 114, 1140, 1230],
+        "ordem": 1,
+        "label": "Aprovado",
+        "cor": "green"
+    },
+    
+    "Em Votação": {
+        "codigos": [1150, 1160, 1200, 1201, 1210, 1220, 1221, 1223, 1294, 1300, 1301, 1302],
+        "ordem": 2,
+        "label": "Em votação",
+        "cor": "teal"
+    },
+    
+    "Preparação para Votação": {
+        "codigos": [904, 910, 927, 929, 932, 1020, 1040, 1052, 1060, 1070, 1080, 1270, 1290, 1291],
+        "ordem": 3,
+        "label": "Preparação para votação",
+        "cor": "orange"
+    },
+    
+    "Estágio Avançado": {
+        "codigos": [924],  # ✅ Só "Pronta para Pauta"
+        "ordem": 4,
+        "label": "Pronta para pauta",
+        "cor": "sky"
+    },
+    
+    "Enviado para Próximo Passo": {
+        "codigos": [926, 1293, 1299, 1303, 1305],
+        "ordem": 5,
+        "label": "Enviado para próximo passo",
+        "cor": "cyan"
+    },
+    
+    "Aguardando Comissões": {
+        "codigos": [901, 902, 906, 922, 1280, 1296],
+        "ordem": 6,
+        "label": "Aguardando comissões",
+        "cor": "blue"
+    },
+    
+    "Em Análise": {
+        "codigos": [903, 915, 928, 1090, 1091, 1297, 1313, 1314, 1380],
+        "ordem": 7,
+        "label": "Em análise",
+        "cor": "indigo"
+    },
+    
+    "Aguardando Designação": {
+        "codigos": [907, 911, 1170, 1185, 1180],
+        "ordem": 8,
+        "label": "Aguardando designação",
+        "cor": "amber"
+    },
+    
+    "Recém Protocolo": {
+        "codigos": [900, 912, 917, 1383],
+        "ordem": 9,
+        "label": "Recém protocolo",
+        "cor": "gray"
+    },
+    
+    "Rejeitado ou Devolvido": {
+        "codigos": [937, 939, 941, 950, 1222, 1292],
+        "ordem": 10,
+        "label": "Rejeitado ou devolvido",
+        "cor": "red"
+    },
+    
+    "Arquivado": {
+        "codigos": [923, 931, 940, 1250, 1260, 1360],
+        "ordem": 11,
+        "label": "Arquivado",
+        "cor": "slate"
+    },
+    
+    "Processos Especiais": {
+        "codigos": [1310, 1311, 1312, 1350, 1355, 1381, 1382, 1298],
+        "ordem": 12,
+        "label": "Processo especial (Ética)",
+        "cor": "rose"
+    }
+}
+
+def obter_ordem_situacao(codigo_situacao):
+    """Retorna a ordem de classificação para um código de situação"""
+    for grupo in situacoes_projetos.values():
+        if codigo_situacao in grupo['codigos']:
+            return grupo['ordem']
+    return 999
+
 def obter_partidos_abreviados():
     return sorted([p['abreviacao'] for p in partidos])
 
+def adicionar_info_grupo(proposicoes):
+    """Adiciona informações de grupo, cor e label a cada proposição"""
+    for prop in proposicoes:
+        for grupo_nome, grupo_info in situacoes_projetos.items():
+            if prop['status'] in grupo_info['codigos']:
+                prop['grupo'] = grupo_nome
+                prop['cor'] = grupo_info['cor']
+                prop['label'] = grupo_info['label']
+                break
+        else:
+            prop['grupo'] = 'Outro'
+            prop['cor'] = 'gray'
+            prop['label'] = 'Sem classificação'
+    return proposicoes
 
 def gerar_grafico_deputado(valor_deputado, valor_media, titulo):
     # Ajustado para o mesmo tamanho do gráfico de temas
@@ -519,6 +626,7 @@ def deputados():
 
     cursor.close()
     conn.close()
+    
 
     return render_template(
         "deputados.html",
@@ -540,9 +648,10 @@ def dados_deputados():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
-    page   = int(request.args.get('page', 1))
-    estado = request.args.get('estado', '')
+    page    = int(request.args.get('page', 1))
+    estado  = request.args.get('estado', '')
     partido = request.args.get('partido', '')
+    tema    = request.args.get('tema', '') 
 
     itens_por_pagina = 24
     offset = (page - 1) * itens_por_pagina
@@ -550,21 +659,42 @@ def dados_deputados():
     filtros = []
     params  = []
 
+    joins = "" 
+
     if estado and estado != 'Estado':
         filtros.append("e.uf = %s")
         params.append(estado)
     if partido and partido != 'Partido':
         filtros.append("p.abreviacao = %s")
         params.append(partido)
+    if tema:                                        
+        joins += """
+        JOIN deputado_tema dt ON dt.fk_deputado = d.cd_deputado
+        JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
+        """
+        if tema.isdigit():
+            filtros.append("t.cd_tp_temas = %s")
+            params.append(tema)
+        else:
+            codigos = []
+            for tema_dict in Temas:
+                if tema in tema_dict:
+                    codigos = [item[1] for item in tema_dict[tema]]
+                    break
+            if codigos:
+                placeholders = ','.join(['%s'] * len(codigos))
+                filtros.append(f"t.cd_tp_temas IN ({placeholders})")
+                params.extend(codigos)
 
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
 
     query = f"""
-    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+    SELECT DISTINCT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
            e.uf AS estado, p.abreviacao AS partido
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
+    {joins}
     {where}
     ORDER BY d.nome_eleitoral
     LIMIT %s OFFSET %s
@@ -583,6 +713,8 @@ def dados_deputados():
 def infodeputados(id):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
+
+    verificacaoRorN = "/ranking" in (request.referrer or "")
 
     # ═══════════════════════════════════════════════════════════
     # DEFINIÇÃO DE QUERIES
@@ -629,8 +761,18 @@ def infodeputados(id):
         ORDER BY
             CASE
                 WHEN p.codSituacao IN (98, 114, 1140, 1230) THEN 1
-                WHEN p.codSituacao IN (920, 924, 930, 1100, 1120) THEN 2
-                ELSE 3
+                WHEN p.codSituacao IN (1150, 1160, 1200, 1201, 1210, 1220, 1221, 1223, 1294, 1300, 1301, 1302) THEN 2
+                WHEN p.codSituacao IN (904, 910, 927, 929, 932, 1020, 1040, 1052, 1060, 1070, 1080, 1270, 1290, 1291) THEN 3
+                WHEN p.codSituacao IN (920, 924, 930, 1100, 1120) THEN 4
+                WHEN p.codSituacao IN (926, 1293, 1299, 1303, 1305) THEN 5
+                WHEN p.codSituacao IN (901, 902, 906, 922, 1280, 1296) THEN 6
+                WHEN p.codSituacao IN (903, 915, 928, 1090, 1091, 1297, 1313, 1314, 1380) THEN 7
+                WHEN p.codSituacao IN (907, 911, 1170, 1185, 1180) THEN 8
+                WHEN p.codSituacao IN (900, 912, 917, 1383) THEN 9
+                WHEN p.codSituacao IN (937, 939, 941, 950, 1222, 1292) THEN 10
+                WHEN p.codSituacao IN (923, 931, 940, 1250, 1260, 1360) THEN 11
+                WHEN p.codSituacao IN (1310, 1311, 1312, 1350, 1355, 1381, 1382, 1298) THEN 12
+                ELSE 13
             END ASC,
             p.nome ASC;
     """
@@ -736,9 +878,12 @@ def infodeputados(id):
         INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
         WHERE pd.fk_deputado = %s 
           AND p.codSituacao IN (
-              920, 924, 930, 1100, 1120
+              1150, 1160, 1200, 1201, 1210, 1220, 1221, 1223, 1294, 1300, 1301, 1302,
+              904, 910, 927, 929, 932, 1020, 1040, 1052, 1060, 1070, 1080, 1270, 1290, 1291,
+              924
           )
     """
+
     
     # Query 18: Situação do deputado
     query18 = """
@@ -757,6 +902,12 @@ def infodeputados(id):
         WHERE l.fk_deputado = %s
         AND l.sigla_cargo IS NOT NULL
     """
+    # Query 20 Autorias
+    query20 = """
+	SELECT SUM(autor) AS autor
+	FROM proposicao_deputados
+	WHERE fk_deputado = %s
+    """
     
     cursor.execute(query1, (id,))
     deputado = cursor.fetchone()
@@ -772,6 +923,7 @@ def infodeputados(id):
 
     cursor.execute(query5, (id,))
     proposicoes = cursor.fetchall()
+    proposicoes = adicionar_info_grupo(proposicoes)
 
     cursor.execute(query6, (id,))
     despesas = cursor.fetchall()
@@ -811,6 +963,9 @@ def infodeputados(id):
     
     cursor.execute(query19, (id,))
     cargo = cursor.fetchone()
+    
+    cursor.execute(query20, (id,))
+    autoria = cursor.fetchone()
     
     total_deputado = stats['total_deputado'] or 0
     media_camara = stats['media_camara'] or 0
@@ -857,7 +1012,7 @@ def infodeputados(id):
         discurso['hora'] = dt.strftime('%H:%M')
     
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, temas_discursos=temas_discursos, score_final=score_final, nb=2, prop_aprov=prop_aprov, prop_quase_aprov=prop_quase_aprov, situacao=situacao, cargo=cargo)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, temas_discursos=temas_discursos, score_final=score_final, nb=2, prop_aprov=prop_aprov, prop_quase_aprov=prop_quase_aprov, situacao=situacao,autoria=autoria,verificacaoRorN=verificacaoRorN, cargo=cargo)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 

@@ -81,7 +81,7 @@
         <!--Filtros de estados e partidos-->
         <section class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-[100rem] mx-auto">
             <form action="/ranking" method="get" id="form-filtro"
-            class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+            class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full items-center">
             
             <div class="relative w-full sm:w-1/2 md:w-[20%]">
                 <select name="estado" id="estado"
@@ -145,7 +145,29 @@
         
         <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
     </div>
+    <div class="relative w-full sm:w-72 lg:w-150 sm:ml-auto">
+    <button type="button" id="btn-buscar-ranking"
+        class="cursor-pointer absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 hover:text-gray-600 focus:outline-none z-10 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+    </button>
     
+    <input
+        id="pesquisa-ranking"
+        type="text"
+        autocomplete="off"
+        placeholder="Buscar deputado no ranking"
+        class="bg-white w-full text-black p-3 pl-11 rounded-full outline-none shadow-sm border border-gray-300 transition-all placeholder:text-gray-500 text-sm">
+    
+    <span id="sem-resultados-ranking"
+        class="hidden absolute -bottom-6 left-4 text-xs text-gray-400">
+        Nenhum deputado encontrado.
+    </span>
+</div>
+
 </form>
 </section>
 </div>
@@ -337,15 +359,42 @@
 
             // 2. Aplica a animação de destaque (Pisca em amarelo/slate e some em 2 segundos)
             // Usamos classes arbitrárias do Tailwind para criar a animação direto no JS
-            elemento.classList.add('animate-[pulse_0.5s_ease-in-out_1]', 'bg-gray-100', 'transition-colors', 'duration-1000');
+            elemento.classList.add('animate-[pulse_0.5s_ease-in_1]', 'bg-gray-200', 'transition-colors', 'duration-500');
 
             // 3. Remove o fundo suavemente após 1.5 segundos para voltar ao normal
             setTimeout(() => {
-                elemento.classList.remove('bg-yellow-100/80');
+                elemento.classList.remove('bg-gray-200');
+                elemento.classList.remove('animate-[pulse_0.5s_ease-in_1]');
             }, 1500);
         }
     }
     });
+    // Pesquisa local no ranking
+    const inputRanking = document.getElementById('pesquisa-ranking');
+    const btnBuscar = document.getElementById('btn-buscar-ranking');
+    const linhas = document.querySelectorAll('.divide-y.divide-gray-100 > a[id]');
+    const semResultados = document.getElementById('sem-resultados-ranking');
+
+    function filtrarRanking() {
+        const termo = inputRanking.value.trim().toLowerCase();
+        let encontrou = false;
+
+        linhas.forEach(linha => {
+            // Busca pelo nome eleitoral e nome civil presentes na linha
+            const textos = linha.querySelectorAll('p');
+            const nomeEleitoral = textos[0]?.textContent.toLowerCase() ?? '';
+            const nomeCivil = textos[1]?.textContent.toLowerCase() ?? '';
+
+            const corresponde = !termo || nomeEleitoral.includes(termo) || nomeCivil.includes(termo);
+            linha.style.display = corresponde ? '' : 'none';
+            if (corresponde) encontrou = true;
+        });
+
+        semResultados.classList.toggle('hidden', encontrou || !termo);
+    }
+
+    inputRanking.addEventListener('input', filtrarRanking);
+    btnBuscar.addEventListener('click', () => inputRanking.focus());
     
 </script>
 {% endblock %}

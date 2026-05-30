@@ -33,7 +33,7 @@
     {% block extra_style %}{% endblock %}
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
+{% block body_class %}<body class="bg-gray-100 min-h-screen flex flex-col">{% endblock %}
     <div id="barra-loading"></div>
     {% set autocomplete_id = 'navbar' %}
     {% include 'partials/_navbar.html' %}

@@ -6,8 +6,10 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 {% endblock %}
 
+
+{% block body_class %}<body class="bg-white min-h-screen flex flex-col">{% endblock %}
 {% block content %}
-    <main class="pb-24 lg:pb-0">
+    <main class="bg-white pb-24 lg:pb-0">
         <!--Banner-->
         <section class="relative h-48 sm:h-64 md:h-80 lg:h-[490px] w-full bg-cover bg-center flex items-center"
         style="background-image: url(../static/img/banner-sobre.png)">
