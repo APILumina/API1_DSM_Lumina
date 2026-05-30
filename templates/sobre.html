@@ -7,48 +7,48 @@
 {% endblock %}
 
 {% block content %}
-    <main class="">
+    <main class="pb-24 lg:pb-0">
         <!--Banner-->
-        <section class="relative h-[490px] w-full bg-cover bg-center flex items-center"
+        <section class="relative h-48 sm:h-64 md:h-80 lg:h-[490px] w-full bg-cover bg-center flex items-center"
         style="background-image: url(../static/img/banner-sobre.png)">
             <div class="absolute inset-0 bg-black/20"></div>
-            <div class="relative z-10 flex flex-row justify-center items- text-white w-full max-w-[100rem] mx-auto px-5">
+            <div class="relative z-10 flex flex-row justify-center items-center text-white w-full max-w-[100rem] mx-auto px-5">
                 <h1 class="text-3xl text-shadow-lg sm:text-4xl md:text-7xl font-bold tracking-tight mb-5">
-                SOBRE
+                Sobre
                 </h1>
             </div>
         </section>
 
         <!--Objetivo-->
-        <section class="grid md:grid-cols-[60%_40%] max-w-6xl mx-auto w-full my-11 px-5">
+        <section class="grid md:grid-cols-[60%_40%] max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5 gap-6">
             <div>
-                <h2 class="text-[#1A249D] text-3xl font-bold mb-2">Objetivo</h2>
-                <p class="text-lg text-justify font-medium">Ao observar um cenário onde as informações sobre os deputados federais são complexas e dispersas, embora públicas, o Radar Cidadão surge da necessidade de tornar a democracia mais acessível através da transparência de dados. Com as eleições de outubro de 2026 se aproximando, o projeto coletou e tratou dados da <a class="text-[#1a249d]" href="https://dadosabertos.camara.leg.br/index.html" target="_blank">API oficial da Câmara dos Deputados</a>, oferecendo uma síntese clara sobre presença, gastos e atividades parlamentares, auxiliando eleitores, educadores e jornalistas a avaliarem com consciência o desempenho dos candidatos, valorizando a neutralidade para que não haja manipulação política.</p>
+                <h2 class="text-radar text-2xl sm:text-3xl font-bold mb-2">Objetivo</h2>
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed">Ao observar um cenário onde as informações sobre os deputados federais são complexas e dispersas, embora públicas, o Radar Cidadão surge da necessidade de tornar a democracia mais acessível através da transparência de dados. Com as eleições de outubro de 2026 se aproximando, o projeto coletou e tratou dados da <a class="text-[#1a249d]" href="https://dadosabertos.camara.leg.br/index.html" target="_blank">API oficial da Câmara dos Deputados</a>, oferecendo uma síntese clara sobre presença, gastos e atividades parlamentares, auxiliando eleitores, educadores e jornalistas a avaliarem com consciência o desempenho dos candidatos, valorizando a neutralidade para que não haja manipulação política.</p>
             </div>
             
-            <div class="flex justify-center items-center mt-5">
-                <img src="../static/img/objetivo-sobre.jpg" alt="" class="object-contain rounded-md shadow-lg" />
+            <div class="flex justify-center items-center mt-5 md:mt-0">
+                <img src="../static/img/objetivo-sobre.jpg" alt="" class="object-contain rounded-md shadow-lg w-full max-w-sm md:max-w-full" />
             </div>
         </section>
 
         
         <!--Linha de separação-->
-        <div class="h-px max-w-6xl bg-gray-300 mx-auto my-10" id="desempenho"></div>
+        <div class="h-px max-w-6xl bg-gray-200 mx-auto my-8 md:my-10" id="desempenho"></div>
 
 
         <!--Desempenho-->
         <section >
-            <div class="max-w-6xl mx-auto w-full my-11 px-5">
-                <h2 class="text-[#1A249D] text-3xl font-bold mb-2">Como a nota de desempenho é calculado?</h2>
-                <h3 class="text-2xl font-bold mb-2">Cálculo da Nota para Proposições</h3>
+            <div class="max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5">
+                <h2 class="text-radar text-2xl sm:text-3xl font-bold mb-2">Como a nota de desempenho é calculado?</h2>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">Cálculo da Nota para Proposições</h3>
 
-                <p class="text-lg text-justify font-medium">A nota final do Índice Geral de Desempenho utiliza 4 aspectos das proposições para o cálculo final. A fórmula que utilizamos para calcular a nota de proposições:<p>
-                <div class="p-3 rounded-2xl border-solid border-gray-300 border-1 w-fit mx-auto my-5">
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed">A nota final do Índice Geral de Desempenho utiliza 4 aspectos das proposições para o cálculo final. A fórmula que utilizamos para calcular a nota de proposições:<p>
+                <div class="p-3 rounded-2xl border-solid border-gray-300 border-1 w-fit max-w-full mx-auto my-5 overflow-x-auto">
                     $$\text{Score}_{\text{Proposições}} = (0.4 \cdot V_{\text{tema}}) + (0.3 \cdot V_{\text{tipo}}) + (0.2 \cdot V_{\text{status}}) + (0.1 \cdot V_{\text{grau}})$$
                 </div>
 
-                <p class=" text-lg text-justify font-medium">Onde:</p>
-                <ul class="text-lg text-justify font-medium list-disc list-inside">
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed">Onde:</p>
+                <ul class="text-base sm:text-lg text-justify font-medium list-disc list-inside space-y-1">
                     <li>Tema representa 40% da nota de Proposições: define a relevância do trabalho para a sociedade.</li>
                     <li>Tipos representa 30% da nota de Proposições: define a complexidade, nosso sistema reconhece que propor uma PEC (Proposta de Emenda da Constituição) exige mais capital político e técnico do que uma Assinatura de Ata, por exemplo.</li>
                     <li>Status representa 20% da nota de Proposições: recompensa o avanço.</li>
@@ -57,14 +57,14 @@
 
             </div>
 
-            <div class="max-w-6xl mx-auto w-full my-11 px-5">
-                <h3 class="text-2xl font-bold mb-2">Cálculo do Índice Geral de Desempenho (IGD)</h3>
-                <div class="p-3 rounded-2xl border-solid border-gray-300 border-1 w-fit mx-auto my-5">
+            <div class="max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5">
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">Cálculo do Índice Geral de Desempenho (IGD)</h3>
+                <div class="p-3 rounded-2xl border-solid border-gray-300 border-1 w-fit max-w-full mx-auto my-5 overflow-x-auto">
                     $$Score_{Final} = (0.2 \cdot Presença) + (0.2 \cdot Economia) + (0.6 \cdot Produção_{Legislativa})$$
                 </div>
 
-                <p class="list-disc list-inside text-lg text-justify font-medium">Onde:</p>
-                <ul class="text-lg text-justify font-medium list-disc list-inside">
+                <p class="text-base sm:text-lg text-justify font-medium">Onde:</p>
+                <ul class="text-base sm:text-lg text-justify font-medium list-disc list-inside space-y-1">
                     <li>Produção Legislativa/Proposições  (representa 60% da nota final): O foco principal é o que o deputado entrega (Projetos/Proposições).</li>
                     <li>Presença  (representa 20% da nota final): O compromisso básico de estar nas sessões.</li>
                     <li>Economia (representa 20% da nota final): O respeito ao dinheiro público. Quanto mais ele economiza, maior será a nota.</li>
@@ -72,63 +72,63 @@
             </div>
 
             <!--Como definimos pesos-->
-            <div class="max-w-6xl mx-auto w-full my-11 px-5">
-                <h2 class="text-[#1A249D] text-3xl font-bold mb-2">Como definimos pesos?</h2>
-                <h3 class="text-2xl font-bold mb-2">Temas das Proposições</h3>
-                <p class="text-lg text-justify font-medium mb-6">Em relação à temas, utilizamos a Constituição Federal de 1988 como parâmetro para a definição de peso dos temas. Nos baseamos nos artigos 5º e 6º da Constituição, que tratam sobre os direitos sociais fundamentais, como base para definirmos os temas com maior peso. O artigo 6º obriga o estado a criar políticas públicas para garantir o bem-estar e a dignidade do povo.</p>
+            <div class="max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5">
+                <h2 class="text-dark-blue text-2xl sm:text-3xl font-bold mb-2">Como definimos pesos?</h2>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">Temas das Proposições</h3>
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mb-6">Em relação à temas, utilizamos a Constituição Federal de 1988 como parâmetro para a definição de peso dos temas. Nos baseamos nos artigos 5º e 6º da Constituição, que tratam sobre os direitos sociais fundamentais, como base para definirmos os temas com maior peso. O artigo 6º obriga o estado a criar políticas públicas para garantir o bem-estar e a dignidade do povo.</p>
                 
                 <div class="space-y-4 my-6">
                     <article class="border-l-2 border-[#1A249D] pl-4">
-                        <h4 class="font-bold text-lg text-[#1A249D]">Art. 5º</h4>
+                        <h4 class="font-bold text-base sm:text-lg text-dark-blue">Art. 5º</h4>
                         <blockquote cite="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm">
-                            <p class="text-lg text-justify font-medium italic text-gray-700">
+                            <p class="text-sm sm:text-base text-justify font-medium italic text-gray-700">
                                 "Todos são iguais perante a lei, sem distinção de qualquer natureza, garantindo-se aos brasileiros e aos estrangeiros residentes no País a inviolabilidade do direito à vida, à liberdade, à igualdade, à segurança e à propriedade [...]"
                             </p>
                         </blockquote>
                     </article>
 
                     <article class="border-l-2 border-[#1A249D] pl-4">
-                        <h4 class="font-bold text-lg text-[#1A249D]">Art. 6º</h4>
+                        <h4 class="font-bold text-base sm:text-lg text-dark-blue">Art. 6º</h4>
                         <blockquote cite="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm">
-                            <p class="text-lg text-justify font-medium italic text-gray-700">
+                            <p class="text-sm sm:text-base text-justify font-medium italic text-gray-700">
                                 "São direitos sociais a educação, a saúde, a alimentação, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados, na forma desta Constituição."
                             </p>
                         </blockquote>
                     </article>
                 </div>
 
-                <p class="text-lg text-justify font-medium mt-6">
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mt-6">
                     Logo, projetos que tratam de direitos fundamentais (como Saúde e Segurança) recebem peso máximo (1.0). Temas que não constam nos artigos 5º e 6º, mas constam na Constituição recebem peso 0.5, pois estão sujeitos aos artigos 5º e 6º, assim entendemos que há uma hierarquia e que seu peso e impacto na vida do cidadão é menor. Por fim, atos simbólicos e meramente administrativos que nem sequer são citados na Constituição recebem nota menor de 0.10.
                 </p>                 
             </div>      
 
                 <!--Tabela Temas-->
-                <div class="max-w-6xl mx-auto w-full my-11 px-5">
+                <div class="max-w-6xl mx-auto w-full my-8 md:my-11 px-4 sm:px-5">
     
                     <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
-                        <table class="w-full text-left border-collapse bg-white text-base">
+                        <table class="w-full text-left border-collapse bg-white text-sm sm:text-base">
                             <thead class="bg-[#1A249D] text-white">
                                 <tr>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Categoria de Peso</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Base Legal (CF/88)</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Temas da Câmara</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Categoria de Peso</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Base Legal (CF/88)</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Temas da Câmara</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 font-medium text-gray-700">
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Crítico (1.0)</td>
-                                    <td class="px-6 py-4 text-justify">Art. 5º e 6º: Direitos Individuais e Sociais (Vida, Saúde, Segurança, Educação, Trabalho, Alimentação, Transporte, Direitos Humanos).</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">39 (Esporte), 44 (Direitos Humanos), 46 (Educação), 52 (Previdência), 56 (Saúde), 57 (Segurança), 58 (Trabalho), 61 (Transporte), 64 (Agricultura), 67 (Defesa do Consumidor).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Crítico (1.0)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Art. 5º e 6º: Direitos Individuais e Sociais (Vida, Saúde, Segurança, Educação, Trabalho, Alimentação, Transporte, Direitos Humanos).</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">39 (Esporte), 44 (Direitos Humanos), 46 (Educação), 52 (Previdência), 56 (Saúde), 57 (Segurança), 58 (Trabalho), 61 (Transporte), 64 (Agricultura), 67 (Defesa do Consumidor).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Constitucional Geral (0.5)</td>
-                                    <td class="px-6 py-4 text-justify">Citados no texto da CF/88, mas fora do núcleo dos Art. 5º e 6º (Organização do Estado, Ordem Econômica, Tributação, Ciência e Pesquisa - Art. 218).</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">34 (Adm. Pública), 35 (Cultura), 37 (Comunicações), 40 (Economia), 41 (Cidades), 42 (Cível), 43 (Penal), 48 (Meio Ambiente), 51 (Fundiária), 53 (Processo Leg.), 54 (Energia), 55 (Relações Internacionais), 60 (Turismo), 62 (Ciência e Tec.), 66 (Indústria), 68 (Constitucional), 70 (Finanças), 74 (Política), 76 (Justiça), 85 (Exatas), 86 (Humanas).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Constitucional Geral (0.5)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Citados no texto da CF/88, mas fora do núcleo dos Art. 5º e 6º (Organização do Estado, Ordem Econômica, Tributação, Ciência e Pesquisa - Art. 218).</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">34 (Adm. Pública), 35 (Cultura), 37 (Comunicações), 40 (Economia), 41 (Cidades), 42 (Cível), 43 (Penal), 48 (Meio Ambiente), 51 (Fundiária), 53 (Processo Leg.), 54 (Energia), 55 (Relações Internacionais), 60 (Turismo), 62 (Ciência e Tec.), 66 (Indústria), 68 (Constitucional), 70 (Finanças), 74 (Política), 76 (Justiça), 85 (Exatas), 86 (Humanas).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Não Citados (0.1)</td>
-                                    <td class="px-6 py-4 text-justify">Atos Simbólicos, ritos honoríficos e datas comemorativas sem previsão de alteração em direitos ou deveres.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">72 (Homenagens e Datas Comemorativas).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Não Citados (0.1)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Atos Simbólicos, ritos honoríficos e datas comemorativas sem previsão de alteração em direitos ou deveres.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">72 (Homenagens e Datas Comemorativas).</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -137,48 +137,48 @@
                 </div>
 
                 <!--Tipos de proposições-->
-                <div class="max-w-6xl mx-auto w-full px-5">
-                    <h3 class="text-2xl font-bold mb-2">Tipos de Proposições</h3>
-                    <p class="text-lg text-justify font-medium mb-4">As proposições variam de PL (Projeto de Lei),  PEC (Proposta de Emenda à Constituição) à AA (Assinatura de Ata) ou RP (Retirada de pauta), por exemplo. No total são 544 tipos de proposição fornecidas pela API da Câmara dos Deputados. Levamos isso em consideração na atribuição de notas. </p>
-                    <p class="text-lg text-justify font-medium">Dividimos em 5 grandezas, separando por complexidade e dificuldade administrativa, sendo itens meramente administrativos e de mínima complexidade com peso 0.1. </p>
+                <div class="max-w-6xl mx-auto w-full px-4 sm:px-5">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-2">Tipos de Proposições</h3>
+                    <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mb-4">As proposições variam de PL (Projeto de Lei),  PEC (Proposta de Emenda à Constituição) à AA (Assinatura de Ata) ou RP (Retirada de pauta), por exemplo. No total são 544 tipos de proposição fornecidas pela API da Câmara dos Deputados. Levamos isso em consideração na atribuição de notas. </p>
+                    <p class="text-base sm:text-lg text-justify font-medium leading-relaxed">Dividimos em 5 grandezas, separando por complexidade e dificuldade administrativa, sendo itens meramente administrativos e de mínima complexidade com peso 0.1. </p>
                 
                 </div>
                 
-                <div class="max-w-6xl mx-auto w-full mt-4 mb-11 px-5">
+                <div class="max-w-6xl mx-auto w-full mt-4 mb-8 md:mb-11 px-4 sm:px-5">
                     <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
-                        <table class="w-full text-left border-collapse bg-white text-base">
+                        <table class="w-full text-left border-collapse bg-white text-sm sm:text-base">
                             <thead class="bg-[#1A249D] text-white">
                                 <tr>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Tipo de Projeto</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">O que significa na prática (Dificuldade)</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Exemplos e Siglas comuns</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Tipo de Projeto</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">O que significa na prática (Dificuldade)</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Exemplos e Siglas comuns</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 font-medium text-gray-700">
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Crítico (1.0)</td>
-                                    <td class="px-6 py-4 text-justify">Dificuldade Máxima: Projetos que mudam as regras principais do país (a Constituição). Exigem a aprovação de quase todos os deputados.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">PEC (Proposta de Emenda à Constituição) e PLP (Projeto de Lei Complementar).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Crítico (1.0)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Dificuldade Máxima: Projetos que mudam as regras principais do país (a Constituição). Exigem a aprovação de quase todos os deputados.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">PEC (Proposta de Emenda à Constituição) e PLP (Projeto de Lei Complementar).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Legislativo (0.8)</td>
-                                    <td class="px-6 py-4 text-justify">Dificuldade Alta: Criação ou alteração de leis federais comuns que mexem direto na vida e na rotina de toda a sociedade.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">PL (Projeto de Lei), MPV (Medida Provisória) e Projetos de Orçamento (PLN/PDL).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Legislativo (0.8)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Dificuldade Alta: Criação ou alteração de leis federais comuns que mexem direto na vida e na rotina de toda a sociedade.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">PL (Projeto de Lei), MPV (Medida Provisória) e Projetos de Orçamento (PLN/PDL).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Fiscalização (0.5)</td>
-                                    <td class="px-6 py-4 text-justify">Dificuldade Média: Ferramentas usadas para vigiar o trabalho do Presidente, Ministros e órgãos do Governo Federal.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Pedidos oficiais de informação (RIC), propostas de fiscalização (PFC) e pedidos para abrir CPI.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Fiscalização (0.5)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Dificuldade Média: Ferramentas usadas para vigiar o trabalho do Presidente, Ministros e órgãos do Governo Federal.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Pedidos oficiais de informação (RIC), propostas de fiscalização (PFC) e pedidos para abrir CPI.</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Regulatório (0.3)</td>
-                                    <td class="px-6 py-4 text-justify">Dificuldade Baixa: Regras internas criadas para organizar o funcionamento, os horários e os rituais da própria Câmara e do Congresso.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">PRC (Projeto de Resolução da Câmara) e PRN (Projeto de Resolução do Congresso).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Regulatório (0.3)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Dificuldade Baixa: Regras internas criadas para organizar o funcionamento, os horários e os rituais da própria Câmara e do Congresso.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">PRC (Projeto de Resolução da Câmara) e PRN (Projeto de Resolução do Congresso).</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Acessório (0.1)</td>
-                                    <td class="px-6 py-4 text-justify">Dificuldade Mínima: Pedidos simples do dia a dia, sugestões de debate, emendas secundárias ou avisos de rotina.</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">REQ (Requerimentos de rotina), INC (Indicações), sugestões de cidadãos (SUG) e emendas (EMC).</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Acessório (0.1)</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">Dificuldade Mínima: Pedidos simples do dia a dia, sugestões de debate, emendas secundárias ou avisos de rotina.</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">REQ (Requerimentos de rotina), INC (Indicações), sugestões de cidadãos (SUG) e emendas (EMC).</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -187,52 +187,52 @@
                 </div>
 
                 <!--Status da proposição-->
-                <div class="max-w-6xl mx-auto w-full px-5">
-                    <h3 class="text-2xl font-bold mb-2">Status da Proposição</h3>
-                    <p class="text-lg text-justify font-medium mb-4">Em Status da Proposição avaliamos o grau de evolução em que o projeto se encontra dentro do fluxo da Câmara dos deputados.
+                <div class="max-w-6xl mx-auto w-full px-4 sm:px-5">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-2">Status da Proposição</h3>
+                    <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mb-4">Em Status da Proposição avaliamos o grau de evolução em que o projeto se encontra dentro do fluxo da Câmara dos deputados.
                         À medida que sua proposta avança nas etapas, isso reflete a seriedade, estrutura e eficiência da proposição. 
                     </p>
-                    <p class="text-lg text-justify font-medium">Dividimos em 5 grandezas de avanço, baseadas nas situações informadas pela API da Câmara dos Deputados. 
+                    <p class="text-base sm:text-lg text-justify font-medium leading-relaxed">Dividimos em 5 grandezas de avanço, baseadas nas situações informadas pela API da Câmara dos Deputados. 
                     </p>
                 
                 </div>
 
-                <div class="max-w-6xl mx-auto w-full my-4 px-5">
+                <div class="max-w-6xl mx-auto w-full my-4 px-4 sm:px-5">
     
                     <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
-                        <table class="w-full text-left border-collapse bg-white text-base">
+                        <table class="w-full text-left border-collapse bg-white text-sm sm:text-base">
                             <thead class="bg-[#1A249D] text-white">
                                 <tr>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Situação do Projeto</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">Nota (Peso)</th>
-                                    <th class="px-6 py-4 font-bold tracking-wider">O que significa na prática</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Situação do Projeto</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">Nota (Peso)</th>
+                                    <th class="px-4 sm:px-6 py-3 sm:py-4 font-bold tracking-wider whitespace-nowrap">O que significa na prática</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 font-medium text-gray-700">
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Aprovado e Virou Lei</td>
-                                    <td class="px-6 py-4 text-justify">1.0</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Sucesso Total: O projeto passou por todas as votações na Câmara e no Senado, foi assinado pelo Presidente e agora é uma lei oficial no país.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Aprovado e Virou Lei</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">1.0</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Sucesso Total: O projeto passou por todas as votações na Câmara e no Senado, foi assinado pelo Presidente e agora é uma lei oficial no país.</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Pronto para Votar ou na Fase Final</td>
-                                    <td class="px-6 py-4 text-justify">0.8</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Fase Final: O projeto já passou pelas comissões e está pronto para ser votado no Plenário principal, ou já foi aprovado na Câmara e enviado para o Senado avaliar.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Pronto para Votar ou na Fase Final</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">0.8</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Fase Final: O projeto já passou pelas comissões e está pronto para ser votado no Plenário principal, ou já foi aprovado na Câmara e enviado para o Senado avaliar.</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Em Análise e Discussão</td>
-                                    <td class="px-6 py-4 text-justify">0.5</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Andamento Normal: O projeto está ativo e sendo debatido pelos deputados dentro das comissões específicas (como a comissão de saúde ou educação), aguardando relatórios e ajustes.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Em Análise e Discussão</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">0.5</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Andamento Normal: O projeto está ativo e sendo debatido pelos deputados dentro das comissões específicas (como a comissão de saúde ou educação), aguardando relatórios e ajustes.</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Aguardando Papelada Inicial</td>
-                                    <td class="px-6 py-4 text-justify">0.3</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Fase Inicial: O projeto acabou de ser criado e está na fila burocrática, esperando receber um número oficial, ser publicado no sistema ou ser juntado a outro projeto parecido.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Aguardando Papelada Inicial</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">0.3</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Fase Inicial: O projeto acabou de ser criado e está na fila burocrática, esperando receber um número oficial, ser publicado no sistema ou ser juntado a outro projeto parecido.</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 font-bold text-[#1A249D] whitespace-nowrap">Cancelado ou Rejeitado</td>
-                                    <td class="px-6 py-4 text-justify">0.05</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Fim da Linha: O projeto foi reprovado nas votações, considerado ilegal, retirado pelo próprio deputado ou arquivado definitivamente.</td>
+                                    <td class="px-4 sm:px-6 py-3 sm:py-4 font-bold text-dark-blue whitespace-nowrap">Cancelado ou Rejeitado</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-justify">0.05</td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-sm text-gray-600">Fim da Linha: O projeto foi reprovado nas votações, considerado ilegal, retirado pelo próprio deputado ou arquivado definitivamente.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -243,13 +243,13 @@
 
 
         <!--Linha de separação-->
-        <div class="h-px max-w-6xl bg-gray-300 mx-auto my-10"></div>
+        <div class="h-px max-w-6xl bg-gray-200 mx-auto my-8 md:my-10"></div>
         
         <!--Funcionalidades-->
-        <section class="max-w-6xl mx-auto w-full px-5">
+        <section class="max-w-6xl mx-auto w-full px-4 sm:px-5">
             <div>
-                <h2 class="text-[#1A249D] text-3xl font-bold mb-2">Funcionalidades</h2>
-                <p class="text-lg text-justify font-medium mb-2"> O Radar Cidadão oferece um conjunto de recursos pensados para facilitar o acesso à informação parlamentar, são eles: </p>
+                <h2 class="text-radar text-2xl sm:text-3xl font-bold mb-2">Funcionalidades</h2>
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mb-2"> O Radar Cidadão oferece um conjunto de recursos pensados para facilitar o acesso à informação parlamentar, são eles: </p>
 
                 <ol class="list-decimal list-inside space-y-3 text-lg">
                     <li class="font-medium"> <span class="font-bold">Busca pelo nome do deputado:</span> o usuário encontra rapidamente o perfil do candidato desejado;</li>
@@ -261,13 +261,13 @@
         </section>
 
         <!--Linha de separação-->
-        <div class="h-px max-w-6xl bg-gray-300 mx-auto my-10"></div>
+        <div class="h-px max-w-6xl bg-gray-200 mx-auto my-8 md:my-10"></div>
 
         <!--Sobre a equipe-->
-        <section class="max-w-6xl mx-auto w-full px-5">
+        <section class="max-w-6xl mx-auto w-full px-4 sm:px-5">
             <div>
-                <h2 class="text-[#1A249D] text-3xl font-bold mb-2">Sobre a equipe</h2>
-                <p class="text-lg text-justify font-medium mb-2">O Radar Cidadão é uma iniciativa totalmente independente desenvolvida por estudantes do curso de Desenvolvimento de Software Multiplataforma (DSM) da FATEC de São José dos Campos. 
+                <h2 class="text-radar text-2xl sm:text-3xl font-bold mb-2">Sobre a equipe</h2>
+                <p class="text-base sm:text-lg text-justify font-medium leading-relaxed mb-2">O Radar Cidadão é uma iniciativa totalmente independente desenvolvida por estudantes do curso de Desenvolvimento de Software Multiplataforma (DSM) da FATEC de São José dos Campos. 
                     O projeto funciona sem qualquer tipo de filiação partidária, ideologia política ou apoio a candidatos ou recebimento de verbas governamentais, 
                     financiamento de políticos ou dinheiro público. Todos os dados utilizados são extraídos diretamente da API oficial da Câmara dos Deputados.
                 </p>
@@ -276,14 +276,14 @@
 
             <!--Membros da equipe-->
             <div>
-                <h3 class="text-2xl font-bold mb-2">Membros da Equipe</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">Membros da Equipe</h3>
 
                 <!--Membros - linha de cima -->
-                <div class="grid md:grid-cols-5 mt-4 justify-center gap-8 mb-5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-4 gap-4 sm:gap-6 mb-8">
 
                     <!--Cid-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/C1dneve.png" alt="Foto Cid">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/C1dneve.png" alt="Foto Cid">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Cid Neves</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -291,7 +291,7 @@
 
                     <!--Daiane-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/Dai4ne.png" alt="Foto Daiane">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/Dai4ne.png" alt="Foto Daiane">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Daiane Karine</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Product Owner</p>
@@ -299,7 +299,7 @@
 
                     <!--Guilherme de Siqueira-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/introspective616.png" alt="Foto Guilherme M">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/introspective616.png" alt="Foto Guilherme M">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Guilherme Marques</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -307,7 +307,7 @@
 
                     <!--Guilherme Ribeiro-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/guilherme16092007.png" alt="Foto Guilherme R">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/guilherme16092007.png" alt="Foto Guilherme R">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Guilherme Ribeiro</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -315,7 +315,7 @@
 
                     <!--Gustavo-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/gustaft07.png" alt="Foto Gustavo">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/gustaft07.png" alt="Foto Gustavo">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Gustavo de Oliveira</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -323,7 +323,7 @@
 
                     <!--Júlia-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/juliacarolina728-sudo.png" alt="Foto Júlia">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/juliacarolina728-sudo.png" alt="Foto Júlia">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Júlia Inácio</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -331,7 +331,7 @@
 
                     <!--Kelwin-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/kersilva.png" alt="Foto Kelwin">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/kersilva.png" alt="Foto Kelwin">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Kelwin Rocha</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Scrum Master</p>
@@ -339,7 +339,7 @@
 
                     <!--Pamela-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/pamelaiwabuchi.png" alt="Foto Pamela">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/pamelaiwabuchi.png" alt="Foto Pamela">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Pamela Iwabuchi</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -347,7 +347,7 @@
                     
                     <!--Vinicius-->
                     <div class="flex flex-col items-center">
-                        <img class="w-24 rounded-md object-cover border border-gray-300" src="https://github.com/vinicius538.png" alt="Foto Vinicius">
+                        <img class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200 shadow-sm mb-2" src="https://github.com/vinicius538.png" alt="Foto Vinicius">
 
                         <h4 class="text-base text-center font-bold text-gray-900">Vinicius de Souza</h4>
                         <p class="text-sm text-center font-medium text-gray-500">Time de Desenvolvimento</p>
@@ -357,7 +357,7 @@
             </div>
 
             <div class="flex justify-end mt-8"> 
-                <a href="https://github.com/APILumina/API1_DSM_Lumina" target="_blank" class="w-fit bg-radar/30 p-2 text-dark-blue font-bold rounded-md text-md shadow-sm transition delay-50 duration-100 ease-in-out hover:scale-105">Acesse o repositório!</a>
+                <a href="https://github.com/APILumina/API1_DSM_Lumina" target="_blank" class="w-fit bg-radar/20 hover:bg-radar/30 px-4 py-2 text-dark-blue font-bold rounded-lg text-sm shadow-sm transition duration-150 hover:scale-105">Acesse o repositório!</a>
             </div>
         </section>
     </main>

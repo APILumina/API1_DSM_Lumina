@@ -30,6 +30,8 @@
                 </li>
             </ol>
         </nav>
+
+        
         
         <!--Container principal com duas colunas ⬇️ -->
         <div class="flex flex-col lg:flex-row gap-8 w-full items-start relative">
@@ -42,25 +44,31 @@
             class="lg:aspect-square w-full min-h-[470px] lg:min-h-auto lg:max-w-[280px] lg:max-w-none mx-auto rounded-lg overflow-hidden flex items-center justify-center bg-gray-100 mb-7 relative">
             <img src="{{ dep['imagem_deputado'] }}" class="min-h-[470px] lg:min-h-auto h-full object-cover"
             alt="Foto do deputado" />
-            <div class="absolute bottom-3 right-3 flex [&>div]:rounded-full [&>div]:bg-white [&>div]:p-2 [&>div]:size-12 [&>div]:items-center [&>div]:justify-center [&>div]:shadow-md [&>div]:border [&>div]:border-gray-100">
+            <div class="absolute bottom-3 right-3 flex rounded-full bg-white p-2 size-12 items-center justify-center shadow-md border border-gray-100">
                 {% set sigla_partido = dep['partido'] | sem_acentos %}
-                <div>
-                    <img src="{{ url_for('static', filename='img/partidos/' + sigla_partido + '.png') }}" alt="Logo do partido {{ dep['partido'] }}" class="max-w-full max-h-full object-contain">
-                </div>
+                <img src="{{ url_for('static', filename='img/partidos/' + sigla_partido + '.png') }}" alt="Logo do partido {{ dep['partido'] }}" class="max-w-full max-h-full object-contain">
             </div>
         </div>
         
         <!-- Nome eleitoral do deputado ⬇️ -->
-        <div class="flex justify-center lg:justify-between items-center">
-            <h2 class="text-2xl lg:text-3xl xl:text-4xl mt-4 mb-7 text-center lg:text-left">
+        <div class="flex flex-col gap-3 mt-4 mb-6">
+            <h2 class="text-2xl lg:text-3xl xl:text-4xl text-center lg:text-left">
                 <span class="font-bold">{{ nome[0] }}</span> {{ " ".join(nome[1:])}}
             </h2>
+        
+            <div class="flex gap-3 items-center justify-center lg:justify-start">
+                <span class="text-base xl:text-xl">Situação:</span>
+                <span class="bg-green-700 text-white top-3 text-nowrap px-3 py-1 text-xs md:text-sm font-medium rounded-full capitalize w-fit">
+                    {{ 'Exercendo' if situacao['nome'] == 'Exercício' else situacao['nome'] }}
+                </span>
+            </div>
         </div>
         
         <!-- Partido, Estado e Email ⬇️ -->
-        <div class="text-base xl:text-xl mb-6 space-y-2">
+        <div class="text-base xl:text-xl mb-6 space-y-1">
             <p>Partido: <span class="font-bold">{{ dep['partido'] }}</span></p>
             <p>Estado: <span class="font-bold">{{ dep['estado'] }}</span></p>
+            <p>Cargo(s): <span class="font-bold">{{ cargo['cargos'] if cargo and cargo['cargos'] else 'Sem cargo' }}</span></p>
             <p class="flex flex-row sm:gap-1 min-w-0">Email: <a href="mailto:{{ dep['email'] }}"
                 class="truncate hover:whitespace-normal hover:break-all bg-white transition-all text-radar font-medium sm:font-normal">{{
                     dep['email'] }}</a></p>
@@ -68,7 +76,7 @@
                 
                 <!-- Botão de acessar site da câmara ⬇️ -->
                 <div class="absolute bg-radar/15 bottom-0 right-0 w-full p-5 flex justify-center">
-                    <a href="https://www.camara.leg.br/deputados/{{ dep['cd_deputado'] }}" target="_blank"
+                    <a href="https://www.camara.leg.br/deputados/{{ dep['id'] }}" target="_blank"
                     class="bg-radar hover:bg-radar/90 text-left text-white text-base xl:text-xl font-semibold tracking-wide w-full py-3 md:py-4 px-2 md:px-3 rounded-xl transition-colors flex items-center justify-center gap-2">Acessar
                     site da Câmara<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                     class="size-6">
@@ -84,18 +92,18 @@
     <div class="w-full lg:w-3/4 flex flex-col gap-8">
         
         <!-- Área das informações ⬇️ -->
-        <div class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg text-dark-blue flex flex-col gap-5">
+        <div class="bg-white shadow-md rounded-lg text-dark-blue flex flex-col pb-5 lg:pb-0">
             
             <!-- Nome e partido ⬇️ -->
-            <div class="flex flex-col gap-2">
+            <div class="flex pt-5 px-4 md:px-7 flex-col gap-2 pb-5">
                 <h2 class="text-2xl md:text-4xl font-bold capitalize">
                     {{ dep['nome'] | lower }}
                 </h2>
                 <p class="text-lg md:text-xl mb-3 md:text-left">Partido: {{ dep['partido'] }}</p>
                 
-                <!--Temas do deputad-->
-                <div class="flex flex-wrap scrollbar-none gap-2 mb-3">
-                    
+                <!--Temas do deputado-->
+                <div class="flex flex-wrap items-center scrollbar-none gap-2">
+                    <span>Temas:</span>
                     
                     {% set cores_temas = {
                         'ciências sociais e humanas': 'bg-[#e2daf8] border-[#5c3ab7] text-[#5c3ab7]',
@@ -113,21 +121,17 @@
                         'direito e defesa do consumidor': 'bg-[#f0d4e4] border-[#9c27b0] text-[#9c27b0]',
                         
                         'política, partidos e eleições': 'bg-[#d5dae1] border-[#162e54] text-[#162e54]',
-                        'processo legislativo e atuação parlamentar': 'bg-[#d5dae1] border-[#162e54]
-                        text-[#162e54]',
+                        'processo legislativo e atuação parlamentar': 'bg-[#d5dae1] border-[#162e54] text-[#162e54]',
                         'administração pública': 'bg-[#d5dae1] border-[#162e54] text-[#162e54]',
                         
                         'finanças públicas e orçamento': 'bg-[#d4edd9] border-[#1b5e20] text-[#1b5e20]',
                         'economia': 'bg-[#d4edd9] border-[#1b5e20] text-[#1b5e20]',
                         'economia e desenvolvimento': 'bg-[#d4edd9] border-[#1b5e20] text-[#1b5e20]',
                         'indústria, comércio e serviços': 'bg-[#d4edd9] border-[#1b5e20] text-[#1b5e20]',
-                        'relações internacionais e comércio exterior': 'bg-[#d4edd9] border-[#1b5e20]
-                        text-[#1b5e20]',
+                        'relações internacionais e comércio exterior': 'bg-[#d4edd9] border-[#1b5e20] text-[#1b5e20]',
                         
-                        'agricultura, pecuária, pesca e extrativismo': 'bg-[#cbd6c3] border-[#44612e]
-                        text-[#44612e]',
-                        'meio ambiente e desenvolvimento sustentável': 'bg-[#cbd6c3] border-[#44612e]
-                        text-[#44612e]',
+                        'agricultura, pecuária, pesca e extrativismo': 'bg-[#cbd6c3] border-[#44612e] text-[#44612e]',
+                        'meio ambiente e desenvolvimento sustentável': 'bg-[#cbd6c3] border-[#44612e] text-[#44612e]',
                         'estrutura fundiária': 'bg-[#cbd6c3] border-[#44612e] text-[#44612e]',
                         
                         'viação, transporte e mobilidade': 'bg-[#e2e8f0] border-[#475569] text-[#475569]',
@@ -157,7 +161,7 @@
                     border-radar text-radar' %}
                     <span
                     class="{{ tema_style }} top-3 text-nowrap px-3 py-1 border-2 text-xs md:text-sm font-medium rounded-full capitalize">
-                    {{ t['nome'] }}
+                    {{ t['nome'] }} ({{ t['qtd']}})
                 </span>
                 {% endfor %}
                 {% if temas_discursos|length > 3 %}
@@ -167,14 +171,24 @@
                 border-radar text-radar' %}
                 <span
                 class="extra-tema hidden {{ tema_style }} text-nowrap px-3 py-1 border-2 text-xs md:text-sm font-medium rounded-full capitalize">
-                {{ t['nome'] }}
+                {{ t['nome'] }} ({{ t['qtd']}})
             </span>
             {% endfor %}
             <button
-            class="text-nowrap px-3 py-1 border-2 text-xs md:text-sm font-medium rounded-full bg-radar/30 border-radar text-radar capitalize cursor-pointer"
-            onclick="toggleTemas(this)">
-            Ver mais +
-        </button>
+               class="flex items-center gap-1 text-nowrap px-3 py-1 text-xs md:text-sm font-medium rounded-full text-gray-500 capitalize cursor-pointer"
+               onclick="toggleTemas(this)"
+               data-expandido="false">
+
+               <span class="btn-text">Ver mais</span>
+
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 icon-baixo">
+                   <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+               </svg>
+           
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 icon-cima hidden">
+                   <path fill-rule="evenodd" d="M9.47 6.47a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25Z" clip-rule="evenodd" />
+               </svg>
+            </button>
         {% endif %}
         {% else %}
         <p class="text-gray-500 text-sm italic">Nenhum tema mapeado nos discursos deste deputado.
@@ -182,18 +196,20 @@
         {% endif %}
     </div>
     
-    <div class="h-px w-full bg-gray-300"></div>
+    
 </div>
+
+<div class="h-px w-full bg-gray-300"></div>
 
 <!-- Principais informações ⬇️ -->
 <div class="flex flex-col md:flex-row w-full items-stretch gap-6 md:gap-0">
     
     <!--Situação, presença e despesas ⬇️ -->
     <div
-    class="w-full md:w-1/2 h-full flex flex-col justify-between text-xl lg:text-2xl md:pr-5 gap-y-4 md:gap-y-0">
+    class="w-full md:w-1/2 h-full flex flex-col justify-between text-xl lg:text-2xl gap-y-4 md:gap-y-0">
     
     <!--IGD-->
-    <div class="flex flex-col mb-2">
+    <div class="flex flex-col pb-0 lg:pb-5 pt-5 px-5 md:px-7">
         <div class="flex items-center mb-1.7">
             <span class="font-bold">IGD</span>
             
@@ -204,35 +220,47 @@
                 class="size-6 ms-2 me-1 text-radar/50 group-hover:hidden">
                 <path stroke-linecap="round" stroke-linejoin="round"
                 d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-            </svg>
+                </svg>
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                class="size-6 ms-2 me-1 text-radar/50 hidden group-hover:block">
+                    <path fill-rule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                    clip-rule="evenodd" />
+                </svg>
             
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-            class="size-6 ms-2 me-1 text-radar/50 hidden group-hover:block">
-            <path fill-rule="evenodd"
-            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-            clip-rule="evenodd" />
-        </svg>
-        
-        <span
-        class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity bg-radar/50 text-white text-center text-xs font-semibold rounded-lg p-1 w-48 left-[105%] top-1/2 -translate-y-1/2 z-10">
-        Índice Geral de Desempenho
-    </span>
-</span>
-</div>
+                <span class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity bg-radar/50 text-white text-center text-xs font-semibold rounded-lg p-1 w-48 left-[105%] top-1/2 -translate-y-1/2 z-10">
+                Índice Geral de Desempenho
+                </span>
+            </span>
+        </div>
 
-<span class="font-bold text-3xl md:text-4xl text-radar">{{ score_final['nota'] * 10 }}</span>
+        <!--Nota-->
+        <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+                <a href="{{ url_for('route.ranking') }}?{{ dep['id'] }}" class="font-bold text-3xl md:text-4xl text-radar hover:underline decoration-radar">{{ score_final['nota'] * 10 }}</a>
+                <a href="{{ url_for('route.ranking') }}?{{ dep['id'] }}" class="font-bold text-lg text-radar hover:underline decoration-radar">{{ score_final['posicao_ranking'] }}º de 513</a>
+            </div>
 
-<div class="mt-0">
-    <a href="{{ url_for('route.sobre') }}#desempenho"
-    class="text-black/80 font-medium text-base lg:text-sm hover:text-radar underline lg:no-underline"
-    target="_blank">Saiba mais sobre</a>
-</div>
-</div>
+            <!--Seta/link que leva pro ranking do deputado-->
+            <a href="{{ url_for('route.ranking') }}?{{ dep['id'] }}" class="text-radar">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-8 md:size-10">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </a>
+        </div>
 
-<div class="h-px w-full bg-gray-300 md:my-3"></div>
+        <div class="mt-0">
+            <a href="{{ url_for('route.sobre') }}#desempenho"
+            class="text-black/80 font-medium text-base lg:text-sm hover:text-radar underline lg:no-underline"
+            target="_blank">Saiba mais sobre</a>
+        </div>
+    </div>
+
+<div class="h-px w-full bg-gray-300 md:mb-3"></div>
 
 <!--Presença-->
-<div class="flex flex-col">
+<div class="flex flex-col px-5 md:px-7">
     <span class="font-bold mb-2">Presença total nas votações</span>
     <div class="relative bg-radar/20 rounded-full w-full">
         <div class="bg-radar h-3 rounded-full"
@@ -260,20 +288,19 @@
         </svg>
         
         {{ diff_presenca | abs | porcentagem }}%
-    </span>
+        </span>
     
-    {{ 'maior' if presenca_maior else 'menor' }} que a média da Câmara
-</div>
+        {{ 'maior' if presenca_maior else 'menor' }} que a média da Câmara
+    </div>
 </div>
 </div>
 
 <div class="h-px w-full bg-gray-300 md:my-3"></div>
 
 <!--Despesas-->
-<div class="flex flex-col">
+<div class="flex flex-col px-5 md:px-7 pb-0 lg:pb-5">
     <span class="font-bold">Despesas totais</span>
-    <span class="font-bold text-3xl md:text-4xl text-radar">R${{ gasto['total'] | real
-    }}</span>
+    <span class="font-bold text-3xl md:text-4xl text-radar">R${{ gasto['total'] | real }}</span>
     
     {% set diff_porcentagem = (gasto['total'] * 100 / media_gasto['gasto'] - 100) %}
     {% set gasto_maior = gasto['total'] > media_gasto['gasto'] %}
@@ -287,72 +314,71 @@
         <path fill-rule="evenodd"
         d="M11.78 9.78a.75.75 0 0 1-1.06 0L8 7.06 5.28 9.78a.75.75 0 0 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06Z"
         clip-rule="evenodd" />
-    </svg>
+        </svg>
     
-    {{ diff_porcentagem | abs | porcentagem }}%
-</span>
+        {{ diff_porcentagem | abs | porcentagem }}%
+        </span> {{ 'maior' if gasto_maior else 'menor' }} que a média da Câmara </span>
 
-{{ 'maior' if gasto_maior else 'menor' }} que a média da Câmara
-</span>
-<button onclick="document.getElementById('modal').showModal()"
-class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
-mais
-</button>
+    <button onclick="document.getElementById('modal').showModal()"
+        class="bg-radar/30 font-medium text-radar text-sm px-4 py-2 rounded-full w-fit mt-3 cursor-pointer hover:bg-radar hover:text-white transition-all">Ver
+        mais
+    </button>
 </div>
 
 <!--Modal das despesas-->
 <dialog id="modal"
-class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-1/2 max-h-[80vh]">
-<div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
-    
-    <h2 class="text-xl md:text-2xl font-medium mb-2">Despesas detalhadas</h2>
-    
-    <div
-    class="flex flex-row w-full text-black/70 font-semibold text-base md:text-lg border-b pb-2">
-    <div class="flex-1">Tipo</div>
-    <div class="flex-none pl-4">Gasto</div>
-</div>
+class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 min-w-7/8 lg:min-w-2/5 w-fit max-h-[80vh]">
+    <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
+        
+        <h2 class="text-xl md:text-2xl font-medium mb-2">Despesas detalhadas</h2>
+        
+        <div class="flex flex-row w-full text-black/70 font-semibold text-base md:text-lg border-b pb-2">
+            <div class="flex-1">Tipo</div>
+            <div class="flex-none pl-4">Gasto</div>
+        </div>
 
-<div class="flex-1 overflow-y-auto pr-2 font-medium text-black/80">
-    {% if despesas %}
-    {% for despesa in despesas %}
-    <div
-    class="flex flex-row w-full border-b border-black/15 py-3 text-base md:text-xl items-center">
-    <div class="flex-1 capitalize text-black/80 text-sm md:text-lg break-words">
-        {{despesa['tipo'] | lower}}
+        <div class="flex-1 overflow-y-auto pr-2 font-medium text-black/80">
+            {% if despesas %}
+            {% for despesa in despesas %}
+            <div
+            class="flex flex-row w-full border-b border-black/15 py-3 text-base md:text-xl items-center">
+            <div class="flex-1 capitalize text-black/80 text-base md:text-lg lg:text-xl break-words">
+                {{despesa['tipo'] | lower}}
+            </div>
+            <div
+            class="flex-none whitespace-nowrap ml-4 text-sm md:text-base lg:text-lg font-bold text-radar">
+            R$ {{despesa['gasto_total'] | real}}
+        </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <p class="text-gray-400 text-center py-10">
+            Esse deputado não tem nenhuma despesa.
+        </p>
+
+        {% endif %}
+        </div>
+
+        <div class="flex justify-end pt-2">
+            <button onclick="document.getElementById('modal').close()"
+            class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
+                Fechar
+            </button>
+        </div>
     </div>
-    <div
-    class="flex-none whitespace-nowrap ml-4 text-base md:text-xl font-bold text-radar">
-    R$ {{despesa['gasto_total'] | real}}
-</div>
-</div>
-{% endfor %}
-
-{% else %}
-<p class="text-gray-400 text-center py-10">
-    Esse deputado não tem nenhuma despesa.
-</p>
-
-{% endif %}
-</div>
-
-<div class="flex justify-end pt-2">
-    <button onclick="document.getElementById('modal').close()"
-    class="bg-radar/30 font-medium px-4 py-2 text-base rounded hover:bg-radar hover:text-white transition cursor-pointer">
-    Fechar
-</button>
-</div>
-</div>
 </dialog>
 </div>
 
 <div class="hidden md:block w-px bg-gray-300 self-stretch"></div>
 
-<!-- Discurso e proposição-->
-<div class="w-full md:w-1/2 flex flex-col text-xl md:text-2xl md:pl-5 gap-5 mt-6 md:mt-0">
+<div class="block md:hidden h-px w-full bg-gray-300"></div>
+
+<!-- Discurso e cargo-->
+<div class="w-full md:w-1/2 flex flex-col text-xl md:text-2xl gap-5">
     
     <!--Discurso-->
-    <div class="flex flex-col">
+    <div class="flex flex-col px-5 md:px-7 md:pt-5">
         <span class="font-bold">Confira seus discursos</span>
         
         <button onclick="document.getElementById('modal-discurso').showModal()"
@@ -362,7 +388,7 @@ class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg s
         
         <!--Modal do discurso-->
         <dialog id="modal-discurso"
-        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 w-11/12 md:w-2/3 lg:w-1/2 max-h-[80vh] overflow-visible">
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg shadow-xl backdrop:backdrop-blur-xs backdrop:bg-black/30 p-0 min-w-7/8 lg:min-w-2/5 w-fit max-h-[80vh] max-w-9/10 lg:max-w-5/10 overflow-visible">
         
         <div class="p-4 md:p-6 flex flex-col gap-4 h-full max-h-[80vh] overflow-hidden">
             
@@ -409,15 +435,15 @@ class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg s
         <div
         class="conteudo-discurso hidden bg-gray-50 px-4 py-4 font-medium text-sm md:text-base text-black/70 border-t border-gray-200">
         
-        <div class="text-sm bg-radar/20 p-2 rounded-full w-fit cursor-pointer transition-all hover:bg-radar hover:text-white mb-2"
-        data-keywords="{{ discurso['keywords'] }}"
-        onclick="abrirKeywords(event, this)">
-        <span class="font-bold">📋 Ver palavras-chave</span>
-    </div>
-    
-    <p class="pt-2 leading-relaxed break-words">{{ discurso['texto'] }}
-    </p>
-</div>
+            <div class="text-sm bg-radar/20 p-2 rounded-full w-fit cursor-pointer transition-all hover:bg-radar hover:text-white mb-2"
+            data-keywords="{{ discurso['keywords'] }}"
+            onclick="abrirKeywords(event, this)">
+                <span class="font-bold">Ver palavras-chave</span>
+            </div>
+        
+            <p class="pt-2 leading-relaxed break-words">{{ discurso['texto'] }}
+            </p>
+        </div>
 
 </div>
 {% endfor %}
@@ -442,12 +468,12 @@ class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 rounded-lg s
 <!-- Card de keywords posicionado à direita -->
 <div id="card-keywords"
 class="hidden absolute md:absolute fixed top-10 md:top-0 left-4 md:left-[calc(100%+12px)] right-4 md:right-auto bg-white rounded-lg shadow-2xl border border-gray-200 p-5 w-auto md:w-64 max-h-[70vh] md:max-h-[80vh] overflow-y-auto flex-col gap-3 z-50">
-<div class="flex justify-between items-center border-b pb-2">
-    <h3 class="font-bold text-dark-blue text-base">Palavras-chave</h3>
-    <button onclick="fecharKeywords()"
-    class="text-black/40 hover:text-black transition cursor-pointer text-2xl leading-none">&times;</button>
-</div>
-<div id="keywords-lista" class="flex flex-wrap gap-2 text-xs md:text-sm"></div>
+    <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-dark-blue text-base">Palavras-chave</h3>
+        <button onclick="fecharKeywords()"
+        class="text-black/40 hover:text-black transition cursor-pointer text-2xl leading-none">&times;</button>
+    </div>
+    <div id="keywords-lista" class="flex flex-wrap gap-2 text-xs md:text-base"></div>
 </div>
 
 </dialog>
@@ -456,66 +482,77 @@ class="hidden absolute md:absolute fixed top-10 md:top-0 left-4 md:left-[calc(10
 
 <div class="h-px w-full bg-gray-300"></div>
 
-<!--Projetos aprovadas -->
-<div
-class="flex flex-col max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
-<h3 class="font-bold mb-2">Projetos aprovados</h3>
-<div
-class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
-
-{% if aprovadas %}
-{% for prop in aprovadas %}
-{% if prop['nome'] %}
-<div class="flex flex-col items-start gap-2 border-l-2 border-radar pl-4">
-    <div class="text-xs lg:text-sm font-bold capitalize text-radar">{{
-        prop['status'] | lower }}</div>
-        <h4 class="font-medium text-base md:text-lg text-dark-blue mb-1 break-words">
-            <span class="font-bold text-radar">-</span> {{ prop['nome'] }}
-        </h4>
+<!--Cargo por extenso-->
+    <div class="flex flex-col max-h-[320px] overflow-y-auto pl-5 md:px-7 px-5 scrollbar-thin scrollbar-thumb-radar">
+    <h3 class="font-bold mb-2">Cargos</h3>
+        <div class="flex flex-col overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
+            {% if cargo and cargo['cargos_extenso'] %}
+                {% for c, o in zip(cargo['cargos_extenso'].split('|||'), cargo['orgaos'].split('|||')) %}
+                <p class="font-bold text-lg">▸{{ c }} <span class="font-normal">- {{ o }}</span></p>
+            {% endfor %}
+            {% else %}
+                <p class="text-base font-semibold">Sem cargo</p>
+            {% endif %}
+        </div>
     </div>
-    {% endif %}
-    {% endfor %}
-    
-    {% else %}
-    <p class="text-black/70 font-medium text-sm md:text-base">Este deputado não tem projeto
-        aprovado.</p>
-        {% endif %}
-    </div>
-</div>
 </div>
 
 </div>
 </div>
 
 <!--Seção de Projetos totais -->
-<section class="bg-white py-5 px-4 md:px-7 shadow-md rounded-lg flex flex-col max-h-[600px]">
-    <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-4 gap-2 sm:gap-0">
-        <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize">Projetos</h1>
-        <p class="text-base md:text-lg font-semibold text-black/70">Total: <span
-            class="font-bold text-radar">{{
-                total_proposicao['total_proposicao'] }}</span> Projetos</p>
-            </div>
+<section class="bg-white shadow-md rounded-lg flex flex-col max-h-[600px]">
+    <h1 class="text-dark-blue text-2xl md:text-4xl font-bold capitalize px-5 pt-5 lg:px-7 mb-5">Projetos</h1>
             
-            <div class="h-px w-full bg-gray-300 mb-4"></div>
+            <div class="min-h-px max-h-px w-full bg-gray-300"></div>
             
-            <div class="flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-radar">
+            <div class="flex flex-col gap-3 overflow-y-auto px-5 lg:px-7 scrollbar-thin scrollbar-thumb-radar py-5">
                 {% for prop in proposicoes %}
+                {% set codigos_aprovados = [98, 114, 1140, 1230] %}
+                {% set codigos_avancados = [920, 924, 930, 1100, 1120] %}
                 {% if prop['keywords'] or prop['nome'] and prop['nome'] != 'aaaaa' %}
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-3 last:border-none">
-                    <div class="relative bg-sec/20 w-fit p-2 rounded-lg flex-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                        class="size-5 md:size-6 text-sec">
-                        <path fill-rule="evenodd"
-                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                        clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <h4 class="font-medium text-base md:text-xl text-dark-blue capitalize break-words">{{
+                <div data-cod="{{ prop['status'] }}" class="flex flex-col gap-1 py-2 rounded-md [&>span]:text-xs [&>span]:font-bold [&>span]:capitalize
+                    [&>span]:text-{{ 'green-600' if prop['status'] in codigos_aprovados else ('sky-500' if prop['status'] in codigos_avancados else 'gray-400') }}
+                    border-l-3 pl-4 border-l-{{ 'green-600' if prop['status'] in codigos_aprovados else ('sky-500' if prop['status'] in codigos_avancados else 'gray-400/70') }}
+                    bg-{{ 'green-600/7' if prop['status'] in codigos_aprovados else ('sky-500/7' if prop['status'] in codigos_avancados else 'gray-400/7') }}">
+                {% if prop['status'] in codigos_aprovados %}
+                <span>
+                    Aprovado
+                </span>
+                {% elif prop['status'] in codigos_avancados %}
+                <span>
+                    Em estágio avançado de aprovação
+                </span>
+                {% else %}
+                <span>
+                    Rejeitado
+                </span>
+                {% endif %}
+
+                <h4 class="font-medium text-base md:text-xl text-dark-blue/90 capitalize break-words">{{
                     prop['nome'] or 'Não informado'
                 }}</h4>
             </div>
             {% endif %}
             {% endfor %}
+        </div>
+        <div class="min-h-px max-h-px w-full bg-gray-300"></div>
+        <div class="flex pb-5 px-5 lg:px-7 mt-5 justify-between
+        [&>div]:flex [&>div]:flex-col [&>div]:text-center
+        [&>div>span:first-child]:font-bold [&>div>span:first-child]:text-3xl [&>div>span:first-child]:md:text-4xl [&>div>span:first-child]:text-radar
+        [&>div>span:last-child]:font-semibold [&>div>span:last-child]:text-sm [&>div>span:last-child]:md:text-base [&>div>span:last-child]:capitalize">
+            <div>
+                <span>{{ total_proposicao['total_proposicao'] }}</span>
+                <span>Total Projetos</span>
+            </div>
+            <div>
+                <span>{{ prop_quase_aprov['total'] }}</span>
+                <span>Em estágio avançado de aprovação</span>
+            </div>
+            <div>
+                <span>{{ prop_aprov['total'] }}</span>
+                <span>Projetos Aprovados</span>
+            </div>
         </div>
     </section>
     
@@ -675,7 +712,7 @@ class="max-h-full max-w-full object-contain">
         
         document.getElementById('keywords-lista').innerHTML = (btn.dataset.keywords || '')
         .split(',').map(p => p.trim()).filter(Boolean)
-        .map(p => `<span class="bg-radar/20 capitalize text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">${p}</span>`)
+        .map(p => `<span class="bg-radar/20 capitalize text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">${p}</span>`)
         .join('') || '<span class="text-black/40 text-xs">Nenhuma palavra-chave.</span>';
         
         document.getElementById('card-keywords').classList.replace('hidden', 'flex');
@@ -686,16 +723,32 @@ class="max-h-full max-w-full object-contain">
     }
     
     function toggleTemas(btn) {
-        const temas = btn.parentElement.querySelectorAll('span:not(:last-child)');
-        const estaExpandido = btn.textContent.includes('Ver mais +');
-        
-        temas.forEach((tema, index) => {
-            if (index >= 3) {
-                tema.classList.toggle('hidden', !estaExpandido);
-            }
-        });
-        
-        btn.textContent = estaExpandido ? 'Ver menos -' : 'Ver mais +';
-    }
+    // Busca os temas irmãos (ignorando o último elemento se necessário)
+    const temas = btn.parentElement.querySelectorAll('span:not(.btn-text):not(:last-child)');
+    
+    // Verifica o estado atual baseado no atributo "data-expandido"
+    const estaExpandido = btn.getAttribute('data-expandido') === 'true';
+    
+    // Novo estado será o oposto do atual
+    const novoEstado = !estaExpandido;
+
+    // 1. Controla a visibilidade dos temas
+    temas.forEach((tema, index) => {
+        if (index >= 4) {
+            // Se o novo estado for expandido, remove o hidden (false). Se não, adiciona (true).
+            tema.classList.toggle('hidden', !novoEstado);
+        }
+    });
+    
+    // 2. Atualiza o texto interno do span
+    btn.querySelector('.btn-text').textContent = novoEstado ? 'Ver menos' : 'Ver mais';
+    
+    // 3. Alterna a visibilidade dos SVGs
+    btn.querySelector('.icon-baixo').classList.toggle('hidden', novoEstado);
+    btn.querySelector('.icon-cima').classList.toggle('hidden', !novoEstado);
+    
+    // 4. Salva o novo estado no atributo do botão
+    btn.setAttribute('data-expandido', novoEstado);
+}
 </script>
 {% endblock %}

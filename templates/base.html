@@ -39,7 +39,7 @@
     {% include 'partials/_navbar.html' %}
     {% include 'partials/_navbar-bottom.html' %}
 
-   <main class="flex-grow pb-24 lg:pb-0 pt-20 lg:pt-0">
+   <main class="{{ 'flex-grow pb-24 lg:pb-0 pt-20 lg:pt-0' if sticky_navbar else 'flex-grow' }}">
         {% block content %}{% endblock %}
     </main>
 

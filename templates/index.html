@@ -8,13 +8,11 @@
   <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script>
-    //Roda o JS somente após carregar o HTML inteiro
     document.addEventListener("DOMContentLoaded", () => {
       const btn = document.getElementById("btn-deputados");
       const menu = document.getElementById("menu-deputados");
       const seta = document.getElementById("seta");
 
-      //Abre o dropdown e verifica se o JS está funcionando
       if (btn && menu) {
         seta.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -23,14 +21,12 @@
           seta.classList.toggle("rotate-180");
         });
 
-        //Fecha o dropdown ao clicar fora dele
         document.addEventListener("click", (e) => {
           if (!menu.contains(e.target) && !btn.contains(e.target)) {
             menu.classList.add("hidden");
             seta.classList.remove("rotate-180");
           }
         });
-        //Erro caso os IDs não forem encontrados
       } else {
         console.error("Erro: Elementos não encontrados. Verifique os IDs.");
       }
@@ -39,199 +35,253 @@
 
   <style type="text/tailwindcss">
     @theme {
-        --color-hover: #151385; /* Cor do hover (Ex: Botão Pesquisa) */
-        --color-radar: #1a249d; /* Cor principal (Ex: cor da navbar) */
-        --color-dark-blue: #081638; /* Cor dos texto */
-        --color-sec: #efc33c; /* Cor amarela */
-        --color-verde: #34c560 /* Cor verde */;
+        --color-hover: #151385;
+        --color-radar: #1a249d;
+        --color-dark-blue: #081638;
+        --color-sec: #efc33c;
+        --color-verde: #34c560;
       }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col relative">
-  <!--Deixa o footer sempre no final da página-->
   <main class="flex-grow">
-    <!--Navbar-->
     {% include 'partials/_navbar.html' %}
     {% include 'partials/_navbar-bottom.html' %}
     
     <!--Banner-->
     <section class="relative h-[510px] w-full bg-cover bg-center flex items-center"
     style="background-image: url(../static/img/banner.png)">
-    <div class="absolute inset-0 bg-black/20"></div>
-    <div class="relative z-10 text-white w-full max-w-[100rem] mx-auto px-5">
-      <h1 class="text-3xl text-shadow-md sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mb-5">
-        ACOMPANHE SEUS DEPUTADOS FEDERAIS!
-      </h1>
-      <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl">
-        Saiba como votar com consciência
-      </p>
-    </div>
-  </section>
-  
-  <!--Barra de pesquisa-->
-  <div class="bg-gray-200 py-6">
-    <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
-      <div class="flex-1 relative z-1">
-        {% set show_icon = false %}
-        {% set input_class = "px-6 py-4 w-full rounded-none md:rounded-l-full bg-white text-gray-500 border-none shadow-sm focus:shadow-none" %}
-        {% set input_placeholder = "Buscar por deputado" %}
-        {% set autocomplete_id = 'home' %}
-        {% include 'partials/_autocomplete.html' %}
+      <div class="absolute inset-0 bg-black/20"></div>
+      <div class="relative z-10 text-white w-full max-w-[100rem] mx-auto px-5">
+        <h1 class="text-3xl text-shadow-md sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mb-5">
+          ACOMPANHE SEUS DEPUTADOS FEDERAIS!
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl font-normal max-w-2xl">
+          Saiba como votar com consciência
+        </p>
       </div>
-      
-      <div class="relative flex-1">
-        <select name="estado"
-        class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-        <option value="">Selecionar Estado</option>
-        {% for est in estados %}
-          <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
-        {% endfor %}
-      </select>
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg>
-      </div>
-    </div>
+    </section>
     
-    <div class="relative flex-1">
-      <select name="partido"
-      class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
-      <option value="">Partido</option>
-      {% for part in partidos %}
-       <option value="{{ part['abreviacao'] | lower}}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
-      {% endfor %}
-    </select>
-    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-      <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-      </svg>
-    </div>
-  </div>
-  
-  <button
-  class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
-  <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-  </svg>
-</button>
-</form>
-</div>
-<!--Saiba mais sobre-->
-<div class="w-full max-w-[100rem] mx-auto px-5">
-  <h2 class="text-radar text-2xl md:text-3xl font-bold font-poppins my-6 md:my-15">
-    Saiba mais sobre...
-  </h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-15
-  
-  [&>button]:text-left
-
-  [&>button>a>div]:bg-gray-50 [&>button>a>div]:border [&>button>a>div]:border-gray-200 [&>button>a>div]:shadow-md [&>button>a>div]:w-full [&>button>a>div]:h-full [&>button>a>div]:hover:scale-105 [&>button>a>div]:duration-300 [&>button>a>div]:rounded-2xl [&>button>a>div]:text-black
-  
-  [&>button>a>div>img]:w-full [&>button>a>div>img]:object-cover [&>button>a>div>img]:rounded-t-2xl
-
-  [&>button>a>div>h3]:pl-5 [&>button>a>div>h3]:pt-3 [&>button>a>div>h3]:font-bold [&>button>a>div>h3]:text-xl
-
-  [&>button>a>div>p]:pl-5 [&>button>a>div>p]:pt-1 [&>button>a>div>p]:pb-4 [&>button>a>div>p]:font-semibold [&>button>a>div>p]:text-base">
-    <!--Botões que levam aos gráficos-->
-    {% set botoes = [
-      {'href': 'gastos', 'img': 'gastos', 'titulo': 'Gastos', 'descricao': 'Descubra se os gastos do seu deputado são úteis.'},
-      {'href': 'projetos', 'img': 'projetos', 'titulo': 'Projetos', 'descricao': 'Descubra sobre os projetos seu deputado.'},
-      {'href': 'presenca', 'img': 'presenca', 'titulo': 'Presença', 'descricao': 'Descubra se o seu deputado está faltando muito.'},
-      {'href': 'ranking', 'img': 'ranking', 'titulo': 'Ranking', 'descricao': 'Descubra a colocação de desempenho do seu deputado.'}
-      ] %}
-    {% for botao in botoes %}
-      <button>
-        <a href="{{ url_for('route.graficos') }}#{{ botao['href'] }}">
-          <div>
-            <img src="{{ url_for('static', filename='img/' + botao['img'] + '.png') }}"/>
-            <h3>{{ botao['titulo'] }}</h3>
-            <p>
-              {{ botao['descricao'] }}
-            </p>
+    <!--Barra de pesquisa -->
+    <div class="bg-gray-200 py-6">
+      <form action="{{ url_for('route.procurar') }}" method="GET" class="max-w-[100rem] px-5 mx-auto flex flex-col md:flex-row gap-3">
+        <div class="flex-1 relative z-1">
+          {% set show_icon = false %}
+          {% set input_class = "px-6 py-4 w-full rounded-none md:rounded-l-full bg-white text-gray-500 border-none shadow-sm focus:shadow-none" %}
+          {% set input_placeholder = "Buscar por deputado" %}
+          {% set autocomplete_id = 'home' %}
+          {% include 'partials/_autocomplete.html' %}
+        </div>
+        
+        <div class="relative flex-1">
+          <!-- ✅ id adicionado -->
+          <select id="select-estado" name="estado"
+          class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+            <option value="">Selecionar Estado</option>
+            {% for est in estados %}
+              <option value="{{ est['uf'] }}">{{ est['nome'] }} ({{est['uf'] }})</option>
+            {% endfor %}
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
           </div>
-        </a>
-      </button>
-    {% endfor %}
-  </div>
-</div>
+        </div>
+        
+        <div class="relative flex-1">
+          <!-- ✅ id adicionado -->
+          <select id="select-partido" name="partido"
+          class="w-full appearance-none px-6 py-4 bg-white text-gray-500 outline-none shadow-sm cursor-pointer">
+            <option value="">Partido</option>
+            {% for part in partidos %}
+              <option value="{{ part['abreviacao'] | lower }}">{{ part['nome'] }} ({{part['abreviacao'] }})</option>
+            {% endfor %}
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
 
-<div class="w-full max-w-[100rem] mx-auto px-5">
-  <h1 class="text-black my-10 md:my-15 text-2xl md:text-3xl font-bold font-poppins">
-    Veja sobre os temas:
-  </h1>
-  
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-15
-  [&_a]:w-full [&_a]:flex
-  [&_button]:flex [&_button]:items-center [&_button]:text-left [&_button]:gap-4 [&_button]:p-4 
-  [&_button]:bg-gray-50 [&_button]:border [&_button]:border-gray-200 
-  [&_button]:shadow-md [&_button]:rounded-2xl [&_button]:w-full [&_button]:h-full
-  [&_button]:cursor-pointer [&_button]:hover:scale-105 [&_button]:duration-300
-  [&_img]:w-9 [&_img]:h-9 [&_img]:object-contain [&_img]:shrink-0
-  [&_span]:text-base sm:[&_span]:text-lg [&_span]:font-medium [&_span]:leading-snug">
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/saude e educação.png" alt="saude">
-      <span>Saúde e Educação</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/economia.png" alt="economia">
-      <span>Economia e Desenvolvimento</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/ciencia.png" alt="ciencia">
-      <span>Ciências</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/tecnologia.png" alt="tecnologia">
-      <span>Infraestrutura e Tecnologia</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/natureza.png" alt="natureza">
-      <span>Natureza e Produção</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/direitos e justiça.png" alt="direitos">
-      <span>Direitos, Justiça e Cidadania</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/gestão publica.png" alt="gestão">
-      <span>Gestão pública e Política</span>
-    </button>
-  </a>
-  
-  <a href="#">
-    <button>
-      <img src="../static/img/icones/cultura.png" alt="cultura">
-      <span>Cultura, Lazer e Segurança</span>
-    </button>
-  </a>
-</div>
-</main>
-<!--Footer-->
-{% include 'partials/_footer.html' %}
-<script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+        <button class="bg-radar px-8 py-4 rounded-none md:rounded-r-full hover:bg-hover transition-colors shadow-sm flex items-center justify-center cursor-pointer">
+          <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <!--Script do filtro dinâmico -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectEstado = document.getElementById("select-estado");
+        const selectPartido = document.getElementById("select-partido");
+
+        if (!selectEstado || !selectPartido) return;
+
+        const estadosOriginais = Array.from(selectEstado.options).map(opt => ({ value: opt.value, text: opt.text }));
+        const partidosOriginais = Array.from(selectPartido.options).map(opt => ({ value: opt.value, text: opt.text }));
+
+        function atualizarFiltrosCruzados() {
+            const estadoVal = selectEstado.value;
+            const partidoVal = selectPartido.value;
+
+            fetch(`/api/filtros-dinamicos?estado=${estadoVal}&partido=${partidoVal}`)
+                .then(response => response.json())
+                .then(data => {
+                    const estadoAtual = selectEstado.value;
+                    selectEstado.innerHTML = '';
+                    console.log("data.partidos:", data.partidos);
+                    console.log("opt.values:", partidosOriginais.map(o => o.value));
+                    
+                    estadosOriginais.forEach(opt => {
+                        if (opt.value === "" || data.estados.includes(opt.value)) {
+                            const selecionado = opt.value === estadoAtual ? 'selected' : '';
+                            selectEstado.innerHTML += `<option value="${opt.value}" ${selecionado}>${opt.text}</option>`;
+                        }
+                    });
+
+                    const partidoAtual = selectPartido.value;
+                    selectPartido.innerHTML = '';
+                    
+                    partidosOriginais.forEach(opt => {
+                      if (opt.value === "" || data.partidos.map(p => p.toLowerCase()).includes(opt.value)) {
+                          const selecionado = opt.value === partidoAtual ? 'selected' : '';
+                          selectPartido.innerHTML += `<option value="${opt.value}" ${selecionado}>${opt.text}</option>`;
+                      }
+                  });
+                })
+                .catch(err => console.error("Erro na requisição dos filtros:", err));
+        }
+
+        const formulario = selectEstado.closest('form');
+        if (formulario) {
+            formulario.addEventListener("change", function(evento) {
+                if (evento.target.id === "select-estado" || evento.target.id === "select-partido") {
+                    atualizarFiltrosCruzados();
+                }
+            });
+        }
+    });
+    </script>
+
+    <!--Saiba mais sobre -->
+    <div class="w-full max-w-[100rem] mx-auto px-5">
+      <h2 class="text-dark-blue text-2xl md:text-3xl font-bold my-6 md:mt-15 md:mb-6">
+        Saiba mais sobre...
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10
+      
+      [&>button]:text-left
+
+      [&>button>a>div]:bg-gray-50 [&>button>a>div]:border [&>button>a>div]:border-gray-200 [&>button>a>div]:shadow-md [&>button>a>div]:w-full [&>button>a>div]:h-full [&>button>a>div]:hover:scale-105 [&>button>a>div]:duration-300 [&>button>a>div]:rounded-2xl [&>button>a>div]:text-black
+      
+      [&>button>a>div>img]:w-full [&>button>a>div>img]:object-cover [&>button>a>div>img]:rounded-t-2xl
+
+      [&>button>a>div>h3]:pl-5 [&>button>a>div>h3]:pt-3 [&>button>a>div>h3]:font-bold [&>button>a>div>h3]:text-xl
+
+      [&>button>a>div>p]:pl-5 [&>button>a>div>p]:pt-1 [&>button>a>div>p]:pb-4 [&>button>a>div>p]:font-semibold [&>button>a>div>p]:text-base">
+        {% set botoes = [
+          {'href': url_for("route.graficos") ~ '?tab=projetos', 'img': 'projetos', 'titulo': 'Projetos', 'descricao': 'Descubra sobre os projetos do seu deputado.'},
+          {'href': url_for("route.graficos") ~ '?tab=presenca', 'img': 'presenca', 'titulo': 'Presença', 'descricao': 'Descubra se o seu deputado está faltando muito.'},
+          {'href': url_for("route.graficos") ~ '?tab=gastos', 'img': 'gastos', 'titulo': 'Gastos', 'descricao': 'Descubra se os gastos do seu deputado são úteis.'},
+          {'href': url_for("route.ranking"), 'img': 'ranking', 'titulo': 'Ranking', 'descricao': 'Descubra a colocação de desempenho do seu deputado.'}
+        ] %}
+        {% for botao in botoes %}
+          <button>
+            <a href="{{ botao['href'] }}">
+              <div>
+                <img src="{{ url_for('static', filename='img/' + botao['img'] + '.png') }}"/>
+                <h3>{{ botao['titulo'] }}</h3>
+                <p>{{ botao['descricao'] }}</p>
+              </div>
+            </a>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <div class="w-full max-w-[100rem] mx-auto px-5">
+      <h2 class="text-dark-blue my-10 md:mt-15 md:mb-6 text-2xl md:text-3xl font-bold">
+        Veja sobre os temas:
+      </h2>
+      
+   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-15
+       [&_a]:w-full [&_a]:flex
+       [&_button]:flex [&_button]:items-center [&_button]:text-left [&_button]:gap-4 [&_button]:p-4 
+       [&_button]:bg-gray-50 [&_button]:border [&_button]:border-gray-200 
+       [&_button]:shadow-md [&_button]:rounded-2xl [&_button]:w-full [&_button]:h-full
+       [&_button]:cursor-pointer [&_button]:hover:scale-105 [&_button]:duration-300
+       [&_img]:w-9 [&_img]:h-9 [&_img]:object-contain [&_img]:shrink-0
+       [&_span]:text-base sm:[&_span]:text-lg [&_span]:font-medium [&_span]:leading-snug">
+      
+       <a href="{{ url_for('route.deputados', tema='Saude_e_educacao') }}">
+      <button>
+        <img src="../static/img/icones/saude e educação.png" alt="saude">
+        <span>Saúde e Educação</span>
+      </button>
+    </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Economia_e_desenvolvimento') }}">
+          <button>
+            <img src="../static/img/icones/economia.png" alt="economia">
+            <span>Economia e Desenvolvimento</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Ciencias') }}">
+          <button>
+            <img src="../static/img/icones/ciencia.png" alt="ciencia">
+            <span>Ciências</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Infraestrutura_e_tecnologia') }}">
+          <button>
+            <img src="../static/img/icones/tecnologia.png" alt="tecnologia">
+            <span>Infraestrutura e Tecnologia</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', '?tab=' tema='Natureza_e_produção') }}">
+          <button>
+            <img src="../static/img/icones/natureza.png" alt="natureza">
+            <span>Natureza e Produção</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Direitos, justiça_e_cidadania') }}">
+          <button>
+            <img src="../static/img/icones/direitos e justiça.png" alt="direitos">
+            <span>Direitos, Justiça e Cidadania</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Gestao publica_e_politica') }}">
+          <button>
+            <img src="../static/img/icones/gestão publica.png" alt="gestão">
+            <span>Gestão pública e Política</span>
+          </button>
+        </a>
+        
+        <a href="{{ url_for('route.deputados', tema='Cultura_lazer_e_seguranca') }}">
+          <button>
+            <img src="../static/img/icones/cultura.png" alt="cultura">
+            <span>Cultura, Lazer e Segurança</span>
+          </button>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  {% include 'partials/_footer.html' %}
+  <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 </body>
 
 </html>

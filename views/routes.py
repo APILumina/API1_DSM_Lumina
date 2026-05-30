@@ -13,7 +13,7 @@ route_bp = Blueprint("route", __name__)
 
 partidos = [
     {'abreviacao': 'AVANTE', 'nome': 'Avante'},
-    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'}, #FALTA IMAGEM
+    {'abreviacao': 'CIDADANIA', 'nome': 'Cidadania'},
     {'abreviacao': 'MDB', 'nome': 'Movimento Democrático Brasileiro'},
     {'abreviacao': 'MISSÃO', 'nome': 'Partido Missão'},
     {'abreviacao': 'NOVO', 'nome': 'Partido Novo'},
@@ -63,6 +63,66 @@ estados = [
     {'uf': 'SP', 'nome': 'São Paulo'},
     {'uf': 'SE', 'nome': 'Sergipe'},
     {'uf': 'TO', 'nome': 'Tocantins'}
+]
+
+Temas = [
+    {
+        "Gestão pública e política": [
+            ["Administração pública", 34],
+            ["Processo legislativo e atuação parlamentar", 52],
+            ["Finanças públicas e orçamento", 70],
+            ["Política, partidos e eleições", 74]
+        ],
+
+        "Direitos, justiça e cidadania": [
+            ["Direito constitucional", 68],
+            ["Direito civil e processual civil", 42],
+            ["Direito penal e processual penal", 43],
+            ["Direito e justiça", 76],
+            ["Direitos humanos e minorias", 44],
+            ["Direito e defesa do consumidor", 67]
+        ],
+
+        "Economia e desenvolvimento": [
+            ["Economia", 40],
+            ["Indústria, comércio e serviços", 66],
+            ["Relações internacionais e comércio exterior", 55],
+            ["Turismo", 60],
+            ["Trabalho e emprego", 58],
+            ["Previdência e assistência social", 51]
+        ],
+
+        "Infraestrutura e tecnologia": [
+            ["Cidades e desenvolvimento urbano", 41],
+            ["Viação, transporte e mobilidade", 61],
+            ["Energia, recursos hídricos e minerais", 54],
+            ["Comunicações", 37]
+        ],
+
+        "Natureza e produção": [
+            ["Meio ambiente e desenvolvimento sustentável", 48],
+            ["Agricultura, pecuária, pesca e extrativismo", 64],
+            ["Estrutura fundiária", 49]
+        ],
+
+        "Ciências": [
+            ["Ciências sociais e humanas", 86],
+            ["Ciências exatas e da terra", 85],
+            ["Ciência, tecnologia e inovação", 62]
+        ],
+
+        "Saúde e educação": [
+            ["Saúde", 56],
+            ["Educação", 46]
+        ],
+
+        "Cultura, lazer e segurança": [
+            ["Arte, cultura e religião", 35],
+            ["Esporte e lazer", 39],
+            ["Defesa e segurança", 57],
+            ["Homenagens e datas comemorativas", 72]
+        ]
+    }
 ]
 
 def obter_partidos_abreviados():
@@ -190,7 +250,8 @@ def graficos():
             JOIN deputado d ON pd.fk_deputado = d.cd_deputado
             JOIN partido p  ON d.fk_partido   = p.cd_partido
             JOIN estado e   ON d.fk_estado    = e.cd_estado
-            WHERE e.uf = %s
+            JOIN proposicoes pr ON pd.fk_proposicao = pr.cd_proposicoes
+            WHERE e.uf = %s AND pr.status = 'Transformado em Norma Jurídica'
             GROUP BY p.abreviacao ORDER BY total DESC
         """, (estado,))
         grafico_projetos = gerar_grafico(pd.DataFrame(cursor.fetchall()), 'label', 'total', f'Projetos por Partido — {estado}')
@@ -392,15 +453,35 @@ def deputados():
         JOIN top_temas t
             ON t.cd_tp_temas = dt.fk_tema
         """
-        
-        filtros.append("t.cd_tp_temas = %s")
-        params.append(tema)
+
+        # Se o valor de tema for um id (número), filtra por esse subtema específico.
+        # Caso contrário, assume-se que é um macrotema (categoria) e expande
+        # para todos os códigos de subtema pertencentes àquela categoria.
+        if tema.isdigit():
+            filtros.append("t.cd_tp_temas = %s")
+            params.append(tema)
+        else:
+            # encontrar os códigos dos subtemas da categoria selecionada
+            codigos = []
+            for tema_dict in Temas:
+                if tema in tema_dict:
+                    codigos = [item[1] for item in tema_dict[tema]]
+                    break
+
+            if codigos:
+                placeholders = ','.join(['%s'] * len(codigos))
+                filtros.append(f"t.cd_tp_temas IN ({placeholders})")
+                params.extend(codigos)
+            else:
+                # fallback: tenta comparar texto (não esperado normalmente)
+                filtros.append("t.cd_tp_temas = %s")
+                params.append(tema)
 
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
 
 
     query = f"""
-    SELECT 
+    SELECT DISTINCT
         d.cd_deputado,
         d.nome,
         d.nome_eleitoral,
@@ -415,6 +496,7 @@ def deputados():
     ORDER BY d.nome_eleitoral
     LIMIT 24 OFFSET 0
     """
+    
 
     cursor.execute(query, params)
     dados = cursor.fetchall()
@@ -428,8 +510,9 @@ def deputados():
     todos_deputados = cursor.fetchall()
 
     cursor.execute("""
-        SELECT tipo, cd_tp_temas
-        FROM top_temas
+    SELECT tipo, cd_tp_temas
+    FROM top_temas
+    ORDER BY tipo
     """)
 
     temas = cursor.fetchall()
@@ -447,6 +530,7 @@ def deputados():
         partidos=partidos,
         todos_deputados=todos_deputados,
         temas=temas,
+        Temas=Temas,
         sticky_navbar=True,
         nb=2
     )
@@ -507,7 +591,7 @@ def infodeputados(id):
     # Query 1: Dados básicos do deputado
     query1 = """
         SELECT 
-            d.cd_deputado, d.nome, d.nome_eleitoral, d.email, d.imagem_deputado,
+            d.cd_deputado as id, d.nome, d.nome_eleitoral, d.email, d.imagem_deputado,
             e.uf AS estado, p.abreviacao AS partido
         FROM deputado d
         JOIN estado e ON fk_estado = e.cd_estado
@@ -538,10 +622,17 @@ def infodeputados(id):
     
     # Query 5: Proposições detalhes
     query5 = """
-        SELECT p.cd_proposicoes, p.keywords, p.nome
+        SELECT p.cd_proposicoes, p.keywords, p.nome, p.codSituacao as status
         FROM proposicao_deputados pd
         INNER JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
         WHERE pd.fk_deputado = %s
+        ORDER BY
+            CASE
+                WHEN p.codSituacao IN (98, 114, 1140, 1230) THEN 1
+                WHEN p.codSituacao IN (920, 924, 930, 1100, 1120) THEN 2
+                ELSE 3
+            END ASC,
+            p.nome ASC;
     """
     
     # Query 6: Despesas por tipo
@@ -579,36 +670,6 @@ def infodeputados(id):
         SELECT ROUND(AVG(e.despesa_total), 2) AS gasto
         FROM economia e
     """
-    
-    cursor.execute(query1, (id,))
-    deputado = cursor.fetchone()
-
-    cursor.execute(query2, (id,))
-    gasto = cursor.fetchone()
-
-    cursor.execute(query3, (id,))
-    presenca = cursor.fetchone()
-
-    cursor.execute(query4, (id,))
-    total_proposicao = cursor.fetchone()
-
-    cursor.execute(query5, (id,))
-    proposicoes = cursor.fetchall()
-
-    cursor.execute(query6, (id,))
-    despesas = cursor.fetchall()
-
-    cursor.execute(query7, (id,))
-    discursos = cursor.fetchall()
-
-    cursor.execute(query8, (id,))
-    aprovadas = cursor.fetchall()
-
-    cursor.execute(query9)
-    media_presenca = cursor.fetchone()
-
-    cursor.execute(query10)
-    media_gasto = cursor.fetchone()
 
     # Query 11: Combinar todas as métricas em uma única query
     query11 = """
@@ -641,86 +702,120 @@ def infodeputados(id):
         LIMIT 5
     """
     query13 = """
-        SELECT tp.nome 
+        SELECT tp.nome, d.qtd_proposicoes as qtd
         FROM deputado_tema d
         INNER JOIN tema_peso tp ON tp.cd_tema = d.fk_tema
         WHERE fk_deputado = %s
         ORDER BY d.qtd_proposicoes DESC
     """
-    #query14 = """
-    #     {
-    #     "Gestão pública e política": [
-    #         "Administração pública",
-    #         "Processo legislativo e atuação parlamentar",
-    #         "Finanças públicas e orçamento",
-    #         "Política, partidos e eleições"
-    #     ],
-    #     "Direitos, justiça e cidadania": [
-    #         "Direito constitucional",
-    #         "Direito civil e processual civil",
-    #         "Direito penal e processual penal",
-    #         "Direito e justiça",
-    #         "Direitos humanos e minorias",
-    #         "Direito e defesa do consumidor"
-    #     ],
-    #     "Economia e desenvolvimento": [
-    #         "Economia",
-    #         "Indústria, comércio e serviços",
-    #         "Relações internacionais e comércio exterior",
-    #         "Turismo",
-    #         "Trabalho e emprego",
-    #         "Previdência e assistência social"
-    #     ],
-    #     "Infraestrutura e tecnologia": [
-    #         "Cidades e desenvolvimento urbano",
-    #         "Viação, transporte e mobilidade",
-    #         "Energia, recursos hídricos e minerais",
-    #         "Comunicações"
-    #     ],
-    #     "Natureza e produção": [
-    #         "Meio ambiente e desenvolvimento sustentável",
-    #         "Agricultura, pecuária, pesca e extrativismo",
-    #         "Estrutura fundiária"
-    #     ],
-    #     "Ciências": [
-    #         "Ciências sociais e humanas",
-    #         "Ciências exatas e da terra",
-    #         "Ciência, tecnologia e inovação"
-    #     ],
-    #     "Saúde e educação": [
-    #         "Saúde",
-    #         "Educação"
-    #     ],
-    #     "Cultura, lazer e segurança": [
-    #         "Arte, cultura e religião",
-    #         "Esporte e lazer",
-    #         "Defesa e segurança",
-    #         "Homenagens e datas comemorativas"
-    #     ]
-    # }
-    #"""
     
     query15 = """
         SELECT
-        d.score_final as nota
+            d.score_final as nota,
+            d.ranking as posicao_ranking
         FROM desempenho d
         WHERE fk_deputado = %s
     
     """
     
+    # Query 16: Quantidade de proposições aprovadas
+    query16 = """
+        SELECT COUNT(*) AS total
+        FROM proposicoes p
+        INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE pd.fk_deputado = %s 
+          AND p.codSituacao IN (
+            98, 114, 1140, 1230
+          )
+    """
+    
+    # Query 17: Quantidade de proposições (quase) aprovadas
+    query17 = """
+        SELECT COUNT(*) AS total
+        FROM proposicoes p
+        INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE pd.fk_deputado = %s 
+          AND p.codSituacao IN (
+              920, 924, 930, 1100, 1120
+          )
+    """
+    
+    # Query 18: Situação do deputado
+    query18 = """
+        SELECT s.nome
+        FROM situacao_deputado s
+        WHERE s.fk_deputado = %s
+    """
+    
+    # Query 19: Cargo do deputado
+    query19 = """
+        SELECT 
+            GROUP_CONCAT(DISTINCT l.sigla_cargo SEPARATOR ' / ') as cargos,
+            GROUP_CONCAT(l.cargo ORDER BY l.peso_cargo DESC SEPARATOR '|||') as cargos_extenso,
+            GROUP_CONCAT(l.nome_orgao ORDER BY l.peso_cargo DESC SEPARATOR '|||') as orgaos
+        FROM lideranca_orgaos l
+        WHERE l.fk_deputado = %s
+        AND l.sigla_cargo IS NOT NULL
+    """
+    
+    cursor.execute(query1, (id,))
+    deputado = cursor.fetchone()
+
+    cursor.execute(query2, (id,))
+    gasto = cursor.fetchone()
+
+    cursor.execute(query3, (id,))
+    presenca = cursor.fetchone()
+
+    cursor.execute(query4, (id,))
+    total_proposicao = cursor.fetchone()
+
+    cursor.execute(query5, (id,))
+    proposicoes = cursor.fetchall()
+
+    cursor.execute(query6, (id,))
+    despesas = cursor.fetchall()
+
+    cursor.execute(query7, (id,))
+    discursos = cursor.fetchall()
+
+    cursor.execute(query8, (id,))
+    aprovadas = cursor.fetchall()
+
+    cursor.execute(query9)
+    media_presenca = cursor.fetchone()
+
+    cursor.execute(query10)
+    media_gasto = cursor.fetchone()
+    
     cursor.execute(query11, (id, id))
     stats = cursor.fetchone()
     
+    cursor.execute(query12, (id, id))
+    temas_com_media = cursor.fetchall()
+    
+    cursor.execute(query13, (id,))
+    temas_discursos = cursor.fetchall()
+    
     cursor.execute(query15, (id,))
     score_final = cursor.fetchone()
+    
+    cursor.execute(query16, (id,))
+    prop_aprov = cursor.fetchone()
+    
+    cursor.execute(query17, (id,))
+    prop_quase_aprov = cursor.fetchone()
+    
+    cursor.execute(query18, (id,))
+    situacao = cursor.fetchone()
+    
+    cursor.execute(query19, (id,))
+    cargo = cursor.fetchone()
     
     total_deputado = stats['total_deputado'] or 0
     media_camara = stats['media_camara'] or 0
     aprovados_deputado = stats['aprovados_deputado'] or 0
     media_aprovados_camara = stats['media_aprovados_camara'] or 0
-    
-    cursor.execute(query12, (id, id))
-    temas_com_media = cursor.fetchall()
     
     labels_tema = []
     valores_dep_tema = []
@@ -731,8 +826,6 @@ def infodeputados(id):
         valores_dep_tema.append(tema['qtd_deputado'])
         valores_med_tema.append(round(tema['media_tema'], 1))
 
-    cursor.execute(query13, (id,))
-    temas_discursos = cursor.fetchall()
     
     # --- GERAÇÃO DOS GRÁFICOS ---
     grafico_proposicoes_img = gerar_grafico_deputado(
@@ -764,7 +857,7 @@ def infodeputados(id):
         discurso['hora'] = dt.strftime('%H:%M')
     
     if deputado:
-        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, temas_discursos=temas_discursos, score_final=score_final, nb=2)
+        return render_template("deputado.html", dep=deputado, gasto=gasto, presenca=presenca,total_proposicao=total_proposicao, proposicoes=proposicoes,grafico_proposicoes=grafico_proposicoes_img,grafico_aprovados=grafico_aprovados_img,grafico_temas=grafico_temas_img, despesas=despesas, discursos=discursos, aprovadas=aprovadas, media_presenca=media_presenca, media_gasto=media_gasto,todos_deputados=todos_deputados, temas_discursos=temas_discursos, score_final=score_final, nb=2, prop_aprov=prop_aprov, prop_quase_aprov=prop_quase_aprov, situacao=situacao, cargo=cargo)
     else:
         return {"erro": "Deputado não encontrado"}, 404
 
@@ -982,7 +1075,7 @@ def ranking():
         query += " AND p.abreviacao = %s"
         params.append(partido)
 
-    query += " ORDER BY des.score_final DESC"
+    query += " ORDER BY des.score_final DESC, des.ranking"
 
     cursor.execute(query, params)
     ranking_data = cursor.fetchall()
@@ -991,6 +1084,3 @@ def ranking():
     conn.close()
 
     return render_template('ranking.html', ranking=ranking_data, estado=estado, partido=partido)
-@route_bp.route('/rankingf')
-def rankingf():
-    return render_template('rankingfront.html')

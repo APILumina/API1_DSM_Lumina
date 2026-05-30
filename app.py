@@ -3,6 +3,7 @@ from views.routes import route_bp
 import unicodedata
 
 app = Flask(__name__)
+app.jinja_env.globals.update(zip=zip)
 app.register_blueprint(route_bp)
 
 def formato_moeda(valor):
