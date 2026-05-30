@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}Deputados{% endblock %}
+
+{% block extra_style %}
+<style>
+  .menu-anim {
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock %}
+  
+
+{% block content %}
+
+<!-- TÍTULO -->
+<div class="bg-white">
+  <h1 class="px-5 pt-8 pb-4 max-w-[100rem] mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
+    Deputados federais por estado
+  </h1>
+</div>
+
+<!-- FILTROS -->
+<form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro" class="bg-white">
+  <div class="px-5 pb-5 pt-4 max-w-[100rem] mx-auto">
+
+    <!-- Badge do tema ativo — aparece somente quando há tema selecionado -->
+    {% if tema %}
+    <div class="flex items-center gap-2 mb-4">
+      <span class="inline-flex items-center gap-2 bg-[#1a249d] text-white text-sm font-semibold px-4 py-1.5 rounded-full">
+        <!-- Nome do sub-tema ativo buscado da lista de temas -->
+        <span>
+          Tema:
+          {% for t in temas %}
+            {% if t['cd_tp_temas']|string == tema|string %}
+              {{ t['tipo'] }}
+            {% endif %}
+          {% endfor %}
+        </span>
+        <!-- Botão para remover o filtro de tema (mantém estado e partido se ativos) -->
+        <a href="{{ url_for('route.deputados', estado=estado, partido=partido) }}"
+           class="ml-1 hover:text-yellow-300 font-bold leading-none"
+           title="Remover filtro de tema">
+          &times;
+        </a>
+      </span>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-y-3 gap-x-[2%] flex-wrap sm:flex-nowrap">
+
+      <!-- ESTADO -->
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
+        <select name="estado" id="estado" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+          <option value="">Selecionar Estado</option>
+          {% for est in estados %}
+          <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{ est['uf'] }})</option>
+          {% endfor %}
+        </select>
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+      </div>
+
+      <!-- PARTIDOS -->
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
+        <select name="partido" id="partido" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+          <option value="">Selecionar Partido</option>
+          {% for part in partidos %}
+          <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{ part['abreviacao'] }})</option>
+          {% endfor %}
+        </select>
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+      </div>
+
+      <!-- TEMAS (select com os 32 sub-temas do banco) -->
+      <div class="relative w-full sm:w-[32%] md:w-[20%]">
+        <select name="tema" id="tema" onchange="this.form.submit()"
+          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+          <option value="">Selecionar Tema</option>
+          {% for tema_item in temas %}
+            <option value="{{ tema_item['cd_tp_temas'] }}"
+              {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
+              {{ tema_item['tipo'] }}
+            </option>
+          {% endfor %}
+        </select>
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+{% if not deputados %}
+<div id="erro-nao-encontrado" class="flex flex-col items-center justify-center p-10 text-center max-w-[100rem] mx-auto">
+  <div class="text-red-500 text-5xl mb-4">⚠️</div>
+  <h3 class="text-[#0D1967] text-2xl font-bold mb-2">Erro: Deputado inexistente / não encontrado</h3>
+  <p class="text-gray-500">Tente ajustar os filtros ou digitar outro nome na busca.</p>
+</div>
+{% endif %}
+
+<div id="lista-deputados"
+  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
+  {% for deputado in deputados %}
+  <a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full">
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
+      <div class="p-6">
+        <img src="{{ deputado['imagem_deputado'] }}"
+          class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+        <p class="text-base lg:text-lg font-medium">{{ deputado['nome_eleitoral'] }}</p>
+        <p class="text-sm lg:text-base">{{ deputado['partido'] }}</p>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<div id="sentinela" class="flex justify-center p-10">
+  <div id="loader" class="hidden animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-radar"></div>
+</div>
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const parametros = new URLSearchParams(window.location.search);
+    const pesquisa = parametros.get('pesquisa');
+    const tema = parametros.get('tema');
+
+    // Não inicializa o scroll infinito se houver pesquisa ou tema ativos
+    if (pesquisa || tema) return;
+
+    let paginaAtual = 1;
+    let carregando = false;
+    let fimDados = false;
+
+    const lista = document.getElementById('lista-deputados');
+    const sentinela = document.getElementById('sentinela');
+    const loader = document.getElementById('loader');
+
+    function criarCard(deputado) {
+      return `
+        <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+            <div class="p-6">
+              <img src="${deputado.imagem_deputado}"
+              class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+              <p class="text-base lg:text-lg font-medium">${deputado.nome_eleitoral}</p>
+              <p class="text-sm lg:text-base">${deputado.partido}</p>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    async function carregarMaisDeputados() {
+      if (carregando || fimDados) return;
+
+      carregando = true;
+      loader.classList.remove('hidden');
+      paginaAtual++;
+
+        // Preserva todos os parâmetros da URL
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', paginaAtual);
+
+      try {
+        const response = await fetch(`/dados/deputados?${params.toString()}`);
+        const novosDeputados = await response.json();
+
+        if (novosDeputados.length === 0) {
+          fimDados = true;
+          sentinela.classList.add('hidden'); // esconde o sentinela quando acabar
+        } else {
+          novosDeputados.forEach(dep => {
+            lista.insertAdjacentHTML('beforeend', criarCard(dep));
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar mais deputados:", error);
+      } finally {
+        carregando = false;
+        loader.classList.add('hidden');
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        carregarMaisDeputados();
+      }
+    }, { threshold: 0.5 });
+
+    observer.observe(sentinela);
+  });
+</script>
+{% endblock %}
+
+{% endblock %}

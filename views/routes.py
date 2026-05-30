@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, url_for
 import mysql
-from database import conectar
+from src.database import conectar
 import unicodedata
 import matplotlib
 matplotlib.use('Agg')

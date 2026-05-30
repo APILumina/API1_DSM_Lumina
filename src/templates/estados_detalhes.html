@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Radar Cidadão - Gastos de {{ uf }}</title>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-radar: #1A249D;
+            --color-dark-blue: #081638;
+            --color-sec: #efc33c;
+            --color-verde: #34C560;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    
+    <header>
+        <div class="h-30 py-5 bg-radar text-white">
+            <div class="w-full flex mx-auto max-w-[100rem] px-6 items-center">
+                <a href="{{ url_for('route.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" class="h-20">
+                </a>
+                
+                <div class="flex flex-col gap-5 ml-auto w-auto min-w-1/4">
+                    <ul class="flex justify-end gap-6 w-full text-sm font-sans font-semibold mt-6">
+                        <li><a href="{{ url_for('route.home') }}" class="hover:underline underline-offset-4">HOME</a></li>
+                        <li><a href="{{ url_for('estados.lista_estados') }}" class="hover:underline underline-offset-4">DEPUTADOS</a></li>
+                        <li><a href="#" class="hover:underline underline-offset-4">GRÁFICOS</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-[100rem] mx-auto px-6 mb-10">
+        
+        <div class="mt-8 mb-4">
+            <a href="{{ url_for('estados.lista_estados') }}" class="text-radar font-bold hover:underline flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Voltar para Estados
+            </a>
+        </div>
+
+        <div class="bg-white px-8 py-10 rounded-2xl shadow-sm text-center">
+            <h1 class="text-3xl font-bold text-dark-blue tracking-tight mb-8 uppercase">ANÁLISE DE GASTOS: {{ uf }}</h1>
+            
+            {% if grafico_url %}
+                <div class="flex justify-center border border-gray-100 rounded-xl p-4 bg-gray-50 shadow-inner">
+                    <img src="data:image/png;base64,{{ grafico_url }}" alt="Gráfico de Gastos {{ uf }}" class="max-w-full h-auto">
+                </div>
+            {% else %}
+                <div class="py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 mx-auto text-gray-400 mb-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    <h3 class="text-xl text-gray-500 font-semibold">Nenhum dado de gasto encontrado para o estado de {{ uf }}.</h3>
+                    <p class="text-gray-400">Tente selecionar outro estado ou verifique a base de dados.</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="bg-radar text-white py-6 text-center mt-auto">
+        <p class="text-sm opacity-80">© 2026 Radar Cidadão - Projeto DSM</p>
+    </footer>
+
+</body>
+</html>

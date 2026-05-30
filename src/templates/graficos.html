@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% block title %}Gráficos{% endblock %}
+
+{% block extra_style %}
+<style type="text/tailwindcss">
+    .shadow-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .dropdown-select {
+        @apply absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-y-auto;
+        max-height: 250px;
+    }
+
+    .dropdown-select li {
+        @apply px-6 py-2 hover:bg-gray-100 cursor-pointer text-dark-blue transition-colors;
+    }
+
+    .dropdown-select::-webkit-scrollbar { width: 8px; }
+    .dropdown-select::-webkit-scrollbar-track { @apply bg-gray-50 rounded-r-2xl; }
+    .dropdown-select::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full border-2 border-solid border-gray-50; }
+    .dropdown-select::-webkit-scrollbar-thumb:hover { @apply bg-gray-400; }
+
+    /* Garante que a imagem do gráfico não quebre o layout no mobile */
+    .grafico-img-wrapper {
+        @apply w-full overflow-x-auto;
+    }
+    .grafico-img-wrapper img {
+        @apply h-auto;
+        min-width: 320px;
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="flex-grow pb-24 lg:pb-0">
+
+    <!-- Cabeçalho + Filtros -->
+    <div class="bg-white px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-4 sm:mb-9">
+
+        <section class="mb-4 sm:mb-6 w-full max-w-[100rem] mx-auto">
+            <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
+                Gráficos por partido
+            </h1>
+        </section>
+
+        <!-- Filtros -->
+        <form action="/graficos" method="get" id="form-filtro">
+            <section class="flex flex-col sm:flex-row gap-3 w-full max-w-[100rem] mx-auto">
+
+                <div class="relative w-full sm:w-1/2 md:w-[20%]">
+                    <select id="select-estado" name="estado"
+                        class="w-full bg-white text-[#0D1967] py-2.5 px-4 pr-10 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-200">
+                        <option value="">Selecionar Estado</option>
+                        {% for est in estados %}
+                        <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>
+                            {{ est['nome'] }} ({{ est['uf'] }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+                </div>
+
+                <div class="relative w-full sm:w-1/2 md:w-[20%]">
+                    <select id="select-partido" name="partido"
+                        class="w-full bg-white text-[#0D1967] py-2.5 px-4 pr-10 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-200">
+                        <option value="">Selecionar artido</option>
+                        {% for part in partidos %}
+                        <option value="{{ part['abreviacao'] }}" {{ 'selected' if partido==part['abreviacao'] }}>
+                            {{ part['nome'] }} ({{ part['abreviacao'] }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+                </div>
+
+            </section>
+        </form>
+    </div>
+
+    <!-- Card de Gráficos -->
+    <div class="w-full max-w-[100rem] mx-auto px-3 sm:px-5">
+        <section class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-card mb-6 sm:mb-8">
+
+            <!-- Tabs + botão info -->
+            <div class="flex items-center gap-1 sm:gap-4 mb-6 sm:mb-8 border-b border-gray-100 pb-3 sm:pb-4 overflow-x-auto">
+                <button onclick="mostrarGrafico('projetos', this)"
+                    class="btn-tab flex-shrink-0 px-3 sm:px-4 py-2 font-bold text-sm sm:text-base text-gray-400 hover:text-dark-blue transition-all whitespace-nowrap">
+                    Projetos
+                </button>
+                <button onclick="mostrarGrafico('presenca', this)"
+                    class="btn-tab flex-shrink-0 px-3 sm:px-4 py-2 font-bold text-sm sm:text-base text-gray-400 hover:text-dark-blue transition-all whitespace-nowrap">
+                    Presença
+                </button>
+                <button onclick="mostrarGrafico('gastos', this)"
+                    class="btn-tab flex-shrink-0 px-3 sm:px-4 py-2 font-bold text-sm sm:text-base text-gray-400 hover:text-dark-blue transition-all whitespace-nowrap">
+                    Gastos
+                </button>
+
+                <!-- Botão info -->
+                <button onclick="abrirModal()"
+                    class="flex-shrink-0 ml-1 sm:ml-2 size-5 sm:size-6 rounded-full bg-radar text-white text-xs font-bold flex items-center justify-center hover:opacity-80 transition cursor-pointer"
+                    title="O que é este gráfico?">
+                    i
+                </button>
+            </div>
+
+            <!-- Conteúdo dos gráficos -->
+            <div id="container-graficos">
+
+                <!-- Gráfico 1: Projetos -->
+                <div id="box-projetos" class="grafico-box hidden">
+                    <h2 class="text-base sm:text-lg md:text-xl font-bold text-dark-blue mb-4 sm:mb-6 uppercase tracking-wide">
+                        Projetos aprovados <span class="font-normal">por partido</span>
+                    </h2>
+                    {% if grafico_projetos %}
+                    <div class="w-full overflow-x-auto visual-scrollbar">
+                        <img src="data:image/png;base64,{{ grafico_projetos }}" alt="Gráfico de projetos" class="w-full h-auto min-w-[650px] max-w-none">
+                    </div>
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10 text-sm">Nenhuma proposição aprovada encontrada.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Gráfico 2: Presença -->
+                <div id="box-presenca" class="grafico-box hidden">
+                    <h2 class="text-base sm:text-lg md:text-xl font-bold text-dark-blue mb-4 sm:mb-6 uppercase tracking-wide">
+                        Presença <span class="font-normal">por partido</span>
+                    </h2>
+                    {% if grafico_presenca %}
+                    <div class="w-full overflow-x-auto visual-scrollbar">
+                        <img src="data:image/png;base64,{{ grafico_presenca }}" alt="Gráfico de presença" class="w-full h-auto min-w-[650px] max-w-none">
+                    </div>
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10 text-sm">Nenhuma presença encontrada.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Gráfico 3: Gastos -->
+                <div id="box-gastos" class="grafico-box hidden">
+                    <h2 class="text-base sm:text-lg md:text-xl font-bold text-dark-blue mb-4 sm:mb-6 uppercase tracking-wide">
+                        Gastos <span class="font-normal">por partido</span>
+                    </h2>
+                    {% if grafico_gastos %}
+                    <div class="w-full overflow-x-auto visual-scrollbar">
+                        <img src="data:image/png;base64,{{ grafico_gastos }}" alt="Gráfico de gastos" class="w-full h-auto min-w-[650px] max-w-none">
+                    </div>
+                    {% else %}
+                    <p class="text-gray-400 text-center py-10 text-sm">Nenhum gasto encontrado.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de informação -->
+    <div id="modal-info" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 px-4">
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full relative">
+            <button onclick="fecharModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer">✕</button>
+            <div id="modal-conteudo"></div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    const infoGraficos = {
+        projetos: {
+            titulo: 'Projetos Aprovados',
+            texto: 'Mostra a quantidade de projetos de lei que foram aprovados e transformados em norma jurídica. Permite comparar o desempenho legislativo entre partidos ou estados, dependendo dos filtros selecionados.'
+        },
+        presenca: {
+            titulo: 'Presença',
+            texto: 'Exibe a taxa média de assiduidade dos deputados nas sessões da Câmara. Uma presença alta indica maior participação nas votações e atividades parlamentares.'
+        },
+        gastos: {
+            titulo: 'Gastos',
+            texto: 'Representa o total de despesas parlamentares (cota parlamentar) utilizadas pelos deputados. Inclui gastos com transporte, alimentação, hospedagem e outros itens previstos pela cota.'
+        }
+    };
+
+    let graficoAtivo = 'projetos';
+
+    function mostrarGrafico(id, btnElement) {
+        graficoAtivo = id;
+        document.querySelectorAll('.grafico-box').forEach(box => box.classList.add('hidden'));
+        document.getElementById('box-' + id).classList.remove('hidden');
+        document.querySelectorAll('.btn-tab').forEach(btn => {
+            btn.classList.remove('border-b-2', 'border-blue-600', 'text-dark-blue');
+            btn.classList.add('text-gray-400');
+        });
+        btnElement.classList.remove('text-gray-400');
+        btnElement.classList.add('border-b-2', 'border-blue-600', 'text-dark-blue');
+    }
+
+    function abrirModal() {
+        const info = infoGraficos[graficoAtivo];
+        document.getElementById('modal-conteudo').innerHTML = `
+            <h2 class="text-lg sm:text-xl font-bold text-dark-blue mb-3">${info.titulo}</h2>
+            <p class="text-gray-600 leading-relaxed text-sm sm:text-base">${info.texto}</p>
+        `;
+        const modal = document.getElementById('modal-info');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function fecharModal() {
+        const modal = document.getElementById('modal-info');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    document.getElementById('modal-info').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modal-info')) fecharModal();
+    });
+</script>
+
+{% block extra_js %}
+<!-- JS do dropdown do filtro -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const formFiltro = document.getElementById('form-filtro');
+        const selectEstado = document.getElementById('select-estado');
+        const selectPartido = document.getElementById('select-partido');
+
+        const estadosOriginais = Array.from(selectEstado.options).map(opt => ({ value: opt.value, text: opt.text }));
+        const partidosOriginais = Array.from(selectPartido.options).map(opt => ({ value: opt.value, text: opt.text }));
+
+        function atualizarFiltros() {
+            fetch(`/api/filtros-dinamicos?estado=${selectEstado.value}&partido=${selectPartido.value}`)
+            .then(res => res.json())
+            .then(data => {
+                const estadoAtual = selectEstado.value;
+                selectEstado.innerHTML = '';
+                estadosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.estados.includes(opt.value)) {
+                        selectEstado.innerHTML += `<option value="${opt.value}" ${opt.value === estadoAtual ? 'selected' : ''}>${opt.text}</option>`;
+                    }
+                });
+
+                const partidoAtual = selectPartido.value;
+                selectPartido.innerHTML = '';
+                partidosOriginais.forEach(opt => {
+                    if (opt.value === "" || data.partidos.includes(opt.value.toUpperCase())) {
+                        selectPartido.innerHTML += `<option value="${opt.value}" ${opt.value === partidoAtual ? 'selected' : ''}>${opt.text}</option>`;
+                    }
+                });
+            });
+        }
+
+        let timerBusca;
+        const TEMPO_ESPERA = 1000;
+
+        function iniciarTimer() {
+            clearTimeout(timerBusca);
+            timerBusca = setTimeout(() => {
+                // Preserva a tab ativa ao submeter o filtro
+                let inputTab = formFiltro.querySelector('input[name="tab"]');
+                if (!inputTab) {
+                    inputTab = document.createElement('input');
+                    inputTab.type = 'hidden';
+                    inputTab.name = 'tab';
+                    formFiltro.appendChild(inputTab);
+                }
+                inputTab.value = graficoAtivo;
+                formFiltro.submit();
+            }, TEMPO_ESPERA);
+        }
+
+        function pausarTimer() { clearTimeout(timerBusca); }
+
+        selectEstado.addEventListener('change', () => { atualizarFiltros(); iniciarTimer(); });
+        selectPartido.addEventListener('change', () => { atualizarFiltros(); iniciarTimer(); });
+        selectEstado.addEventListener('focus', pausarTimer);
+        selectPartido.addEventListener('focus', pausarTimer);
+        selectEstado.addEventListener('blur', iniciarTimer);
+        selectPartido.addEventListener('blur', iniciarTimer);
+    });
+</script>
+
+<!-- JS de tab via URL -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+
+        document.querySelectorAll('.grafico-box').forEach(box => box.classList.add('hidden'));
+
+        const alvo = (tab && document.getElementById('box-' + tab))
+            ? document.getElementById('box-' + tab)
+            : document.getElementById('box-projetos');
+        if (alvo) alvo.classList.remove('hidden');
+
+        const tabAtiva = (tab && ['projetos', 'presenca', 'gastos'].includes(tab)) ? tab : 'projetos';
+
+        document.querySelectorAll('.btn-tab').forEach(btn => {
+            btn.classList.remove('border-b-2', 'border-blue-600', 'text-dark-blue');
+            btn.classList.add('text-gray-400');
+        });
+
+        const mapaTab = { projetos: 'Projetos', presenca: 'Presença', gastos: 'Gastos' };
+        document.querySelectorAll('.btn-tab').forEach(btn => {
+            if (btn.textContent.trim() === mapaTab[tabAtiva]) {
+                btn.classList.remove('text-gray-400');
+                btn.classList.add('border-b-2', 'border-blue-600', 'text-dark-blue');
+            }
+        });
+
+        graficoAtivo = tabAtiva;
+    });
+</script>
+{% endblock %}
+
+{% endblock %}
