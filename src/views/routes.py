@@ -535,6 +535,7 @@ def deputados():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
+    page = int(request.args.get('page', 1))
     estado  = request.args.get('estado', '')
     partido = request.args.get('partido', '')
     tema    = request.args.get('tema', '')
@@ -553,55 +554,50 @@ def deputados():
         params.append(partido)
         
     if tema:
-        joins += """
-        JOIN deputado_tema dt
-            ON dt.fk_deputado = d.cd_deputado
-
-        JOIN top_temas t
-            ON t.cd_tp_temas = dt.fk_tema
-        """
-
-        # Se o valor de tema for um id (número), filtra por esse subtema específico.
-        # Caso contrário, assume-se que é um macrotema (categoria) e expande
-        # para todos os códigos de subtema pertencentes àquela categoria.
         if tema.isdigit():
-            filtros.append("t.cd_tp_temas = %s")
+            filtros.append("""
+                EXISTS (
+                    SELECT 1 FROM deputado_tema dt
+                    JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
+                    WHERE dt.fk_deputado = d.cd_deputado
+                    AND t.cd_tp_temas = %s
+                )
+            """)
             params.append(tema)
         else:
-            # encontrar os códigos dos subtemas da categoria selecionada
             codigos = []
             for tema_dict in Temas:
                 if tema in tema_dict:
                     codigos = [item[1] for item in tema_dict[tema]]
                     break
-
             if codigos:
                 placeholders = ','.join(['%s'] * len(codigos))
-                filtros.append(f"t.cd_tp_temas IN ({placeholders})")
+                filtros.append(f"""
+                    EXISTS (
+                        SELECT 1 FROM deputado_tema dt
+                        JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
+                        WHERE dt.fk_deputado = d.cd_deputado
+                        AND t.cd_tp_temas IN ({placeholders})
+                    )
+                """)
                 params.extend(codigos)
-            else:
-                # fallback: tenta comparar texto (não esperado normalmente)
-                filtros.append("t.cd_tp_temas = %s")
-                params.append(tema)
 
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
 
+    itens_por_pagina = 24
+    offset = (page - 1) * itens_por_pagina
 
     query = f"""
     SELECT DISTINCT
-        d.cd_deputado,
-        d.nome,
-        d.nome_eleitoral,
-        d.imagem_deputado,
-        e.uf AS estado,
-        p.abreviacao AS partido
+        d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+        e.uf AS estado, p.abreviacao AS partido
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
     {joins}
     {where}
     ORDER BY d.nome_eleitoral
-    LIMIT 24 OFFSET 0
+    LIMIT {itens_por_pagina} OFFSET {offset}
     """
     
 
@@ -640,7 +636,8 @@ def deputados():
         temas=temas,
         Temas=Temas,
         sticky_navbar=True,
-        nb=2
+        nb=2,
+        page=page
     )
 
 @route_bp.route("/dados/deputados")
@@ -667,13 +664,16 @@ def dados_deputados():
     if partido and partido != 'Partido':
         filtros.append("p.abreviacao = %s")
         params.append(partido)
-    if tema:                                        
-        joins += """
-        JOIN deputado_tema dt ON dt.fk_deputado = d.cd_deputado
-        JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
-        """
+    if tema:
         if tema.isdigit():
-            filtros.append("t.cd_tp_temas = %s")
+            filtros.append("""
+                EXISTS (
+                    SELECT 1 FROM deputado_tema dt
+                    JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
+                    WHERE dt.fk_deputado = d.cd_deputado
+                    AND t.cd_tp_temas = %s
+                )
+            """)
             params.append(tema)
         else:
             codigos = []
@@ -683,18 +683,24 @@ def dados_deputados():
                     break
             if codigos:
                 placeholders = ','.join(['%s'] * len(codigos))
-                filtros.append(f"t.cd_tp_temas IN ({placeholders})")
+                filtros.append(f"""
+                    EXISTS (
+                        SELECT 1 FROM deputado_tema dt
+                        JOIN top_temas t ON t.cd_tp_temas = dt.fk_tema
+                        WHERE dt.fk_deputado = d.cd_deputado
+                        AND t.cd_tp_temas IN ({placeholders})
+                    )
+                """)
                 params.extend(codigos)
 
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
 
     query = f"""
-    SELECT DISTINCT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
+    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
            e.uf AS estado, p.abreviacao AS partido
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
-    {joins}
     {where}
     ORDER BY d.nome_eleitoral
     LIMIT %s OFFSET %s
@@ -1238,4 +1244,4 @@ def ranking():
     cursor.close()
     conn.close()
 
-    return render_template('ranking.html', ranking=ranking_data, estado=estado, partido=partido)
+    return render_template('ranking.html', ranking=ranking_data, estado=estado, partido=partido, nb=3)

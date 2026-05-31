@@ -107,8 +107,10 @@
       <div class="p-6">
         <img src="{{ deputado['imagem_deputado'] }}"
           class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-        <p class="text-base lg:text-lg font-medium">{{ deputado['nome_eleitoral'] }}</p>
-        <p class="text-sm lg:text-base">{{ deputado['partido'] }}</p>
+          <div>
+            <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">{{ deputado['nome_eleitoral'] }}</p>
+            <p class="text-sm lg:text-base">{{ deputado['partido'] }}</p>  
+          </div>
       </div>
     </div>
   </a>
@@ -121,58 +123,62 @@
 
 {% block extra_js %}
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     const parametros = new URLSearchParams(window.location.search);
     const pesquisa = parametros.get('pesquisa');
     const tema = parametros.get('tema');
-
+    
     // Não inicializa o scroll infinito se houver pesquisa ou tema ativos
-    if (pesquisa || tema) return;
-
-    let paginaAtual = 1;
+    if (pesquisa) return;
+    
+    let paginaAtual = {{ page }};
     let carregando = false;
     let fimDados = false;
-
+    
     const lista = document.getElementById('lista-deputados');
     const sentinela = document.getElementById('sentinela');
     const loader = document.getElementById('loader');
-
+    
     function criarCard(deputado) {
       return `
         <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
-          <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full hover:scale-105 duration-300">
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
             <div class="p-6">
               <img src="${deputado.imagem_deputado}"
-              class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-              <p class="text-base lg:text-lg font-medium">${deputado.nome_eleitoral}</p>
-              <p class="text-sm lg:text-base">${deputado.partido}</p>
+                class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+              <div>
+                <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">${deputado.nome_eleitoral}</p>
+                <p class="text-sm lg:text-base">${deputado.partido}</p>  
+              </div>
             </div>
           </div>
         </a>
       `;
     }
-
+  
     async function carregarMaisDeputados() {
       if (carregando || fimDados) return;
-
+    
       carregando = true;
       loader.classList.remove('hidden');
       paginaAtual++;
-
-        // Preserva todos os parâmetros da URL
-        const params = new URLSearchParams(window.location.search);
-        params.set('page', paginaAtual);
-
+    
+      // Preserva todos os parâmetros da URL
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', paginaAtual);
+    
       try {
         const response = await fetch(`/dados/deputados?${params.toString()}`);
         const novosDeputados = await response.json();
-
+      
         if (novosDeputados.length === 0) {
           fimDados = true;
           sentinela.classList.add('hidden'); // esconde o sentinela quando acabar
         } else {
           novosDeputados.forEach(dep => {
-            lista.insertAdjacentHTML('beforeend', criarCard(dep));
+            if (!lista.innerHTML.includes(`${dep.cd_deputado}`)) {
+              lista.insertAdjacentHTML('beforeend', criarCard(dep));
+            }
           });
         }
       } catch (error) {
@@ -182,13 +188,13 @@
         loader.classList.add('hidden');
       }
     }
-
+  
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && !carregando && !fimDados) {
         carregarMaisDeputados();
       }
     }, { threshold: 0.5 });
-
+  
     observer.observe(sentinela);
   });
 </script>

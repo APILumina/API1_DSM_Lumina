@@ -7,8 +7,9 @@ services:
     container_name: mariadb_api
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: "lumina1234"  # Senha que o banco terá ao iniciar
-      MARIADB_DATABASE: "Lumina2"          # Banco que será criado automaticamente
+      # O Docker substitui automaticamente pelos valores do seu .env
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"  
+      MARIADB_DATABASE: "${DB_NAME}"          
     ports:
       - "3306:3306"
     volumes:
@@ -22,13 +23,13 @@ services:
     ports:
       - "5000:5000"
     environment:
-      # IMPORTANTE: Como a API e o Banco sobem juntos no Compose,
-      # o host DEVE ser o nome do serviço ("db") para eles se comunicarem internamente.
+      # IMPORTANTE: Mantemos o DB_HOST como "db" fixo porque o Docker 
+      # usa o nome do serviço para fazer a comunicação interna segura entre eles.
       - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=lumina1234
-      - DB_NAME=Lumina2
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_NAME=${DB_NAME}
     depends_on:
       - db
 
