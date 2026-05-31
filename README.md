@@ -1,6 +1,6 @@
-## Documentação da Sprint 1 <a id="topo"></a>
+## 📃 Documentação da Sprint 1 <a id="topo"></a>
 
-<img src="https://raw.githubusercontent.com/APILumina/API1_DSM_Lumina/refs/heads/main/docs/img/banner.png" alt="Banner do Radar Cidadão" width="100%" >
+<img src="docs/img/banner.png" alt="Banner do Radar Cidadão" width="100%" >
 
 
 <p align="center">
@@ -16,22 +16,18 @@
 > Status da Sprint: Concluída 🟩
 
 ## 🏅 Meta <a id="meta"></a>
-Para a Sprint 2, foi definida como prioridade a inserção dos dados reais dos deputados no site (US 3), um filtro de pesquisa por estado e partido para ajudar na análise de desempenho (US 7) e a implementação de uma funcionalidade para que o eleitor consiga ver e avaliar os gastos individuais do deputado. 
+As metas da Sprint 1 foram definidas como sendo as US 1 e 2, onde se teve a criação das telas principais com foco em um design intuitivo e simples (US 1), além da coleta e tratamento de dados para o desenvolvimento de gráficos exploratórios (US 2).
 
-## 📌 Demonstração (vídeos)<a id="demonstracao"></a> 
-  - <a href="https://youtu.be/BTGHa1jO4tM?si=K4X5c1tOQDxV-UyW">Site</a> 
+## 📌 Demonstração (vídeos)<a id="demonstracao"></a>
+  - <a href="https://youtu.be/4DmUEi5Si7M">Google Colab</a> 
+  - <a href="https://youtu.be/ED5b2YN3RUs">Site</a> 
 
 
 ## 📝 User Stories <a id="us"></a>
 | RANK | PRIORIDADE | USER STORY | STATUS |
-| :---: | :---: | :--- | :---: | 
-| 3 | Alta <sup>★</sup>| Como eleitor, gostaria de uma página dedicada aos deputados e suas informações básicas, organizada com filtros para que eu não me perca. | 🟢 |
-| 4 | Alta | Como eleitor, quero ver fotos dos deputados no site para os identificar mais facilmente. | 🟢 |
-| 5 | Alta | Como eleitor, quero uma barra de pesquisa por nome para encontrar um deputado específico rapidamente. | 🟢 |
-| 6 | Alta <sup>★</sup>| Como eleitor, quero ver com o que o meu deputado está gastando para analisar e avaliar se a despesa é necessária. | 🟢 |
-| 7 | Alta <sup>★</sup>| Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🟢 |
-| 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🟢 |
-| 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🟢 |
+| :---: | :---: | :--- | :---: |
+| 1 | Alta <sup>★</sup> | Como usuário, quero acessar uma página inicial simples e intuitiva para entender o propósito do projeto. | 🟢 |
+| 2 | Alta <sup>★</sup> | Como professor, gostaria de visualizar gráficos preliminares sobre os gastos e presença dos deputados para validar se os dados são úteis para minhas aulas de cidadania. | 🟢 |
 --- 
 <br>
 
