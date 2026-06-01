@@ -1,0 +1,443 @@
+<header
+  class="{{ 'fixed w-full lg:sticky z-50 flex top-0' if sticky_navbar else '' }}"
+>
+  <div class="h-20 lg:h-30 py-5 bg-radar text-white w-full flex items-center">
+    <div class="w-full flex mx-auto max-w-[100rem] px-5 items-center">
+      <a href="/"
+        ><img
+          src="/static/img/logo.png"
+          alt="logo do radar cidadao"
+          class="h-12 lg:h-20"
+      /></a>
+
+      {% if not hide_pesquisa %}
+      <button
+        class="flex items-center justify-center text-white ml-auto border rounded-full size-8 lg:hidden"
+        id="btn-menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          stroke="currentColor"
+          class="size-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+      </button>
+      {% endif %}
+
+      <div
+        class="hidden lg:flex flex-col gap-5 ml-auto w-auto min-w-1/4 justify-center"
+      >
+        {% if not hide_pesquisa %} {% set show_icon = true %} {% set input_class
+        = "bg-white w-full text-black p-3 pl-[3rem] rounded-full" %} {% set
+        input_placeholder = "Pesquisar" %}
+        <form
+          action="{{ url_for('route.procurar') }}"
+          method="GET"
+          class="flex relative z-60"
+        >
+          {% include 'partials/_autocomplete.html' %}
+        </form>
+        {% endif %}
+
+        <ul
+          class="hidden lg:flex justify-between gap-auto w-full text-sm mr-20 font-sans font-semibold"
+        >
+          <li>
+            <a
+              href="{{ url_for('route.home') }}"
+              class="underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500"
+              >HOME</a
+            >
+          </li>
+
+          <!-- Dropdown Deputados -->
+          <li class="relative flex items-center">
+            <button
+              type="button"
+              data-dropdown="menu-deputados"
+              data-dropdown-seta="seta-deputados"
+              class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm"
+            >
+              <a href="{{ url_for('route.deputados') }}">DEPUTADOS</a>
+              <svg
+                id="seta-deputados"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="3"
+                stroke="currentColor"
+                class="size-4 ml-1 transition-transform duration-300"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+
+            <ul
+              id="menu-deputados"
+              class="absolute top-full left-0 mt-2 w-48 bg-white text-radar rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0 max-h-60 overflow-y-auto scrollbar-thin"
+            >
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=AC"
+                  class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline"
+                  >Acre</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=AL"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Alagoas</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=AP"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Amapá</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=AM"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Amazonas</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=BA"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Bahia</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=CE"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Ceará</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=DF"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Distrito Federal</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=ES"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Espírito Santo</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=GO"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Goiás</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=MA"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Maranhão</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=MT"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Mato Grosso</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=MS"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Mato Grosso do Sul</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=MG"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Minas Gerais</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=PA"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Pará</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=PB"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Paraíba</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=PR"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Paraná</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=PE"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Pernambuco</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=PI"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Piauí</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=RJ"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Rio de Janeiro</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=RN"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Rio Grande do Norte</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=RS"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Rio Grande do Sul</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=RO"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Rondônia</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=RR"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Roraima</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=SC"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Santa Catarina</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=SP"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >São Paulo</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=SE"
+                  class="block px-4 py-2 hover:bg-gray-100 no-underline"
+                  >Sergipe</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.buscar') }}?estado=TO"
+                  class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline"
+                  >Tocantins</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <!-- Dropdown Desempenho -->
+          <li class="relative flex items-center">
+            <button
+              type="button"
+              data-dropdown="menu-desempenho"
+              data-dropdown-seta="seta-desempenho"
+              class="flex items-center cursor-pointer underline underline-offset-4 decoration-transparent hover:decoration-sec transition-all duration-500 select-none outline-none border-none bg-transparent text-white font-sans font-semibold text-xs md:text-sm"
+            >
+              DESEMPENHO
+              <svg
+                id="seta-desempenho"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="3"
+                stroke="currentColor"
+                class="size-4 ml-1 transition-transform duration-300"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+
+            <ul
+              id="menu-desempenho"
+              class="absolute top-full left-0 mt-2 w-30 bg-white text-radar rounded-md shadow-lg border border-gray-100 hidden z-50 list-none p-0"
+            >
+              <li>
+                <a
+                  href="{{ url_for('route.graficos') }}"
+                  class="block px-4 py-2 hover:bg-gray-100 rounded-t-md no-underline"
+                  >Gráficos</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('route.ranking') }}"
+                  class="block px-4 py-2 hover:bg-gray-100 rounded-b-md no-underline"
+                  >Ranking</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  class="fixed size-full z-100 bg-white hidden lg:hidden flex-col"
+  id="menu-pesquisa-mobile"
+>
+  <div class="flex items-center gap-3 px-4 py-3">
+    <div class="relative w-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2.5"
+        stroke="currentColor"
+        class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+        />
+      </svg>
+      <input
+        id="pesquisa-mobile"
+        type="text"
+        autocomplete="off"
+        placeholder="Pesquisar por deputado"
+        class="bg-gray-200 w-full text-sm text-black p-3 pl-[2.5rem] rounded-full outline-none"
+      />
+    </div>
+    <button
+      type="button"
+      id="btn-cancelar-mobile"
+      class="px-2 py-3 cursor-pointer text-sm whitespace-nowrap"
+    >
+      Cancelar
+    </button>
+  </div>
+
+  <div class="flex-grow overflow-y-auto px-4">
+    <ul
+      id="lista-mobile"
+      class="list-none p-0 m-0 w-full divide-y divide-gray-100 [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:py-3 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors [&>li>a>img]:w-11 [&>li>a>img]:h-11 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0 [&>li>a>div>span:first-child]:font-semibold [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate [&>li>a>div>span:first-child]:text-sm [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:text-xs [&>li>a>div>span:last-child]:truncate"
+    ></ul>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Menu mobile
+    const btnMenu = document.getElementById("btn-menu");
+    const menuPesquisaMobile = document.getElementById("menu-pesquisa-mobile");
+    const btnCancelar = document.getElementById("btn-cancelar-mobile");
+    const inputMobile = document.getElementById("pesquisa-mobile");
+
+    btnMenu?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menuPesquisaMobile.classList.remove("hidden");
+      inputMobile?.focus();
+    });
+
+    btnCancelar?.addEventListener("click", () => {
+      menuPesquisaMobile.classList.add("hidden");
+      if (inputMobile) {
+        inputMobile.value = "";
+        inputMobile.dispatchEvent(new Event("input"));
+      }
+    });
+
+    // Dropdowns
+    const todosDropdowns = document.querySelectorAll("[data-dropdown]");
+
+    todosDropdowns.forEach((btn) => {
+      const menuId = btn.dataset.dropdown;
+      const setaId = btn.dataset.dropdownSeta;
+      const menu = document.getElementById(menuId);
+      const seta = setaId ? document.getElementById(setaId) : null;
+
+      if (!menu) return;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const estaAberto = !menu.classList.contains("hidden");
+
+        // Fecha todos
+        todosDropdowns.forEach((outroBtn) => {
+          const outroMenu = document.getElementById(outroBtn.dataset.dropdown);
+          const outraSeta = outroBtn.dataset.dropdownSeta
+            ? document.getElementById(outroBtn.dataset.dropdownSeta)
+            : null;
+          outroMenu?.classList.add("hidden");
+          outraSeta?.classList.remove("rotate-180");
+        });
+
+        // Abre o atual só se estava fechado
+        if (!estaAberto) {
+          menu.classList.remove("hidden");
+          seta?.classList.add("rotate-180");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.add("hidden");
+          seta?.classList.remove("rotate-180");
+        }
+      });
+    });
+  });
+</script>

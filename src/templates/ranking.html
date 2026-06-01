@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+{% block title %}Ranking{% endblock %}
+
+{% block extra_style %}
+<style type="text/tailwindcss">
+    .shadow-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Responsividade melhorada para dispositivos pequenos */
+    @media (max-width: 640px) {
+        .shadow-card {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+    }
+    
+    /*Filtro de partido e estado */
+    .btn-custom-select {
+        @apply bg-white border border-gray-200 rounded-full py-2 px-6 flex items-center justify-between min-w-[220px] cursor-pointer hover:bg-gray-50 transition-all text-dark-blue font-medium shadow-sm;
+    }
+    
+    /* Estilo da lista suspensa */
+    .dropdown-select {
+        @apply absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-y-auto;
+        max-height: 250px;
+    }
+    
+    .dropdown-select li {
+        @apply px-6 py-2 hover:bg-gray-100 cursor-pointer text-dark-blue transition-colors;
+    }
+    
+    /*Barra de rolagem do dropdown de partido e estado*/
+    .dropdown-select::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .dropdown-select::-webkit-scrollbar-track {
+        @apply bg-gray-50 rounded-r-2xl;
+    }
+    
+    .dropdown-select::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-full border-2 border-solid border-gray-50;
+    }
+    
+    .dropdown-select::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-400; 
+    }
+    
+    /* Melhorias de responsividade para tablets e desktops */
+    @media (min-width: 768px) {
+        .shadow-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<!--Conteúdo principal-->
+<main class="flex-grow bg-gray-100 pb-24 lg:pb-0">
+    
+    <!--Título e filtros-->
+    <div class="bg-white px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-4 sm:mb-6">
+        
+        <section class="mb-4 sm:mb-6 w-full max-w-[100rem] mx-auto">
+            <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Ranking dos deputados</h1>
+        </section>
+        
+        <!--Filtros de estados e partidos-->
+        <section class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-[100rem] mx-auto">
+            <form action="/ranking" method="get" id="form-filtro"
+            class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full items-center">
+            
+            <div class="relative w-full sm:w-1/2 md:w-[20%]">
+                <select name="estado" id="estado"
+                class="w-full bg-white text-[#0D1967] py-2 sm:py-2.5 px-3 sm:px-4 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                
+                <option value="">Selecionar Estado</option>
+                <option value="AC" {{ 'selected' if estado=='AC' }}>Acre (AC)</option>
+                <option value="AL" {{ 'selected' if estado=='AL' }}>Alagoas (AL)</option>
+                <option value="AP" {{ 'selected' if estado=='AP' }}>Amapá (AP)</option>
+                <option value="AM" {{ 'selected' if estado=='AM' }}>Amazonas (AM)</option>
+                <option value="BA" {{ 'selected' if estado=='BA' }}>Bahia (BA)</option>
+                <option value="CE" {{ 'selected' if estado=='CE' }}>Ceará (CE)</option>
+                <option value="DF" {{ 'selected' if estado=='DF' }}>Distrito Federal (DF)</option>
+                <option value="ES" {{ 'selected' if estado=='ES' }}>Espírito Santo (ES)</option>
+                <option value="GO" {{ 'selected' if estado=='GO' }}>Goiás (GO)</option>
+                <option value="MA" {{ 'selected' if estado=='MA' }}>Maranhão (MA)</option>
+                <option value="MT" {{ 'selected' if estado=='MT' }}>Mato Grosso (MT)</option>
+                <option value="MS" {{ 'selected' if estado=='MS' }}>Mato Grosso do Sul (MS)</option>
+                <option value="MG" {{ 'selected' if estado=='MG' }}>Minas Gerais (MG)</option>
+                <option value="PA" {{ 'selected' if estado=='PA' }}>Pará (PA)</option>
+                <option value="PB" {{ 'selected' if estado=='PB' }}>Paraíba (PB)</option>
+                <option value="PR" {{ 'selected' if estado=='PR' }}>Paraná (PR)</option>
+                <option value="PE" {{ 'selected' if estado=='PE' }}>Pernambuco (PE)</option>
+                <option value="PI" {{ 'selected' if estado=='PI' }}>Piauí (PI)</option>
+                <option value="RJ" {{ 'selected' if estado=='RJ' }}>Rio de Janeiro (RJ)</option>
+                <option value="RN" {{ 'selected' if estado=='RN' }}>Rio Grande do Norte (RN)</option>
+                <option value="RS" {{ 'selected' if estado=='RS' }}>Rio Grande do Sul (RS)</option>
+                <option value="RO" {{ 'selected' if estado=='RO' }}>Rondônia (RO)</option>
+                <option value="RR" {{ 'selected' if estado=='RR' }}>Roraima (RR)</option>
+                <option value="SC" {{ 'selected' if estado=='SC' }}>Santa Catarina (SC)</option>
+                <option value="SP" {{ 'selected' if estado=='SP' }}>São Paulo (SP)</option>
+                <option value="SE" {{ 'selected' if estado=='SE' }}>Sergipe (SE)</option>
+                <option value="TO" {{ 'selected' if estado=='TO' }}>Tocantins (TO)</option>
+            </select>
+            <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+        </div>
+        
+        <div class="relative w-full sm:w-1/2 md:w-[20%]">
+            <select name="partido" id="partido"
+            class="w-full bg-white text-[#0D1967] py-2 sm:py-2.5 px-3 sm:px-4 rounded-full font-bold text-sm sm:text-base appearance-none shadow-lg cursor-pointer transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            
+            <option value="">Selecionar Partido</option>
+            <option value="PT" {{ 'selected' if partido=='PT' }}>PT</option>
+            <option value="PL" {{ 'selected' if partido=='PL' }}>PL</option>
+            <option value="PSDB" {{ 'selected' if partido=='PSDB' }}>PSDB</option>
+            <option value="PP" {{ 'selected' if partido=='PP' }}>PP</option>
+            <option value="PRD" {{ 'selected' if partido=='PRD' }}>PRD</option>
+            <option value="PDT" {{ 'selected' if partido=='PDT' }}>PDT</option>
+            <option value="PSB" {{ 'selected' if partido=='PSB' }}>PSB</option>
+            <option value="PSD" {{ 'selected' if partido=='PSD' }}>PSD</option>
+            <option value="PSOL" {{ 'selected' if partido=='PSOL' }}>PSOL</option>
+            <option value="REPUBLICANOS" {{ 'selected' if partido=='REPUBLICANOS' }}>REPUBLICANOS</option>
+            <option value="AVANTE" {{ 'selected' if partido=='AVANTE' }}>AVANTE</option>
+            <option value="MDB" {{ 'selected' if partido=='MDB' }}>MDB</option>
+            <option value="UNIÃO" {{ 'selected' if partido=='UNIÃO' }}>UNIÃO</option>
+            <option value="PV" {{ 'selected' if partido=='PV' }}>PV</option>
+            <option value="PCdoB" {{ 'selected' if partido=='PCdoB' }}>PCdoB</option>
+            <option value="REDE" {{ 'selected' if partido=='REDE' }}>REDE</option>
+            <option value="NOVO" {{ 'selected' if partido=='NOVO' }}>NOVO</option>
+        </select>
+        
+        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+    </div>
+    <div class="relative w-full sm:w-72 lg:w-150 sm:ml-auto">
+    <button type="button" id="btn-buscar-ranking"
+        class="cursor-pointer absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 hover:text-gray-600 focus:outline-none z-10 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+    </button>
+    
+    <input
+        id="pesquisa-ranking"
+        type="text"
+        autocomplete="off"
+        placeholder="Buscar deputado no ranking"
+        class="bg-white w-full text-black p-3 pl-11 rounded-full outline-none shadow-sm border border-gray-300 transition-all placeholder:text-gray-500 text-sm">
+</div>
+
+</form>
+</section>
+</div>
+
+<!--Parte do ranking-->
+<div class="px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-4 sm:mb-9 flex">
+    <div class="self-center w-full max-w-[100rem] mx-auto px-3 sm:px-5 hidden" id="nenhum-deputado-encontrado">
+        Nenhum deputado encontrado
+    </div>
+    <!--Lista/Tabela de ranking-->
+    <div class="w-full max-w-[100rem] mx-auto px-3 sm:px-5" id="secao-ranking">
+        <section class="bg-white py-4 sm:py-6 md:py-8 rounded-2xl size-full shadow-card">
+            
+            <div class="hidden sm:grid sm:grid-cols-[4rem_1fr_4rem_4rem_4rem] gap-4 text-slate-400 text-sm font-semibold border-b border-gray-100 px-4 py-3 sm:px-6">
+                <div class="text-center">Posição</div>
+                <div class="pl-2">Nome</div>
+                <div class="text-center">Estado</div>
+                <div class="text-center">Partido</div>
+                <div class="text-center">IGD</div>
+            </div>
+            
+            <div class="divide-y divide-gray-100 text-slate-700">
+                {% for deputado in ranking %}
+                
+                {# Definindo as cores do pódio com Jinja para evitar repetição de HTML #}
+                {% if loop.index == 1 %}
+                {% set bg_class = "bg-[#ecdc65]/30 hover:bg-[#ecdc65]/40" %}
+                {% set badge_class = "bg-[#ecdc65] text-white shadow-sm" %}
+                {% elif loop.index == 2 %}
+                {% set bg_class = "bg-[#A3B3C2]/30 hover:bg-[#A3B3C2]/40" %}
+                {% set badge_class = "bg-[#A3B3C2] text-white shadow-sm" %}
+                {% elif loop.index == 3 %}
+                {% set bg_class = "bg-[#C28C53]/30 hover:bg-[#C28C53]/40" %}
+                {% set badge_class = "bg-[#C28C53] text-white shadow-sm" %}
+                {% else %}
+                {% set bg_class = "hover:bg-slate-50 transition-colors" %}
+                {% set badge_class = "text-slate-400 font-medium" %}
+                {% endif %}
+                
+                <a href="/deputado/{{ deputado['id'] }}" 
+                class="flex items-center gap-3 sm:grid sm:grid-cols-[4rem_1fr_4rem_4rem_4rem] sm:gap-4 px-4 py-3 sm:px-6 sm:py-4 transition-colors group {{ bg_class }}" id="{{ deputado['id'] }}">
+                
+                <div class="w-8 flex-shrink-0 flex justify-center sm:w-full sm:items-center">
+                    {% if loop.index in [1, 2, 3] %}
+                    <span class="size-6 flex items-center justify-center rounded-full text-xs font-bold {{ badge_class }}">
+                        {{ deputado['ranking'] }}
+                    </span>
+                    {% else %}
+                    <span class="text-sm {{ badge_class }}">
+                        {{ deputado['ranking'] }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="flex flex-1 items-center gap-2 sm:gap-3 min-w-0">
+                    <img src="{{ deputado['foto_url'] }}" 
+                    alt="Foto de {{ deputado['nome_eleitoral'] }}"
+                    class="w-12 h-12 sm:w-10 sm:h-10 rounded-full object-cover bg-slate-100 flex-shrink-0">
+                    
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-slate-800 text-sm sm:text-base truncate transition-colors">
+                            {{ deputado['nome_eleitoral'] }}
+                        </p>
+                        
+                        <p class="text-xs text-slate-500 truncate sm:hidden">
+                            {{ deputado['partido'] }} – {{ deputado['estado'] }}
+                        </p>
+                        
+                        <p class="hidden sm:block font-normal text-slate-500 text-xs sm:text-sm truncate capitalize">
+                            {{ deputado['nome_civil'] | lower }}
+                        </p>
+                        
+                        <p class="text-base font-bold text-[#0D6957] mt-0.5 sm:hidden">
+                            {{ deputado['score_final'] }}
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="hidden sm:flex justify-center items-center text-xs sm:text-sm text-slate-600 font-medium">
+                    {{ deputado['estado'] }}
+                </div>
+                
+                <div class="flex-shrink-0 sm:w-full sm:flex sm:justify-center sm:items-center">
+                    <img src="/static/img/partidos/{{ deputado['partido'] | sem_acentos }}.png"
+                    alt="Logo {{ deputado['partido'] }}"
+                    class="w-8 h-8 sm:w-7 sm:h-7 rounded-full object-contain p-1 bg-gray-100 border border-gray-100">
+                </div>
+                
+                <div class="hidden sm:flex justify-center items-center text-xs sm:text-sm text-slate-600 font-medium">
+                    {{ deputado['score_final'] }}
+                </div>
+                
+            </a>
+            {% else %}
+            <div class="text-gray-400 text-center py-10 text-sm px-4">
+                Nenhum registro encontrado no ranking.
+            </div>
+            {% endfor %}
+        </div>
+        
+    </section>
+</div>
+</div>
+</main>
+
+{% block extra_js %}
+{% if not ranking %}
+<!-- esconde a seção da tabela e mostra a mensagem externa -->
+<script>
+    document.getElementById('secao-ranking').classList.add('hidden');
+    document.getElementById('nenhum-deputado-encontrado').classList.remove('hidden');
+</script>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectEstado = document.getElementById('estado');
+        const selectPartido = document.getElementById('partido');
+        const formFiltro = document.getElementById('form-filtro');
+        const nenhumDeputadoElemento = document.getElementById('nenhum-deputado-encontrado');
+        const listaRanking = document.getElementById('lista-ranking');
+        
+        // Guarda opções originais
+        const estadosOriginais = Array.from(selectEstado.options).map(opt => ({
+            value: opt.value,
+            text: opt.text
+        }));
+        const partidosOriginais = Array.from(selectPartido.options).map(opt => ({
+            value: opt.value,
+            text: opt.text
+        }));
+        
+        function atualizarFiltros() {
+            const estadoAtual = selectEstado.value;
+            const partidoAtual = selectPartido.value;
+            
+            fetch(`/api/filtros-dinamicos?estado=${estadoAtual}&partido=${partidoAtual}`)
+            .then(res => res.json())
+            .then(data => {
+                
+                // Atualiza opções de estado
+                selectEstado.innerHTML = '';
+                estadosOriginais.forEach(opt => {
+                    if (opt.value === '' || data.estados.includes(opt.value)) {
+                        const el = document.createElement('option');
+                        el.value = opt.value;
+                        el.text = opt.text;
+                        if (opt.value === estadoAtual) el.selected = true;
+                        selectEstado.appendChild(el);
+                    }
+                });
+                
+                // Atualiza opções de partido
+                selectPartido.innerHTML = '';
+                partidosOriginais.forEach(opt => {
+                    if (opt.value === '' || data.partidos.includes(opt.value.toUpperCase())) {
+                        const el = document.createElement('option');
+                        el.value = opt.value;
+                        el.text = opt.text;
+                        if (opt.value === partidoAtual) el.selected = true;
+                        selectPartido.appendChild(el);
+                    }
+                });
+                
+            })
+            .catch(err => console.error('Erro ao buscar filtros dinâmicos:', err));
+        }
+        
+        // Atualiza filtros e submete o form (estado)
+        selectEstado.addEventListener('change', () => {
+            atualizarFiltros();
+            setTimeout(() => formFiltro.submit(), 300);
+        });
+        
+        // Atualiza filtros e submete o form (partido)
+        selectPartido.addEventListener('change', () => {
+            atualizarFiltros();
+            setTimeout(() => formFiltro.submit(), 300);
+        });
+        
+        // Carrega filtros dinâmicos ao carregar a página, se algum filtro já selecionado
+        if (selectEstado.value || selectPartido.value) {
+            atualizarFiltros();
+        }
+        
+        
+        const urlParams = new URLSearchParams(window.location.search);
+    const idDoElemento = urlParams.keys().next().value;
+
+    if (idDoElemento) {
+        const elemento = document.getElementById(idDoElemento);
+
+        if (elemento) {
+            // 1. Faz o scroll centralizado
+            elemento.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
+
+            // 2. Aplica a animação de destaque (Pisca em amarelo/slate e some em 2 segundos)
+            // Usamos classes arbitrárias do Tailwind para criar a animação direto no JS
+            elemento.classList.add('animate-[pulse_0.5s_ease-in_1]', 'bg-gray-200', 'transition-colors', 'duration-500');
+
+            // 3. Remove o fundo suavemente após 1.5 segundos para voltar ao normal
+            setTimeout(() => {
+                elemento.classList.remove('bg-gray-200');
+                elemento.classList.remove('animate-[pulse_0.5s_ease-in_1]');
+            }, 1500);
+        }
+    }
+    });
+    // Pesquisa local no ranking
+    const inputRanking = document.getElementById('pesquisa-ranking');
+    const btnBuscar = document.getElementById('btn-buscar-ranking');
+    const linhas = document.querySelectorAll('.divide-y.divide-gray-100 > a[id]');
+
+    const secaoRanking = document.getElementById('secao-ranking');
+    const mensagemVazia = document.getElementById('nenhum-deputado-encontrado');
+
+    function filtrarRanking() {
+        const termo = inputRanking.value.trim().toLowerCase();
+        let encontrou = false;
+
+        linhas.forEach(linha => {
+            const textos = linha.querySelectorAll('p');
+            const nomeEleitoral = textos[0]?.textContent.toLowerCase() ?? '';
+            const nomeCivil = textos[1]?.textContent.toLowerCase() ?? '';
+
+            const corresponde = !termo || nomeEleitoral.includes(termo) || nomeCivil.includes(termo);
+            linha.style.display = corresponde ? '' : 'none';
+            if (corresponde) encontrou = true;
+        });
+
+        if (encontrou || !termo) {
+            secaoRanking.classList.remove('hidden');
+            mensagemVazia.classList.add('hidden');
+        } else {
+            secaoRanking.classList.add('hidden');
+            mensagemVazia.classList.remove('hidden');
+        }
+    }
+
+    inputRanking.addEventListener('input', filtrarRanking);
+    btnBuscar.addEventListener('click', () => inputRanking.focus());
+    
+</script>
+
+{% endblock %}
+
+{% endblock %}

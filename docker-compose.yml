@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # 1. Serviço do Banco de Dados (MariaDB)
+  db:
+    image: mariadb:10.11
+    container_name: mariadb_api
+    restart: always
+    environment:
+      # O Docker substitui automaticamente pelos valores do seu .env
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"  
+      MARIADB_DATABASE: "${DB_NAME}"          
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  # 2. Serviço da sua API Python
+  web:
+    build: .
+    container_name: python_api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      # IMPORTANTE: Mantemos o DB_HOST como "db" fixo porque o Docker 
+      # usa o nome do serviço para fazer a comunicação interna segura entre eles.
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - db
+
+volumes:
+  mariadb_data: # Garante que os dados do banco fiquem salvos no servidor AWS
