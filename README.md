@@ -14,7 +14,7 @@
 
 <br>
 
-> **Status do Projeto:** Sprint 3 concluída ✔️
+> **Status do Projeto:** Concluído ✔️
 
 ---
 
