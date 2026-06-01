@@ -1,7 +1,7 @@
 <img src="docs/img/banner.png" alt="Banner do Radar Cidadão" width="100%" >
 
 <p align="center">
-  <a href="#desafio"><img src="https://img.shields.io/badge/Desafio-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Desafio"></a>
+  <a href="#sobre"><img src="https://img.shields.io/badge/Sobre%20o%20Projeto-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Desafio"></a>
   <a href="#backlog"><img src="https://img.shields.io/badge/Backlog-F1BF00?style=for-the-badge&labelColor=0B228B" alt="Backlog"></a>
   <a href="#dor"><img src="https://img.shields.io/badge/DoR-F1BF00?style=for-the-badge&labelColor=0B228B" alt="DoR"></a>
   <a href="#dod"><img src="https://img.shields.io/badge/DoD-F1BF00?style=for-the-badge&labelColor=0B228B" alt="DoD"></a>
@@ -18,16 +18,22 @@
 
 ---
 
-## 🏅 Desafio <a id="desafio"></a>
+## 📌 Sobre o Projeto <a id="sobre"></a>
+
+Este projeto foi desenvolvido como parte da **API (Aprendizagem por Projetos Integrados)** do curso de **Desenvolvimento de Software Multiplataforma (DSM)** na **FATEC Prof. Jessen Vidal (São José dos Campos/SP)**, durante o 1º semestre de 2026.
+
+A metodologia API simula o ambiente real do mercado de trabalho. Neste projeto, atuamos sob a ótica de Metodologias Ágeis (Scrum), onde o **Prof. Fernando Masanori** atuou como o cliente/parceiro real, validando os requisitos e as entregas de valor do produto.
+
+### 🏅 Desafio 
 
 O projeto **Radar Cidadão** surge da necessidade de tornar a democracia mais acessível através da transparência de dados. O foco central é a análise de desempenho dos Deputados Federais que buscam a reeleição, utilizando como fonte a API pública da Câmara dos Deputados.
 
-### 1. Contexto
+#### 1. Contexto
 Em outubro de 2026, ocorrerão as eleições para Deputado Federal. Embora os dados sobre presença, gastos e atividades parlamentares sejam públicos, eles se apresentam de forma técnica, dispersa e de difícil interpretação para a maioria da população. Nosso objetivo é transformar essa complexidade em informação clara e útil.
 
 ---
 
-### 2. Dores do Parceiro
+#### 2. Dores do Parceiro
 Para garantir que a solução seja funcional, focamos em três perfis de usuários (Personas) identificados pelo parceiro:
 
 <details open><summary><b>Educação (Profª Ana Lúcia):</b></summary> Necessidade de ensinar cidadania baseada em fatos e dados neutros, mas falta de ferramentas que organizem o desempenho dos candidatos de forma estruturada.</details>
@@ -38,7 +44,7 @@ Para garantir que a solução seja funcional, focamos em três perfis de usuári
 
 ---
 
-### 3. Problema Central
+#### 3. Problema Central
 Atualmente, eleitores e educadores não possuem ferramentas simples e neutras para avaliar o desempenho de deputados federais candidatos à reeleição.
 > **Pergunta Investigativa:** Como o desempenho dos deputados do meu estado dá valor à sua candidatura e como se compara à média nacional? 
 
@@ -75,10 +81,11 @@ O Backlog do Produto representa a lista de todas as funcionalidades e entregas p
 | 7 | Alta <sup>★</sup>| Como jornalista, quero filtrar deputados por estado para analisar o desempenho da bancada regional. | 🟢 | 2 |
 | 8 | Alta | Como professor, quero poder acessar as palavras-chave mais frequentes nos discursos dos deputados para ensinar cidadania e constituição. | 🟢 | 2 |
 | 9 | Alta | Como eleitor, quero ver dados com linguagem simples e de forma resumida do desempenho do meu deputado para decidir meu voto. | 🟢 | 2 |
-| 10 | Alta | Como usuário, quero uma página de erro caso procure por um deputado inexistente. | 🔴 | 3 |
-| 11 | Alta | Como professor, quero ver legendas explicativas nos gráficos (ex.: o que é "cota parlamentar" etc). | 🔴 | 3 |
-| 12 | Média | Como usuário, quero saber de onde são as fontes utilizadas no levantamento dos dados. | 🔴 | 3 |
-| 13 | Alta | Como usuário de smartphone, quero que as tabelas de dados sejam roláveis lateralmente para não quebrar o layout. | 🔴 | 3 |
+| 10 | Alta | Como usuário, quero uma página de erro caso procure por um deputado inexistente. | 🟢 | 3 |
+| 11 | Alta | Como eleitor, gostaria de poder ver o desempenho do meu deputado avaliado através de uma nota. | 🟢 | 3 |
+| 12 | Alta <sup>★</sup> | Como professor, quero ver legendas explicativas nos gráficos (ex.: o que é "cota parlamentar" etc). | 🟢 | 3 |
+| 13 | Média | Como usuário, quero saber de onde são as fontes utilizadas no levantamento dos dados. | 🟢 | 3 |
+| 14 | Alta <sup>★</sup> | Como usuário de smartphone, quero que as tabelas de dados sejam roláveis lateralmente para não quebrar o layout. | 🟢 | 3 |
 
 ---
 
@@ -112,9 +119,9 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 
 | Sprint | Período | Documentação | Status |
 | :---: | :---: | :---: | :---: |
-| **01** | 16/03 a 05/04 | [📄 Acessar](./docs/sprints/sprint1/README.md) | ✔️ |
-| **02** | 13/04 a 03/05 | [📄 Acessar](./docs/sprints/sprint2/README.md) | ✔️ |
-| **03** | 11/05 a 31/05 | -- | 📅 |
+| **01** | 16/03 a 05/04 | [📄 Acessar](https://github.com/APILumina/API1_DSM_Lumina/tree/sprint-1) | ✔️ |
+| **02** | 13/04 a 03/05 | [📄 Acessar](https://github.com/APILumina/API1_DSM_Lumina/tree/sprint-2) | ✔️ |
+| **03** | 11/05 a 31/05 | [📄 Acessar](https://github.com/APILumina/API1_DSM_Lumina/tree/sprint-3) | ✔️ |
 
 ---
 
@@ -126,20 +133,23 @@ O projeto está dividido em três Sprints, seguindo a metodologia ágil Scrum. O
 Para atender aos requisitos técnicos (RN.P) do desafio Radar Cidadão, utilizamos as seguintes ferramentas:
 
 <p align="center">
-  <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=fff" alt="Python">
+  <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
+  <img src="https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white" alt="VS Code">
+  <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jirasoftware&logoColor=white" alt="Jira">
+  <br>
   <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JS">
-  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB">
   <br>
-  <img src="https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white" alt="VS Code">
-  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-  <img src="https://img.shields.io/badge/Google%20Colab-%23F9A825.svg?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Colab">
-  <img src="https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=fff" alt="Python">
   <br>
-  <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
-  <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jirasoftware&logoColor=white" alt="Jira">
-  <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
   <img src="https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
+  <img src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS">
+  <br>
+  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/Google%20Colab-%23F9A825.svg?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Colab">
+  <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
+  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
 </p>
 
 ---
@@ -174,7 +184,7 @@ API1_DSM_Lumina/
 Siga os passos abaixo para configurar o ambiente e executar a aplicação localmente.
 
 ### 1. Pré-requisitos
-* **Python 3.10 ou superior** ([Download](https://git-scm.com/install/))
+* **Docker (Docker Compose)** ([Download](https://www.docker.com))
 * **Git** ([Download](https://git-scm.com/install/))
 
 ### 2. Instalação e Execução
@@ -185,23 +195,12 @@ git clone https://github.com/APILumina/API1_DSM_Lumina.git
 # 2. Acesse o diretório
 cd API1_DSM_Lumina
 
-# 3. Crie um ambiente virtual
-python -m venv venv
-
-# 4. Instale as dependências
-# No Windows:
-.\venv\Scripts\pip install -r requirements.txt
-
-# No Linux/Mac:
-./venv/bin/pip install -r requirements.txt
-
-# 5. Execute a aplicação
-# No Windows:
-.\venv\Scripts\python app.py
-
-# No Linux/Mac:
-./venv/bin/python app.py
+# 3. Suba a aplicação
+docker compose up
 ```
+
+### 3. Acesso
+> Após subir, acesse no navegador: http://localhost:5000
 
 <br>
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
