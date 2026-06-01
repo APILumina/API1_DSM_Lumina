@@ -1,4 +1,4 @@
-## 📃 Documentação da Sprint 2 <a id="topo"></a>
+## 📃 Documentação da Sprint 3 <a id="topo"></a>
 
 <img src="docs/img/banner.png" alt="Banner do Radar Cidadão" width="100%" >
 
