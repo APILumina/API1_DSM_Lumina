@@ -14,7 +14,7 @@
 
 <br>
 
-> **Status do Projeto:** Sprint 3 concluída ✔️
+> **Status do Projeto:** Concluído ✔️
 
 ---
 
@@ -187,20 +187,31 @@ Siga os passos abaixo para configurar o ambiente e executar a aplicação localm
 * **Docker (Docker Compose)** ([Download](https://www.docker.com))
 * **Git** ([Download](https://git-scm.com/install/))
 
-### 2. Instalação e Execução
+### 2. Configuração
 ```bash
 # 1. Clone o repositório
 git clone https://github.com/APILumina/API1_DSM_Lumina.git
-
+```
+```bash
 # 2. Acesse o diretório
 cd API1_DSM_Lumina
+```
+```bash
+# 3. Copie o arquivo de variáveis
+cp .env.example .env
+```
+```bash
+# 4. Preencha o .env com as credenciais (solicite ao time)
+Email: fatec.luminaAPI@gmail.com
+```
 
-# 3. Suba a aplicação
+### 3. Execução
+```bash
 docker compose up
 ```
 
-### 3. Acesso
-> Após subir, acesse no navegador: http://localhost:5000
+### 4. Acesso
+Após subir, acesse: http://localhost:5000
 
 <br>
 <p align="right"><a href="#topo">↑ Voltar ao topo</a></p>
