@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block title %}Comparar deputados{% endblock %}
+
+{% block extra_style %}
+<style type="text/tailwindcss">
+    .shadow-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .seletor-deputado {
+        @apply w-full bg-white border border-gray-200 rounded-full pl-2 pr-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-all shadow-sm;
+    }
+    .dropdown-busca {
+        @apply absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden;
+    }
+
+    .dropdown-busca ul {
+        max-height: 280px;
+    }
+
+    .dropdown-busca::-webkit-scrollbar,
+    .dropdown-busca ul::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .dropdown-busca::-webkit-scrollbar-thumb,
+    .dropdown-busca ul::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-full;
+    }
+    .barra-comparacao {
+        @apply h-2.5 rounded-full bg-radar transition-all duration-500;
+    }
+
+    .barra-fundo {
+        @apply h-2.5 rounded-full bg-radar/15 w-full overflow-hidden;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<main class="flex-grow bg-gray-100 pb-24 lg:pb-12">
+
+    <!-- Título -->
+    <div class="bg-white px-5 py-4 sm:py-6 mb-4 sm:mb-6">
+        <section class="w-full max-w-[100rem] mx-auto">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-1">Comparar deputados</h1>
+            <p class="text-base md:text-lg lg:text-xl tracking-tight text-gray-600">Selecione dois deputados para comparar a situação parlamentar</p>
+        </section>
+    </div>
+
+    <div class="px-5 w-full max-w-[100rem] mx-auto">
+
+        <!-- Seletores -->
+        <section class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-6">
+
+          
+            <div class="relative w-full sm:flex-1" id="wrapper-seletor-1">
+                <button type="button" id="btn-seletor-1" class="seletor-deputado">
+                    <img id="foto-1" src="{{ dep1['imagem_deputado'] if dep1 else '/static/img/default.jpeg' }}" alt=""
+                        class="size-11 rounded-full object-cover bg-gray-100 {{ 'hidden' if not dep1 }}">
+                    <div class="flex flex-col items-start min-w-0 flex-1">
+                        <span id="nome-1" class="font-bold text-dark-blue truncate w-full text-left">
+                            {{ dep1['nome_eleitoral'] if dep1 else 'Selecionar deputado' }}
+                        </span>
+                        <span id="partido-1" class="text-xs text-gray-500 truncate w-full text-left {{ 'hidden' if not dep1 }}">
+                            Partido: {{ dep1['partido'] if dep1 else '' }}
+                        </span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" class="size-4 text-gray-400 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+
+                <div class="dropdown-busca hidden" id="dropdown-1">
+                    <div class="p-3 border-b border-gray-100">
+                        <input type="text" id="input-busca-1" autocomplete="off" placeholder="Buscar deputado"
+                            class="w-full bg-gray-100 rounded-full px-4 py-2 text-sm outline-none">
+                    </div>
+                    <ul class="js-lista-resultado-1 list-none p-0 m-0 w-full divide-y divide-gray-100 overflow-y-auto
+                        [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:px-4 [&>li>a]:py-2.5 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors [&>li>a]:cursor-pointer
+                        [&>li>a>img]:w-10 [&>li>a>img]:h-10 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover
+                        [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0
+                        [&>li>a>div>span:first-child]:font-medium [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate [&>li>a>div>span:first-child]:text-sm
+                        [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:text-xs [&>li>a>div>span:last-child]:truncate">
+                    </ul>
+                </div>
+            </div>
+
+                      
+            <div class="relative w-full sm:flex-1" id="wrapper-seletor-2">
+                <button type="button" id="btn-seletor-2" class="seletor-deputado">
+                    <img id="foto-2" src="{{ dep2['imagem_deputado'] if dep2 else '/static/img/default.jpeg' }}" alt=""
+                        class="size-11 rounded-full object-cover bg-gray-100 {{ 'hidden' if not dep2 }}">
+                    <div class="flex flex-col items-start min-w-0 flex-1">
+                        <span id="nome-2" class="font-bold text-dark-blue truncate w-full text-left">
+                            {{ dep2['nome_eleitoral'] if dep2 else 'Selecionar deputado' }}
+                        </span>
+                        <span id="partido-2" class="text-xs text-gray-500 truncate w-full text-left {{ 'hidden' if not dep2 }}">
+                            Partido: {{ dep2['partido'] if dep2 else '' }}
+                        </span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" class="size-4 text-gray-400 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+
+                <div class="dropdown-busca hidden" id="dropdown-2">
+                    <div class="p-3 border-b border-gray-100">
+                        <input type="text" id="input-busca-2" autocomplete="off" placeholder="Buscar deputado"
+                            class="w-full bg-gray-100 rounded-full px-4 py-2 text-sm outline-none">
+                    </div>
+                    <ul class="js-lista-resultado-2 list-none p-0 m-0 w-full divide-y divide-gray-100 overflow-y-auto
+                        [&>li>a]:w-full [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-3 [&>li>a]:px-4 [&>li>a]:py-2.5 [&>li>a]:hover:bg-gray-100 [&>li>a]:transition-colors [&>li>a]:cursor-pointer
+                        [&>li>a>img]:w-10 [&>li>a>img]:h-10 [&>li>a>img]:rounded-full [&>li>a>img]:object-cover
+                        [&>li>a>div]:flex [&>li>a>div]:flex-col [&>li>a>div]:min-w-0
+                        [&>li>a>div>span:first-child]:font-medium [&>li>a>div>span:first-child]:text-gray-900 [&>li>a>div>span:first-child]:truncate [&>li>a>div>span:first-child]:text-sm
+                        [&>li>a>div>span:last-child]:text-gray-500 [&>li>a>div>span:last-child]:text-xs [&>li>a>div>span:last-child]:truncate">
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Limpar -->
+            <button type="button" id="btn-limpar"
+                class="shrink-0 flex items-center gap-2 text-xs lg:text-sm font-medium bg-radar/10 hover:bg-radar/20 p-3 rounded-lg text-radar transition-colors cursor-pointer whitespace-nowrap">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4 lg:size-5">
+                  <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75               2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0              11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.            75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
+                </svg>
+
+                Limpar comparação
+            </button>
+        </section>
+
+        <section id="msg-vazia" class="bg-white rounded-2xl shadow-card p-10 text-center text-gray-500 mb-8 {{ 'hidden' if dep1 and dep2 }}">
+            Selecione dois deputados acima para comparar o desempenho.
+        </section>
+
+        
+        <section id="card-comparacao" class="bg-white rounded-2xl shadow-card overflow-hidden mb-8 {{ '' if dep1 and dep2 else 'hidden' }}">
+
+            
+            <div class="flex items-center justify-between px-5 sm:px-10 py-8 border-b border-gray-100">
+    
+    <div class="flex-1 min-w-0 flex items-center gap-3 sm:gap-4">
+        <img src="{{ dep1['imagem_deputado'] if dep1 else '/static/img/default.jpeg' }}"
+            alt="Foto de {{ dep1['nome_eleitoral'] if dep1 else '' }}"
+            class="size-16 sm:size-20 rounded-full object-cover bg-gray-100 shrink-0">
+        <div class="min-w-0">
+            <a href="/deputado/{{ dep1['id'] }}" class="block truncate font-bold text-dark-blue hover:underline text-base sm:text-lg">
+                {{ dep1['nome_eleitoral'] if dep1 else '—' }}
+            </a>
+            <p class="text-xs sm:text-sm text-gray-500 truncate">{{ (dep1['partido'] + ' - ' + dep1['estado']) if dep1 else '' }}</p>
+        </div>
+    </div>
+
+    <div class="shrink-0 size-10 sm:size-12 rounded-full bg-radar/10 text-radar font-bold flex items-center justify-center text-sm sm:text-base mx-4">
+        VS
+    </div>
+
+    <div class="flex-1 min-w-0 flex items-center gap-3 sm:gap-4 flex-row-reverse text-right">
+        <img src="{{ dep2['imagem_deputado'] if dep2 else '/static/img/default.jpeg' }}"
+            alt="Foto de {{ dep2['nome_eleitoral'] if dep2 else '' }}"
+            class="size-16 sm:size-20 rounded-full object-cover bg-gray-100 shrink-0">
+        <div class="min-w-0 w-full"> <a href="/deputado/{{ dep2['id'] }}" class="block truncate font-bold text-dark-blue hover:underline text-base sm:text-lg">
+                {{ dep2['nome_eleitoral'] if dep2 else '—' }}
+            </a>
+            <p class="text-xs sm:text-sm text-gray-500 truncate">{{ (dep2['partido'] + ' - ' + dep2['estado']) if dep2 else '' }}</p>
+        </div>
+    </div>
+</div>
+
+            
+            <div class="px-5 sm:px-10 py-6 sm:py-8 flex flex-col gap-6">
+
+                {% macro metrica(label, tooltip, valor1, valor2, maximo, formato='int') %}
+                {% set p1 = (valor1 / maximo * 100) if maximo else 0 %}
+                {% set p2 = (valor2 / maximo * 100) if maximo else 0 %}
+                <div class="grid grid-cols-[1fr_auto_1fr] sm:grid-cols-[2fr_auto_2fr] items-center gap-3 sm:gap-6">
+
+                    
+                    <div class="flex flex-col gap-1.5 items-end">
+                        <span class="font-bold text-dark-blue text-sm sm:text-base">
+                            {% if formato == 'moeda' %}R$ {{ valor1 | real }}
+                            {% elif formato == 'porcentagem' %}{{ valor1 | porcentagem }}%
+                            {% else %}{{ valor1 }}{% endif %}
+                        </span>
+                        <div class="barra-fundo">
+                            <div class="barra-comparacao ml-auto" style="width: {{ p1 }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-1.5 text-center min-w-[110px] sm:min-w-[160px]">
+                        <span class="font-semibold text-dark-blue text-xs sm:text-base whitespace-nowrap">{{ label }}</span>                      
+                    </div>
+
+                    
+                    <div class="flex flex-col gap-1.5 items-start">
+                        <span class="font-bold text-dark-blue text-sm sm:text-base">
+                            {% if formato == 'moeda' %}R$ {{ valor2 | real }}
+                            {% elif formato == 'porcentagem' %}{{ valor2 | porcentagem }}%
+                            {% else %}{{ valor2 }}{% endif %}
+                        </span>
+                        <div class="barra-fundo">
+                            <div class="barra-comparacao" style="width: {{ p2 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endmacro %}
+
+                {{ metrica('Proposições', 'Total de proposições apresentadas pelo deputado', dep1['proposicoes'] if dep1 else 0, dep2['proposicoes'] if dep2 else 0, maximos['proposicoes']) }}
+                {{ metrica('Proposições aprovadas', 'Proposições transformadas em norma jurídica', dep1['proposicoes_aprovadas'] if dep1 else 0, dep2['proposicoes_aprovadas'] if dep2 else 0, maximos['proposicoes_aprovadas']) }}
+                {{ metrica('Presença', 'Taxa de presença nas votações', dep1['presenca'] if dep1 else 0, dep2['presenca'] if dep2 else 0, maximos['presenca'], 'porcentagem') }}
+                {{ metrica('Índice (IGD)', 'Índice Geral de Desempenho, de 0 a 10', dep1['igd'] if dep1 else 0, dep2['igd'] if dep2 else 0, maximos['igd']) }}
+                {{ metrica('Gastos', 'Total de despesas da cota parlamentar', dep1['gastos'] if dep1 else 0, dep2['gastos'] if dep2 else 0, maximos['gastos'], 'moeda') }}
+            </div>
+
+            
+            <div class="px-5 sm:px-10 py-5 border-t border-gray-100 grid grid-cols-2 text-center">
+                <div>
+                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Posição no ranking</p>
+                    <p class="font-bold text-radar text-lg sm:text-xl">{{ (dep1['ranking'] | string + 'º de 513') if dep1 and dep1['ranking'] else '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Posição no ranking</p>
+                    <p class="font-bold text-radar text-lg sm:text-xl">{{ (dep2['ranking'] | string + 'º de 513') if dep2 and dep2['ranking'] else '—' }}</p>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const params = new URLSearchParams(window.location.search);
+    let id1 = params.get('id1') || '';
+    let id2 = params.get('id2') || '';
+
+    function configurarSeletor(numero) {
+        const btn = document.getElementById(`btn-seletor-${numero}`);
+        const dropdown = document.getElementById(`dropdown-${numero}`);
+        const input = document.getElementById(`input-busca-${numero}`);
+        const lista = document.querySelector(`.js-lista-resultado-${numero}`);
+        const wrapper = document.getElementById(`wrapper-seletor-${numero}`);
+        let debounceTimer;
+
+        function abrir() {
+            dropdown.classList.remove('hidden');
+            input.value = '';
+            lista.innerHTML = '';
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function fechar() {
+            dropdown.classList.add('hidden');
+        }
+
+        function selecionar(deputado) {
+            document.getElementById(`nome-${numero}`).textContent = deputado.nome_eleitoral;
+            const fotoEl = document.getElementById(`foto-${numero}`);
+            fotoEl.src = deputado.foto_url || '/static/img/default.jpeg';
+            fotoEl.classList.remove('hidden');
+            const partidoEl = document.getElementById(`partido-${numero}`);
+            partidoEl.textContent = `Partido: ${deputado.partido || ''}`;
+            partidoEl.classList.remove('hidden');
+
+            if (numero === 1) { id1 = deputado.id; } else { id2 = deputado.id; }
+            atualizarUrlERecarregar();
+        }
+
+        function renderizar(deputados) {
+            if (deputados.length === 0) {
+                lista.innerHTML = `<li class="text-center text-gray-500 py-3 px-4 text-sm">Nenhum deputado encontrado</li>`;
+                return;
+            }
+            lista.innerHTML = deputados.map(d => `
+                <li>
+                    <a data-id="${d.id}" data-nome="${d.nome_eleitoral}" data-foto="${d.foto_url}" data-partido="${d.partido || ''}">
+                        <img src="${d.foto_url}" alt="" onerror="this.src='/static/img/default.jpeg'">
+                        <div>
+                            <span>${d.nome_eleitoral}</span>
+                            <span class="capitalize">${(d.nome_civil || '').toLowerCase()}</span>
+                        </div>
+                    </a>
+                </li>
+            `).join('');
+
+            lista.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => {
+                    selecionar({
+                        id: a.dataset.id,
+                        nome_eleitoral: a.dataset.nome,
+                        foto_url: a.dataset.foto,
+                        partido: a.dataset.partido
+                    });
+                    fechar();
+                });
+            });
+        }
+
+        async function buscar(query) {
+            try {
+                const res = await fetch(`/autocomplete?pesquisa=${encodeURIComponent(query)}`);
+                const dados = await res.json();
+                renderizar(dados);
+            } catch (err) {
+                lista.innerHTML = '';
+                console.error('Erro na busca de deputados:', err);
+            }
+        }
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const estaAberto = !dropdown.classList.contains('hidden');
+            document.querySelectorAll('.dropdown-busca').forEach(d => d.classList.add('hidden'));
+            if (!estaAberto) abrir();
+        });
+
+        input.addEventListener('input', () => {
+            const query = input.value.trim();
+            clearTimeout(debounceTimer);
+            if (query.length < 2) {
+                lista.innerHTML = '';
+                return;
+            }
+            debounceTimer = setTimeout(() => buscar(query), 300);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) fechar();
+        });
+    }
+
+    function atualizarUrlERecarregar() {
+        const url = new URL(window.location.href);
+        if (id1) url.searchParams.set('id1', id1); else url.searchParams.delete('id1');
+        if (id2) url.searchParams.set('id2', id2); else url.searchParams.delete('id2');
+        window.location.href = url.toString();
+    }
+
+    configurarSeletor(1);
+    configurarSeletor(2);
+
+
+    document.getElementById('btn-limpar').addEventListener('click', () => {
+        window.location.href = window.location.pathname;
+    });
+});
+</script>
+{% endblock %}

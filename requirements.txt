@@ -3,3 +3,4 @@ flask-cors==6.0.2
 pandas==3.0.1
 matplotlib==3.10.8
 mysql-connector-python==9.6.0
+python-dotenv

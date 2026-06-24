@@ -8,21 +8,24 @@
   }
 </style>
 {% endblock %}
-  
+
 
 {% block content %}
 
 <!-- TÍTULO -->
 <div class="bg-white">
-  <h1 class="px-5 pt-8 pb-4 max-w-[100rem] mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-    Deputados federais por estado
-  </h1>
+  <div class="px-5 pt-8 pb-4 max-w-[100rem] mx-auto ">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-1">
+              Deputados federais por estado
+            </h1>
+            <p class="text-base md:text-lg lg:text-xl tracking-tight">Conheça os deputados e acompanhe sua atuação no Congresso.</p>
+    </div>
 </div>
 
 <!-- FILTROS -->
 <form action="{{ url_for('route.deputados') }}" method="get" id="form-filtro" class="bg-white">
   <div class="px-5 pb-5 pt-4 max-w-[100rem] mx-auto">
-
+    
     <!-- Badge do tema ativo — aparece somente quando há tema selecionado -->
     {% if tema %}
     <div class="flex items-center gap-2 mb-4">
@@ -31,64 +34,64 @@
         <span>
           Tema:
           {% for t in temas %}
-            {% if t['cd_tp_temas']|string == tema|string %}
-              {{ t['tipo'] }}
-            {% endif %}
+          {% if t['cd_tp_temas']|string == tema|string %}
+          {{ t['tipo'] }}
+          {% endif %}
           {% endfor %}
         </span>
         <!-- Botão para remover o filtro de tema (mantém estado e partido se ativos) -->
         <a href="{{ url_for('route.deputados', estado=estado, partido=partido) }}"
-           class="ml-1 hover:text-yellow-300 font-bold leading-none"
-           title="Remover filtro de tema">
-          &times;
-        </a>
-      </span>
-    </div>
-    {% endif %}
-
-    <div class="flex gap-y-3 gap-x-[2%] flex-wrap sm:flex-nowrap">
-
-      <!-- ESTADO -->
-      <div class="relative w-full sm:w-[32%] md:w-[20%]">
-        <select name="estado" id="estado" onchange="this.form.submit()"
-          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-          <option value="">Selecionar Estado</option>
-          {% for est in estados %}
-          <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{ est['uf'] }})</option>
-          {% endfor %}
-        </select>
-        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
-      </div>
-
-      <!-- PARTIDOS -->
-      <div class="relative w-full sm:w-[32%] md:w-[20%]">
-        <select name="partido" id="partido" onchange="this.form.submit()"
-          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-          <option value="">Selecionar Partido</option>
-          {% for part in partidos %}
-          <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{ part['abreviacao'] }})</option>
-          {% endfor %}
-        </select>
-        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
-      </div>
-
-      <!-- TEMAS (select com os 32 sub-temas do banco) -->
-      <div class="relative w-full sm:w-[32%] md:w-[20%]">
-        <select name="tema" id="tema" onchange="this.form.submit()"
-          class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
-          <option value="">Selecionar Tema</option>
-          {% for tema_item in temas %}
-            <option value="{{ tema_item['cd_tp_temas'] }}"
-              {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
-              {{ tema_item['tipo'] }}
-            </option>
-          {% endfor %}
-        </select>
-        <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
-      </div>
-
-    </div>
+        class="ml-1 hover:text-yellow-300 font-bold leading-none"
+        title="Remover filtro de tema">
+        &times;
+      </a>
+    </span>
   </div>
+  {% endif %}
+  
+  <div class="flex gap-y-3 gap-x-[2%] flex-wrap sm:flex-nowrap">
+    
+    <!-- ESTADO -->
+    <div class="relative w-full sm:w-[32%] md:w-[20%]">
+      <select name="estado" id="estado" onchange="this.form.submit()"
+      class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+      <option value="">Selecionar Estado</option>
+      {% for est in estados %}
+      <option value="{{ est['uf'] }}" {{ 'selected' if estado==est['uf'] }}>{{ est['nome'] }} ({{ est['uf'] }})</option>
+      {% endfor %}
+    </select>
+    <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none">▼</span>
+  </div>
+  
+  <!-- PARTIDOS -->
+  <div class="relative w-full sm:w-[32%] md:w-[20%]">
+    <select name="partido" id="partido" onchange="this.form.submit()"
+    class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+    <option value="">Selecionar Partido</option>
+    {% for part in partidos %}
+    <option value="{{ part['abreviacao'] | lower }}" {{ 'selected' if partido==part['abreviacao'] | lower }}>{{ part['nome'] }} ({{ part['abreviacao'] }})</option>
+    {% endfor %}
+  </select>
+  <span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+</div>
+
+<!-- TEMAS (select com os 32 sub-temas do banco) -->
+<div class="relative w-full sm:w-[32%] md:w-[20%]">
+  <select name="tema" id="tema" onchange="this.form.submit()"
+  class="w-full bg-white text-[#0D1967] py-2 px-3 rounded-full font-bold text-base appearance-none shadow-lg cursor-pointer">
+  <option value="">Selecionar Tema</option>
+  {% for tema_item in temas %}
+  <option value="{{ tema_item['cd_tp_temas'] }}"
+  {{ 'selected' if tema == tema_item['cd_tp_temas']|string }}>
+  {{ tema_item['tipo'] }}
+</option>
+{% endfor %}
+</select>
+<span class="absolute right-[8%] top-1/2 -translate-y-1/2 text-sm pointer-events-none text-[#0D1967]">▼</span>
+</div>
+
+</div>
+</div>
 </form>
 
 {% if not deputados %}
@@ -100,21 +103,27 @@
 {% endif %}
 
 <div id="lista-deputados"
-  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
-  {% for deputado in deputados %}
-  <a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full">
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
-      <div class="p-6">
-        <img src="{{ deputado['imagem_deputado'] }}"
-          class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-          <div>
-            <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">{{ deputado['nome_eleitoral'] }}</p>
-            <p class="text-sm lg:text-base">{{ deputado['partido'] }}</p>  
-          </div>
+class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 max-w-[100rem] mx-auto">
+{% for deputado in deputados %}
+<a href="/deputado/{{ deputado['cd_deputado'] }}" class="block w-full group">
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
+    <div class="p-3 lg:p-6">
+      <img src="{{ deputado['imagem_deputado'] }}"
+      class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+      <div>
+        <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">{{ deputado['nome_eleitoral'] }}</p>
+        <p class="text-sm lg:text-base">{{ deputado['partido'] }} • {{ deputado['estado'] }}</p>  
+      </div>
+      <div class="mt-3 lg:mt-5 text-sm lg:text-base border border-gray-300 rounded-md p-1 text-radar font-semibold group-hover:underline group-hover:underline-offset-2 flex justify-center items-center">
+        Ver perfil
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline-block">
+          <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
       </div>
     </div>
-  </a>
-  {% endfor %}
+  </div>
+</a>
+{% endfor %}
 </div>
 
 <div id="sentinela" class="flex justify-center p-10">
@@ -123,7 +132,7 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const parametros = new URLSearchParams(window.location.search);
     const pesquisa = parametros.get('pesquisa');
     const tema = parametros.get('tema');
@@ -141,36 +150,42 @@
     
     function criarCard(deputado) {
       return `
-        <a href="/deputado/${deputado.cd_deputado}" class="block w-full">
-          <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
-            <div class="p-6">
-              <img src="${deputado.imagem_deputado}"
-                class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
-              <div>
-                <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">${deputado.nome_eleitoral}</p>
-                <p class="text-sm lg:text-base">${deputado.partido}</p>  
-              </div>
-            </div>
+    <a href="/deputado/${deputado.cd_deputado}" class="block w-full group">
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center w-full h-full hover:scale-105 duration-300">
+        <div class="p-3 lg:p-6">
+          <img src="${deputado.imagem_deputado}"
+            class="w-[75%] lg:w-[50%] aspect-square rounded-full mx-auto mb-3 object-cover">
+          <div>
+            <p class="text-base lg:text-lg font-medium line-clamp-2 truncate">${deputado.nome_eleitoral}</p>
+            <p class="text-sm lg:text-base">${deputado.partido} • ${deputado.estado}</p>  
           </div>
-        </a>
-      `;
+          <div class="mt-3 text-sm lg:text-base border border-gray-300 rounded-md p-1 text-radar font-semibold group-hover:underline group-hover:underline-offset-2 flex justify-center items-center">
+            Ver perfil
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline-block">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+  `;
     }
-  
+    
     async function carregarMaisDeputados() {
       if (carregando || fimDados) return;
-    
+      
       carregando = true;
       loader.classList.remove('hidden');
       paginaAtual++;
-    
+      
       // Preserva todos os parâmetros da URL
       const params = new URLSearchParams(window.location.search);
       params.set('page', paginaAtual);
-    
+      
       try {
         const response = await fetch(`/dados/deputados?${params.toString()}`);
         const novosDeputados = await response.json();
-      
+        
         if (novosDeputados.length === 0) {
           fimDados = true;
           sentinela.classList.add('hidden'); // esconde o sentinela quando acabar
@@ -188,13 +203,13 @@
         loader.classList.add('hidden');
       }
     }
-  
+    
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !carregando && !fimDados) {
         carregarMaisDeputados();
       }
     }, { threshold: 0.5 });
-  
+    
     observer.observe(sentinela);
   });
 </script>

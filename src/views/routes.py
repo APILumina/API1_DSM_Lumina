@@ -331,7 +331,7 @@ def home():
     
     cursor.close()
     conn.close()
-    return render_template("index.html", partidos=partidos, estados=estados, hide_pesquisa=True, sticky_navbar=True,todos_deputados=todos_deputados, nb=1)
+    return render_template("index.html", hide_pesquisa=True, sticky_navbar=True,todos_deputados=todos_deputados, nb=1)
 
 
 @route_bp.route("/graficos")
@@ -519,7 +519,6 @@ def graficos():
 
     return render_template("graficos.html",
         estado=estado,
-        estados=estados,
         partido=partido,
         partidos=partidos,
         grafico_projetos=grafico_projetos,
@@ -535,24 +534,34 @@ def deputados():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
-    page = int(request.args.get('page', 1))
-    estado  = request.args.get('estado', '')
-    partido = request.args.get('partido', '')
-    tema    = request.args.get('tema', '')
+    # 1. Capturar todos os parâmetros possíveis (da URL ou formulários)
+    page     = int(request.args.get('page', 1))
+    estado   = request.args.get('estado', '').strip()
+    partido  = request.args.get('partido', '').strip()
+    tema     = request.args.get('tema', '').strip()
+    pesquisa = request.args.get('pesquisa', '').strip()
 
     filtros = []
     params  = []
     
-    joins = ""
+    # 2. Aplicar Filtro de Pesquisa (Texto)
+    if pesquisa:
+        pesquisa_limpa = remover_acentos(pesquisa).lower()
+        termo = f"%{pesquisa_limpa}%"
+        filtros.append("(LOWER(d.nome) LIKE %s OR LOWER(d.nome_eleitoral) LIKE %s)")
+        params.extend([termo, termo])
 
+    # 3. Aplicar Filtro de Estado
     if estado:
         filtros.append("e.uf = %s")
         params.append(estado)   
 
+    # 4. Aplicar Filtro de Partido
     if partido:
         filtros.append("p.abreviacao = %s")
         params.append(partido)
         
+    # 5. Aplicar Filtro de Tema
     if tema:
         if tema.isdigit():
             filtros.append("""
@@ -582,11 +591,14 @@ def deputados():
                 """)
                 params.extend(codigos)
 
+    # Montar a cláusula WHERE dinamicamente
     where = ("WHERE " + " AND ".join(filtros)) if filtros else ""
 
+    # 6. Configurar Paginação
     itens_por_pagina = 24
     offset = (page - 1) * itens_por_pagina
 
+    # 7. Executar Query Principal
     query = f"""
     SELECT DISTINCT
         d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
@@ -594,22 +606,20 @@ def deputados():
     FROM deputado d
     JOIN estado e ON d.fk_estado = e.cd_estado
     JOIN partido p ON d.fk_partido = p.cd_partido
-    {joins}
     {where}
     ORDER BY d.nome_eleitoral
     LIMIT {itens_por_pagina} OFFSET {offset}
     """
     
-
     cursor.execute(query, params)
     dados = cursor.fetchall()
 
+    # 8. Consultas auxiliares para preencher os menus do template
     cursor.execute("""
     SELECT nome, imagem_deputado
     FROM deputado
     ORDER BY nome
     """)
-
     todos_deputados = cursor.fetchall()
 
     cursor.execute("""
@@ -617,24 +627,22 @@ def deputados():
     FROM top_temas
     ORDER BY tipo
     """)
-
     temas = cursor.fetchall()
 
     cursor.close()
     conn.close()
-    
 
+    # 9. Retornar render_template com todas as variáveis
     return render_template(
         "deputados.html",
         deputados=dados,
-        estados=estados,
+        Temas=Temas,          # Variável global que você já tinha
         estado=estado,
         partido=partido,
         tema=tema,
-        partidos=partidos,
+        pesquisa=pesquisa,    # Novo: envia a pesquisa de volta para manter o input preenchido
         todos_deputados=todos_deputados,
         temas=temas,
-        Temas=Temas,
         sticky_navbar=True,
         nb=2,
         page=page
@@ -1027,93 +1035,6 @@ def remover_acentos(texto):
     nfkd_form = unicodedata.normalize('NFKD', texto)
     return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
-@route_bp.route('/buscar')
-def buscar():
-    estado = request.args.get('estado', '')
-    partido = request.args.get('partido', '')
-    
-    filtros = []
-    params = []
-    
-    if estado:
-        filtros.append("e.uf = %s")
-        params.append(estado)
-    if partido:
-        filtros.append("p.abreviacao = %s")
-        params.append(partido)
-    
-    where_clause = "WHERE " + " AND ".join(filtros) if filtros else ""
-    
-    conexao = conectar()
-    cursor = conexao.cursor(dictionary=True)
-    
-    # Usando GROUP BY para garantir que cada nome apareça apenas uma vez
-
-    query = f"""
-    SELECT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
-           e.uf AS estado, p.abreviacao AS partido
-    FROM deputado d
-    JOIN estado e ON d.fk_estado = e.cd_estado
-    JOIN partido p ON d.fk_partido = p.cd_partido
-    {where_clause}
-    GROUP BY d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado, e.uf, p.abreviacao
-    ORDER BY d.nome_eleitoral
-    """
-
-    cursor.execute(query, params)
-    resultados = cursor.fetchall()
-    
-    cursor.close()
-    conexao.close()
-    
-    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, sticky_navbar=True, nb=2)
-
-
-@route_bp.route('/procurar')
-def procurar():
-    estado   = request.args.get('estado', '').strip()
-    partido  = request.args.get('partido', '').strip()
-    pesquisa = request.args.get('pesquisa', '').strip()
-
-    filtros = []
-    params  = []
-
-    if pesquisa:
-        pesquisa_limpa = remover_acentos(pesquisa).lower()
-        termo = f"%{pesquisa_limpa}%"
-        filtros.append("(LOWER(d.nome) LIKE %s OR LOWER(d.nome_eleitoral) LIKE %s)")
-        params.extend([termo, termo])
-
-    if estado:
-        filtros.append("e.uf = %s")
-        params.append(estado)
-    if partido:
-        filtros.append("p.abreviacao = %s")
-        params.append(partido)
-
-    where_clause = "WHERE " + " AND ".join(filtros) if filtros else ""
-
-    conexao = conectar()
-    cursor  = conexao.cursor(dictionary=True)
-
-    query = f"""
-    SELECT DISTINCT d.cd_deputado, d.nome, d.nome_eleitoral, d.imagem_deputado,
-           e.uf AS estado, p.abreviacao AS partido
-    FROM deputado d
-    JOIN estado e ON d.fk_estado = e.cd_estado
-    JOIN partido p ON d.fk_partido = p.cd_partido
-    {where_clause}
-    ORDER BY d.nome_eleitoral
-    """
-    cursor.execute(query, params)
-    resultados = cursor.fetchall()
-
-    cursor.close()
-    conexao.close()
-
-    return render_template("deputados.html", deputados=resultados, estados=estados, estado=estado, partido=partido, partidos=partidos, pesquisa=pesquisa, sticky_navbar=True, nb=2)
-
-#start
 @route_bp.route("/api/filtros-dinamicos")
 def filtros_dinamicos():
     conn = conectar()
@@ -1245,3 +1166,143 @@ def ranking():
     conn.close()
 
     return render_template('ranking.html', ranking=ranking_data, estado=estado, partido=partido, nb=3)
+
+
+def obter_dados_comparacao(cursor, deputado_id):
+    """Busca todas as métricas de um deputado usadas na tela de comparação."""
+    if not deputado_id:
+        return None
+
+    # Dados básicos
+    cursor.execute("""
+        SELECT d.cd_deputado AS id, d.nome, d.nome_eleitoral, d.imagem_deputado,
+               e.uf AS estado, p.abreviacao AS partido
+        FROM deputado d
+        JOIN estado e ON d.fk_estado = e.cd_estado
+        JOIN partido p ON d.fk_partido = p.cd_partido
+        WHERE d.cd_deputado = %s
+    """, (deputado_id,))
+    dep = cursor.fetchone()
+
+    if not dep:
+        return None
+
+    # Total de proposições
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM proposicao_deputados
+        WHERE fk_deputado = %s
+    """, (deputado_id,))
+    dep['proposicoes'] = cursor.fetchone()['total'] or 0
+
+    # Proposições aprovadas (Transformado em Norma Jurídica)
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM proposicoes p
+        INNER JOIN proposicao_deputados pd ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE pd.fk_deputado = %s AND p.codSituacao IN (98, 114, 1140, 1230)
+    """, (deputado_id,))
+    dep['proposicoes_aprovadas'] = cursor.fetchone()['total'] or 0
+
+    # Presença
+    cursor.execute("""
+        SELECT taxa_assiduidade
+        FROM taxa_presenca
+        WHERE fk_deputado = %s
+    """, (deputado_id,))
+    presenca = cursor.fetchone()
+    dep['presenca'] = float(presenca['taxa_assiduidade']) if presenca else 0
+
+    # Gastos totais
+    cursor.execute("""
+        SELECT COALESCE(SUM(CAST(REPLACE(gasto_total, ',', '.') AS DECIMAL(10,2))), 0) AS total
+        FROM despesas
+        WHERE fk_deputado = %s
+    """, (deputado_id,))
+    dep['gastos'] = float(cursor.fetchone()['total'] or 0)
+
+    # IGD (score_final) e posição no ranking
+    cursor.execute("""
+        SELECT score_final, ranking
+        FROM desempenho
+        WHERE fk_deputado = %s
+    """, (deputado_id,))
+    desempenho = cursor.fetchone()
+    dep['igd'] = round(float(desempenho['score_final']) * 10, 1) if desempenho and desempenho['score_final'] is not None else 0
+    dep['ranking'] = desempenho['ranking'] if desempenho else None
+
+    return dep
+
+
+@route_bp.route("/comparar")
+def comparar():
+    id1 = request.args.get('id1', type=int)
+    id2 = request.args.get('id2', type=int)
+
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    dep1 = obter_dados_comparacao(cursor, id1)
+    dep2 = obter_dados_comparacao(cursor, id2)
+
+    cursor.execute("""
+        SELECT COUNT(fk_proposicao) / COUNT(DISTINCT fk_deputado) AS media
+        FROM proposicao_deputados
+    """)
+    media_proposicoes = float(cursor.fetchone()['media'] or 0)
+
+    cursor.execute("""
+        SELECT COUNT(pd.fk_proposicao) / COUNT(DISTINCT pd.fk_deputado) AS media
+        FROM proposicao_deputados pd
+        JOIN proposicoes p ON pd.fk_proposicao = p.cd_proposicoes
+        WHERE p.codSituacao IN (98, 114, 1140, 1230)
+    """)
+    media_proposicoes_aprovadas = float(cursor.fetchone()['media'] or 0)
+
+    cursor.execute("SELECT AVG(taxa_assiduidade) AS media FROM taxa_presenca")
+    media_presenca = float(cursor.fetchone()['media'] or 0)
+
+    cursor.execute("""
+        SELECT AVG(CAST(REPLACE(gasto_total, ',', '.') AS DECIMAL(10,2))) AS media
+        FROM (
+            SELECT fk_deputado, SUM(CAST(REPLACE(gasto_total, ',', '.') AS DECIMAL(10,2))) AS gasto_total
+            FROM despesas
+            GROUP BY fk_deputado
+        ) AS gastos_por_deputado
+    """)
+    media_gastos = float(cursor.fetchone()['media'] or 0)
+
+    cursor.execute("SELECT AVG(score_final) * 10 AS media FROM desempenho")
+    media_igd = float(cursor.fetchone()['media'] or 0)
+
+
+    cursor.execute("""
+        SELECT nome
+        FROM deputado
+        ORDER BY nome
+    """)
+    todos_deputados = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    def maximo(*valores):
+        valores = [v for v in valores if v is not None]
+        return max(valores) if valores else 1
+
+    maximos = {
+        'proposicoes': maximo(dep1['proposicoes'] if dep1 else None, dep2['proposicoes'] if dep2 else None, media_proposicoes, 1),
+        'proposicoes_aprovadas': maximo(dep1['proposicoes_aprovadas'] if dep1 else None, dep2['proposicoes_aprovadas'] if dep2 else None, media_proposicoes_aprovadas, 1),
+        'presenca': 100,
+        'igd': 10,
+        'gastos': maximo(dep1['gastos'] if dep1 else None, dep2['gastos'] if dep2 else None, media_gastos, 1)
+    }
+    
+    
+    return render_template(
+        "comparar.html",
+        dep1=dep1, dep2=dep2,
+        maximos=maximos,
+        todos_deputados=todos_deputados,
+        nb=3, sticky_navbar=True
+    )
